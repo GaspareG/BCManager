@@ -3,7 +3,7 @@ package re.gaspa.bcmanager.ui.viewholders;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import re.gaspa.bcmanager.databinding.BcCardBinding;
+import re.gaspa.bcmanager.databinding.CardviewBcBinding;
 
 /**
  * Created by gaspare on 02/09/17.
@@ -11,18 +11,18 @@ import re.gaspa.bcmanager.databinding.BcCardBinding;
 
 public class BusinessCardVH extends RecyclerView.ViewHolder {
 
-    private BcCardBinding binding;
+    private CardviewBcBinding binding;
 
-    public BusinessCardVH(BcCardBinding binding) {
+    public BusinessCardVH(CardviewBcBinding binding) {
         super(binding.getRoot());
         this.setBinding(binding);
     }
 
-    public BcCardBinding getBinding() {
+    public CardviewBcBinding getBinding() {
         return binding;
     }
 
-    public void setBinding(BcCardBinding bcCardBinding) {
+    public void setBinding(CardviewBcBinding bcCardBinding) {
         this.binding = bcCardBinding;
     }
 }

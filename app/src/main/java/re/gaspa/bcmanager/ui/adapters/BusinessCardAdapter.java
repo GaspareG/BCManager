@@ -1,18 +1,24 @@
 package re.gaspa.bcmanager.ui.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
-import android.support.constraint.solver.ArrayLinkedVariables;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.util.ArrayList;
 
 import re.gaspa.bcmanager.R;
-import re.gaspa.bcmanager.databinding.BcCardBinding;
+import re.gaspa.bcmanager.databinding.CardviewBcBinding;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.ui.viewholders.BusinessCardVH;
 
@@ -20,7 +26,7 @@ import re.gaspa.bcmanager.ui.viewholders.BusinessCardVH;
  * Created by gaspare on 02/09/17.
  */
 
-public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> implements android.widget.Toolbar.OnMenuItemClickListener {
+public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
 
     private Context mContext;
     private ArrayList<BusinessCard> mBusinessCardItems;
@@ -41,19 +47,72 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
 
     @Override
     public BusinessCardVH onCreateViewHolder(ViewGroup parent, int viewType) {
-        BcCardBinding binding = DataBindingUtil.inflate(LayoutInflater.from(this.mContext),
-                R.layout.bc_card, parent, false);
+        CardviewBcBinding binding = DataBindingUtil.inflate(LayoutInflater.from(this.mContext),
+                R.layout.cardview_bc, parent, false);
         return new BusinessCardVH(binding);
     }
 
     @Override
     public void onBindViewHolder(BusinessCardVH holder, int position) {
-        BcCardBinding binding = holder.getBinding();
+        CardviewBcBinding binding = holder.getBinding();
         BusinessCard item = mBusinessCardItems.get(position);
         binding.setBusinessCard(item);
 
-        binding.cardToolbar.inflateMenu(R.menu.home_menu);
+        binding.cardView.setTag(item);
+        binding.cardView.setOnClickListener(this);
+
+        binding.cardToolbar.getMenu().clear();
+        binding.cardToolbar.inflateMenu(R.menu.menu_card);
         binding.cardToolbar.setOnMenuItemClickListener(this);
+
+        final String nome = item.getNome();
+        final String colore = item.getColore();
+        final String ruolo = item.getRuolo();
+        final String numero = item.getTelefono();
+        final Bitmap sfondo = item.getSfondo();
+        final Bitmap profilo = item.getProfilo();
+
+        if( nome != null && nome.length() > 0 )
+            binding.textName.setText(nome);
+
+        if( ruolo != null && ruolo.length() > 0 )
+            binding.textRole.setText(ruolo);
+
+        if( colore != null && colore.length() > 0 )
+        {
+            int background = Color.parseColor(colore);
+
+            binding.fabCall.setBackgroundTintList(ColorStateList.valueOf(background));
+            binding.fabMessage.setBackgroundTintList(ColorStateList.valueOf(background));
+
+            binding.profileImage.setBorderColor(background);
+            binding.textName.setTextColor(background);
+        }
+
+        if( sfondo != null )
+            binding.backgroundImage.setImageBitmap(sfondo);
+
+        if( profilo != null )
+            binding.profileImage.setImageBitmap(profilo);
+
+        if( numero != null && numero.length() > 0 )
+        {
+            binding.fabCall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(view.getContext(), "CHIAMATA " + numero, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            binding.fabMessage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(view.getContext(), "MESSAGGIO " + numero, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+
     }
 
     @Override
@@ -64,6 +123,13 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         // TODO menuItem
+
         return false;
+    }
+
+    @Override
+    public void onClick(View view) {
+        BusinessCard obj = (BusinessCard) view.getTag();
+        Toast.makeText(view.getContext(), "TOCCATO" + obj.getNome(), Toast.LENGTH_SHORT).show();
     }
 }

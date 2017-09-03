@@ -59,11 +59,38 @@ public class Home extends Fragment {
         mBcAdapter = new BusinessCardAdapter(getContext());
 
         ArrayList<BusinessCard> lista = new ArrayList<>();
-        lista.add(new BusinessCard());
-        lista.add(new BusinessCard());
-        lista.add(new BusinessCard());
-        lista.add(new BusinessCard());
-        lista.add(new BusinessCard());
+
+        BusinessCard item1 = new BusinessCard();
+        BusinessCard item2 = new BusinessCard();
+        BusinessCard item3 = new BusinessCard();
+        BusinessCard item4 = new BusinessCard();
+
+        item1.setNome("Gaspare Ferraro");
+        item2.setNome("Paolo Paperino");
+        item3.setNome("Vincenzo Gervasi");
+        item4.setNome("Arrigo Pierroti");
+
+        item1.setRuolo("Studente");
+        item2.setRuolo("Buffone");
+        item3.setRuolo("Professore");
+        item4.setRuolo("Studente");
+
+        item1.setColore("#F44336");
+        item2.setColore("#2196F3");
+        item3.setColore("#009688");
+        item4.setColore("#FF9800");
+
+        item1.setTelefono("+393926477802");
+        item2.setTelefono("+393331234567");
+        item3.setTelefono("+393338912345");
+        item4.setTelefono("+393336789123");
+
+        for(int i = 0 ; i < 100 ; i++) {
+            lista.add(item1);
+            lista.add(item2);
+            lista.add(item3);
+            lista.add(item4);
+        }
 
         mBcAdapter.setBusinessCardItems(lista);
 

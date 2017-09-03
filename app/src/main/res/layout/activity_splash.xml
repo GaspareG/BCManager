@@ -21,7 +21,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="33"
-            android:src="@drawable/ic_menu_contact_white" />
+            android:src="@drawable/ic_menu_contact"
+            android:tint="#FFF"/>
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

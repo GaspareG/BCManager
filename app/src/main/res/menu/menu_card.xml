@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/delete"
+        android:visible="true"
+        android:title="Cancella"
+        android:icon="@drawable/ic_menu_help"
+        app:showAsAction="always">
+    </item>
+
+    <item android:id="@+id/share"
+        android:visible="true"
+        android:title="Condividi"
+        android:icon="@drawable/ic_menu_share"
+        app:showAsAction="always">
+    </item>
+
+    <item android:id="@+id/preferite"
+        android:visible="true"
+        android:title="Preferito"
+        android:icon="@drawable/ic_menu_info"
+        android:checkable="true"
+        app:showAsAction="always">
+    </item>
+
+</menu>
