@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import re.gaspa.bcmanager.R;
+import re.gaspa.bcmanager.utils.Utils;
 
 public class Splash extends AppCompatActivity {
 
@@ -11,5 +12,8 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        Utils.getPreferences(this.getBaseContext());
+
     }
 }

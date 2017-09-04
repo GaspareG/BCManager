@@ -84,5 +84,6 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMar
     @Override
     public boolean onMarkerClick(Marker marker) {
         // marker.getTag();
+        return true;
     }
 }

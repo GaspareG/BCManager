@@ -1,5 +1,6 @@
 package re.gaspa.bcmanager.ui.activities;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,12 +11,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.databinding.ActivityMainBinding;
 import re.gaspa.bcmanager.ui.fragments.Credits;
+import re.gaspa.bcmanager.ui.fragments.EditProfile;
 import re.gaspa.bcmanager.ui.fragments.Home;
 import re.gaspa.bcmanager.ui.fragments.Map;
 import re.gaspa.bcmanager.ui.fragments.Settings;
@@ -45,6 +48,7 @@ public class Main extends AppCompatActivity
         toggle.syncState();
 
         this.loadFragment(Home.class);
+        binding.navView.getMenu().getItem(0).setChecked(true);
 
         binding.navView.setNavigationItemSelectedListener(this);
 
@@ -60,11 +64,14 @@ public class Main extends AppCompatActivity
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                Log.d("SEARCH VIEW", "QUERY SUBMIT "+ query);
                 return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(String newText)
+            {
+                Log.d("SEARCH VIEW", "TEXT CHANGE " + newText);
                 return false;
             }
         });
@@ -93,25 +100,40 @@ public class Main extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        Class fragmentClass = Home.class;
 
-        if (id == R.id.nav_home) {
-            fragmentClass = Home.class;
-        } else if (id == R.id.nav_map) {
-            fragmentClass = Map.class;
-        } else if (id == R.id.nav_share) {
-            //fragmentClass = Share.class;
-        } else if (id == R.id.nav_setting) {
-            fragmentClass = Settings.class;
-        } else if (id == R.id.nav_help) {
-            //fragmentClass = Help.class;
-        } else if (id == R.id.nav_credits) {
-            fragmentClass = Credits.class;
+        if( id == R.id.nav_share )
+        {
+            item.setChecked(false);
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "Utilizza pure te BCManager! http://gaspa.re/bcmanager");
+            sendIntent.setType("text/plain");
+            startActivity(Intent.createChooser(sendIntent, "Condividi!"));
         }
+        else
+        {
+            Class fragmentClass = Home.class;
 
-        this.loadFragment(fragmentClass);
+            if (id == R.id.nav_home) {
+                fragmentClass = Home.class;
+            } else if (id == R.id.nav_map) {
+                fragmentClass = Map.class;
+            } else if (id == R.id.nav_setting) {
+                fragmentClass = Settings.class;
+            } else if (id == R.id.nav_help) {
+                //fragmentClass = Help.class;
+            } else if (id == R.id.nav_credits) {
+                fragmentClass = Credits.class;
+            } else if (id == R.id.nav_profile)
+            {
+                fragmentClass = EditProfile.class;
+            }
 
-        item.setChecked(true);
+            this.loadFragment(fragmentClass);
+
+            item.setChecked(true);
+
+        }
 
         binding.drawerLayout.closeDrawer(GravityCompat.START);
 

@@ -1,8 +1,6 @@
 package re.gaspa.bcmanager.ui.models;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,37 +9,138 @@ import android.os.Parcelable;
  * Created by gaspare on 29/08/17.
  */
 
-public class BusinessCard implements Parcelable{
+public class BusinessCard implements Parcelable {
+
+    private Integer id;
+    private Boolean preferito;
 
     private String nome;
     private String telefono;
     private String email;
-    private String ruolo;
-    private String citta;
-    private String luogo;
-    private Location luogoCoordinate ;
     private String sito;
     private String telegram;
     private String colore;
 
+    private String lavoroRuolo;
+    private String lavoroLuogo;
+    private Location lavoroCoordinate;
+
+    private String casaCitta;
+    private String casaStrada;
+    private Location casaCoordinate;
+
     private Bitmap profilo;
     private Bitmap sfondo;
 
-    public BusinessCard(){}
+    public BusinessCard()
+    {
+        this.id = 0;
+        this.preferito = false;
+        this.nome = "";
+        this.telefono = "";
+        this.email = "";
+        this.lavoroRuolo = "";
+        this.lavoroLuogo = "";
+        this.lavoroCoordinate = null;
+        this.casaCitta = "";
+        this.casaStrada = "";
+        this.casaCoordinate = null;
+        this.sito = "";
+        this.telegram = "";
+        this.colore = "";
+        this.profilo = null;
+        this.sfondo = null;
+    }
 
-    public BusinessCard(String nome, String telefono, String email, String ruolo, String citta, String luogo, Location luogoCoordinate, String sito, String telegram, String colore, Bitmap profilo, Bitmap sfondo) {
+    public BusinessCard(Integer id, Boolean preferito, String nome, String telefono, String email, String lavoroRuolo, String lavoroLuogo, Location lavoroCoordinate, String casaCitta, String casaStrada, Location casaCoordinate, String sito, String telegram, String colore, Bitmap profilo, Bitmap sfondo) {
+        this.id = id;
+        this.preferito = preferito;
         this.nome = nome;
         this.telefono = telefono;
         this.email = email;
-        this.ruolo = ruolo;
-        this.citta = citta;
-        this.luogo = luogo;
-        this.luogoCoordinate = luogoCoordinate;
+        this.lavoroRuolo = lavoroRuolo;
+        this.lavoroLuogo = lavoroLuogo;
+        this.lavoroCoordinate = lavoroCoordinate;
+        this.casaCitta = casaCitta;
+        this.casaStrada = casaStrada;
+        this.casaCoordinate = casaCoordinate;
         this.sito = sito;
         this.telegram = telegram;
         this.colore = colore;
         this.profilo = profilo;
         this.sfondo = sfondo;
+    }
+
+    protected BusinessCard(Parcel in) {
+        id = in.readInt();
+        preferito = in.readByte() != 0 ;
+        nome = in.readString();
+        telefono = in.readString();
+        email = in.readString();
+        lavoroRuolo = in.readString();
+        lavoroLuogo = in.readString();
+        lavoroCoordinate = in.readParcelable(Location.class.getClassLoader());
+        casaCitta = in.readString();
+        casaStrada = in.readString();
+        casaCoordinate = in.readParcelable(Location.class.getClassLoader());
+        sito = in.readString();
+        telegram = in.readString();
+        colore = in.readString();
+        profilo = in.readParcelable(Bitmap.class.getClassLoader());
+        sfondo = in.readParcelable(Bitmap.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeByte((byte) (preferito ? 1 : 0));
+        dest.writeString(nome);
+        dest.writeString(telefono);
+        dest.writeString(email);
+        dest.writeString(lavoroRuolo);
+        dest.writeString(lavoroLuogo);
+        dest.writeParcelable(lavoroCoordinate, flags);
+        dest.writeString(casaCitta);
+        dest.writeString(casaStrada);
+        dest.writeParcelable(casaCoordinate, flags);
+        dest.writeString(sito);
+        dest.writeString(telegram);
+        dest.writeString(colore);
+        dest.writeParcelable(profilo, flags);
+        dest.writeParcelable(sfondo, flags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<BusinessCard> CREATOR = new Creator<BusinessCard>() {
+        @Override
+        public BusinessCard createFromParcel(Parcel in) {
+            return new BusinessCard(in);
+        }
+
+        @Override
+        public BusinessCard[] newArray(int size) {
+            return new BusinessCard[size];
+        }
+    };
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Boolean getPreferito() {
+        return preferito;
+    }
+
+    public void setPreferito(Boolean preferito) {
+        this.preferito = preferito;
     }
 
     public String getNome() {
@@ -68,36 +167,52 @@ public class BusinessCard implements Parcelable{
         this.email = email;
     }
 
-    public String getRuolo() {
-        return ruolo;
+    public String getLavoroRuolo() {
+        return lavoroRuolo;
     }
 
-    public void setRuolo(String ruolo) {
-        this.ruolo = ruolo;
+    public void setLavoroRuolo(String lavoroRuolo) {
+        this.lavoroRuolo = lavoroRuolo;
     }
 
-    public String getCitta() {
-        return citta;
+    public String getLavoroLuogo() {
+        return lavoroLuogo;
     }
 
-    public void setCitta(String citta) {
-        this.citta = citta;
+    public void setLavoroLuogo(String lavoroLuogo) {
+        this.lavoroLuogo = lavoroLuogo;
     }
 
-    public String getLuogo() {
-        return luogo;
+    public Location getLavoroCoordinate() {
+        return lavoroCoordinate;
     }
 
-    public void setLuogo(String luogo) {
-        this.luogo = luogo;
+    public void setLavoroCoordinate(Location lavoroCoordinate) {
+        this.lavoroCoordinate = lavoroCoordinate;
     }
 
-    public Location getLuogoCoordinate() {
-        return luogoCoordinate;
+    public String getCasaCitta() {
+        return casaCitta;
     }
 
-    public void setLuogoCoordinate(Location luogoCoordinate) {
-        this.luogoCoordinate = luogoCoordinate;
+    public void setCasaCitta(String casaCitta) {
+        this.casaCitta = casaCitta;
+    }
+
+    public String getCasaStrada() {
+        return casaStrada;
+    }
+
+    public void setCasaStrada(String casaStrada) {
+        this.casaStrada = casaStrada;
+    }
+
+    public Location getCasaCoordinate() {
+        return casaCoordinate;
+    }
+
+    public void setCasaCoordinate(Location casaCoordinate) {
+        this.casaCoordinate = casaCoordinate;
     }
 
     public String getSito() {
@@ -140,72 +255,6 @@ public class BusinessCard implements Parcelable{
         this.sfondo = sfondo;
     }
 
-    protected BusinessCard(Parcel in) {
-        nome = in.readString();
-        telefono = in.readString();
-        email = in.readString();
-        ruolo = in.readString();
-        citta = in.readString();
-        luogo = in.readString();
-        luogoCoordinate = in.readParcelable(Location.class.getClassLoader());
-        sito = in.readString();
-        telegram = in.readString();
-        colore = in.readString();
-        profilo = in.readParcelable(Bitmap.class.getClassLoader());
-        sfondo = in.readParcelable(Bitmap.class.getClassLoader());
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(nome);
-        dest.writeString(telefono);
-        dest.writeString(email);
-        dest.writeString(ruolo);
-        dest.writeString(citta);
-        dest.writeString(luogo);
-        dest.writeParcelable(luogoCoordinate, flags);
-        dest.writeString(sito);
-        dest.writeString(telegram);
-        dest.writeString(colore);
-        dest.writeParcelable(profilo, flags);
-        dest.writeParcelable(sfondo, flags);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<BusinessCard> CREATOR = new Creator<BusinessCard>() {
-        @Override
-        public BusinessCard createFromParcel(Parcel in) {
-            return new BusinessCard(in);
-        }
-
-        @Override
-        public BusinessCard[] newArray(int size) {
-            return new BusinessCard[size];
-        }
-    };
-
-    @Override
-    public String toString() {
-        return "BusinessCard{" +
-                "nome='" + nome + '\'' +
-                ", telefono='" + telefono + '\'' +
-                ", email='" + email + '\'' +
-                ", ruolo='" + ruolo + '\'' +
-                ", citta='" + citta + '\'' +
-                ", luogo='" + luogo + '\'' +
-                ", luogoCoordinate=" + luogoCoordinate +
-                ", sito='" + sito + '\'' +
-                ", telegram='" + telegram + '\'' +
-                ", colore='" + colore + '\'' +
-                ", profilo=" + profilo +
-                ", sfondo=" + sfondo +
-                '}';
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -213,14 +262,20 @@ public class BusinessCard implements Parcelable{
 
         BusinessCard that = (BusinessCard) o;
 
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (preferito != null ? !preferito.equals(that.preferito) : that.preferito != null)
+            return false;
         if (nome != null ? !nome.equals(that.nome) : that.nome != null) return false;
         if (telefono != null ? !telefono.equals(that.telefono) : that.telefono != null)
             return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (ruolo != null ? !ruolo.equals(that.ruolo) : that.ruolo != null) return false;
-        if (citta != null ? !citta.equals(that.citta) : that.citta != null) return false;
-        if (luogo != null ? !luogo.equals(that.luogo) : that.luogo != null) return false;
-        if (luogoCoordinate != null ? !luogoCoordinate.equals(that.luogoCoordinate) : that.luogoCoordinate != null)
+        if (lavoroRuolo != null ? !lavoroRuolo.equals(that.lavoroRuolo) : that.lavoroRuolo != null) return false;
+        if (lavoroLuogo != null ? !lavoroLuogo.equals(that.lavoroLuogo) : that.lavoroLuogo != null) return false;
+        if (lavoroCoordinate != null ? !lavoroCoordinate.equals(that.lavoroCoordinate) : that.lavoroCoordinate != null)
+            return false;
+        if (casaCitta != null ? !casaCitta.equals(that.casaCitta) : that.casaCitta != null) return false;
+        if (casaStrada != null ? !casaStrada.equals(that.casaStrada) : that.casaStrada != null) return false;
+        if (casaCoordinate != null ? !casaCoordinate.equals(that.casaCoordinate) : that.casaCoordinate != null)
             return false;
         if (sito != null ? !sito.equals(that.sito) : that.sito != null) return false;
         if (telegram != null ? !telegram.equals(that.telegram) : that.telegram != null)
@@ -233,13 +288,17 @@ public class BusinessCard implements Parcelable{
 
     @Override
     public int hashCode() {
-        int result = nome != null ? nome.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (preferito != null ? preferito.hashCode() : 0);
+        result = 31 * result + (nome != null ? nome.hashCode() : 0);
         result = 31 * result + (telefono != null ? telefono.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (ruolo != null ? ruolo.hashCode() : 0);
-        result = 31 * result + (citta != null ? citta.hashCode() : 0);
-        result = 31 * result + (luogo != null ? luogo.hashCode() : 0);
-        result = 31 * result + (luogoCoordinate != null ? luogoCoordinate.hashCode() : 0);
+        result = 31 * result + (lavoroRuolo != null ? lavoroRuolo.hashCode() : 0);
+        result = 31 * result + (lavoroLuogo != null ? lavoroLuogo.hashCode() : 0);
+        result = 31 * result + (lavoroCoordinate != null ? lavoroCoordinate.hashCode() : 0);
+        result = 31 * result + (casaCitta != null ? casaCitta.hashCode() : 0);
+        result = 31 * result + (casaStrada != null ? casaStrada.hashCode() : 0);
+        result = 31 * result + (casaCoordinate != null ? casaCoordinate.hashCode() : 0);
         result = 31 * result + (sito != null ? sito.hashCode() : 0);
         result = 31 * result + (telegram != null ? telegram.hashCode() : 0);
         result = 31 * result + (colore != null ? colore.hashCode() : 0);
@@ -247,4 +306,27 @@ public class BusinessCard implements Parcelable{
         result = 31 * result + (sfondo != null ? sfondo.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "BusinessCard{" +
+                "id=" + id +
+                ", preferito=" + preferito +
+                ", nome='" + nome + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", email='" + email + '\'' +
+                ", lavoroRuolo='" + lavoroRuolo + '\'' +
+                ", lavoroLuogo='" + lavoroLuogo + '\'' +
+                ", lavoroCoordinate=" + lavoroCoordinate +
+                ", casaCitta='" + casaCitta + '\'' +
+                ", casaStrada='" + casaStrada + '\'' +
+                ", casaCoordinate='" + casaCoordinate + '\'' +
+                ", sito='" + sito + '\'' +
+                ", telegram='" + telegram + '\'' +
+                ", colore='" + colore + '\'' +
+                ", profilo=" + profilo +
+                ", sfondo=" + sfondo +
+                '}';
+    }
+
 }

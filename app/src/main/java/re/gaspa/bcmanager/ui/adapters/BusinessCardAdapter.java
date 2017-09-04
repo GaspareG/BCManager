@@ -1,13 +1,12 @@
 package re.gaspa.bcmanager.ui.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +18,7 @@ import java.util.ArrayList;
 
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.databinding.CardviewBcBinding;
+import re.gaspa.bcmanager.ui.activities.BusinessCardActivity;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.ui.viewholders.BusinessCardVH;
 
@@ -65,9 +65,10 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
         binding.cardToolbar.inflateMenu(R.menu.menu_card);
         binding.cardToolbar.setOnMenuItemClickListener(this);
 
+
         final String nome = item.getNome();
         final String colore = item.getColore();
-        final String ruolo = item.getRuolo();
+        final String ruolo = item.getLavoroRuolo();
         final String numero = item.getTelefono();
         final Bitmap sfondo = item.getSfondo();
         final Bitmap profilo = item.getProfilo();
@@ -131,5 +132,9 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
     public void onClick(View view) {
         BusinessCard obj = (BusinessCard) view.getTag();
         Toast.makeText(view.getContext(), "TOCCATO" + obj.getNome(), Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(view.getContext(), BusinessCardActivity.class);
+        intent.putExtra("businesscard", obj);
+        view.getContext().startActivity(intent);
     }
 }

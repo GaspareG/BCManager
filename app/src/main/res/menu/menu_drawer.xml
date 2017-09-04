@@ -7,6 +7,10 @@
             android:icon="@drawable/ic_menu_contact"
             android:title="Home" />
         <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_menu_profile"
+            android:title="Profilo" />
+        <item
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_menu_map"
             android:title="Mappa" />

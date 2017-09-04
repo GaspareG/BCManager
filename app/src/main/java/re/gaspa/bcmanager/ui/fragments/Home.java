@@ -6,7 +6,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,10 +69,10 @@ public class Home extends Fragment {
         item3.setNome("Vincenzo Gervasi");
         item4.setNome("Arrigo Pierroti");
 
-        item1.setRuolo("Studente");
-        item2.setRuolo("Buffone");
-        item3.setRuolo("Professore");
-        item4.setRuolo("Studente");
+        item1.setLavoroRuolo("Studente");
+        item2.setLavoroRuolo("Buffone");
+        item3.setLavoroRuolo("Professore");
+        item4.setLavoroRuolo("Studente");
 
         item1.setColore("#F44336");
         item2.setColore("#2196F3");
@@ -96,6 +95,7 @@ public class Home extends Fragment {
 
         mBinding.bcList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mBinding.bcList.setAdapter(mBcAdapter);
+
 
         return mBinding.getRoot();
     }
