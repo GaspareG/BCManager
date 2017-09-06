@@ -5,4 +5,35 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="cerca">Cerca</string>
+    <string name="solo_preferiti">Solo preferiti</string>
+    <string name="preferito">Preferito</string>
+    <string name="home">Home</string>
+    <string name="mappa">Mappa</string>
+    <string name="condividi">Condividi</string>
+    <string name="impostazioni">Impostazioni</string>
+    <string name="aiuto">Aiuto</string>
+    <string name="crediti">Crediti</string>
+    <string name="elimina">Elimina</string>
+    <string name="modifica_profilo">Modifica profilo</string>
+    <string name="default_name">Gaspare Ferraro</string>
+    <string name="default_job">Studente</string>
+    <string name="background_image">background image</string>
+    <string name="fake_gps_coord">8.123456, 8.123456</string>
+    <string name="default_job_place">Google Inc.</string>
+    <string name="default_job_role">Ruolo</string>
+    <string name="lavoro">Lavoro</string>
+    <string name="scegli_la_sposizione">Scegli la sposizione</string>
+    <string name="default_street">via garibaldi</string>
+    <string name="default_city">Pisa</string>
+    <string name="abitazione">Abitazione</string>
+    <string name="telegram_nick">\@TelegramNick</string>
+    <string name="default_website">website.org</string>
+    <string name="default_mail">prova@mail.com</string>
+    <string name="default_phone">+39333123456</string>
+    <string name="name">Nome</string>
+    <string name="informazioni_personali">Informazioni personali</string>
+    <string name="desc_background_profile">background profile</string>
+    <string name="desc_nome">Nome</string>
+
 </resources>

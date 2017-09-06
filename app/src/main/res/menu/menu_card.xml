@@ -4,24 +4,24 @@
 
     <item android:id="@+id/delete"
         android:visible="true"
-        android:title="Cancella"
-        android:icon="@drawable/ic_menu_help"
-        app:showAsAction="always">
+        android:title="@string/elimina"
+        android:icon="@drawable/icon_help"
+        app:showAsAction="ifRoom">
     </item>
 
     <item android:id="@+id/share"
         android:visible="true"
-        android:title="Condividi"
+        android:title="@string/condividi"
         android:icon="@drawable/ic_menu_share"
-        app:showAsAction="always">
+        app:showAsAction="ifRoom">
     </item>
 
     <item android:id="@+id/preferite"
         android:visible="true"
-        android:title="Preferito"
-        android:icon="@drawable/ic_menu_info"
+        android:title="@string/preferito"
+        android:icon="@drawable/icon_info"
         android:checkable="true"
-        app:showAsAction="always">
+        app:showAsAction="ifRoom">
     </item>
 
 </menu>

@@ -28,19 +28,23 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activities.Splash" />
-        <uses-permission android:name="android.permission.CALL_PHONE" />
 
         <uses-library android:name="com.google.android.maps" />
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBu28hg-J-vF0DywdlPGbntHaROsVmNLLk" />
 
         <activity android:name=".ui.activities.BusinessCardActivity" />
+
+        <provider
+            android:name=".contentprovider.ContentProviderBC"
+            android:authorities="re.gaspa.provider"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

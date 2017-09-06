@@ -2,106 +2,360 @@
 
     <RelativeLayout
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context="re.gaspa.bcmanager.ui.activities.Main">
 
-
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:padding="8dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/text_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text=""
-                android:hint="Nome"/>
-        </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:padding="8dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="160dp"
+                    android:scaleType="centerCrop"
+                    android:id="@+id/image_background"
+                    android:src="@drawable/default_background"
+                    android:contentDescription="@string/desc_background_profile" />
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/image_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="100dp"
+                    android:src="@drawable/default_profile"
+                    app:civ_border_color="@color/colorPrimary"
+                    app:civ_border_width="2dp" />
+
+
+            </RelativeLayout>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:layout_marginBottom="0dp"
+                android:id="@+id/card_city"
+                android:elevation="8dp">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center"
+                    android:text="@string/informazioni_personali"
+                    android:id="@+id/text_info"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="18sp" />
+
+
+                <ImageView
+                    android:id="@+id/icon_name"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="60dp"
+                    android:padding="5dp"
+                    android:src="@drawable/icon_profile"
+                    android:tint="@color/colorPrimary"
+                    android:contentDescription="@string/desc_nome" />
+
+                <EditText
+                    android:id="@+id/text_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="15dp"
+                    android:inputType="textPersonName"
+                    android:text=""
+                    android:hint="@string/name"/>
+
+
+
+                <ImageView
+                    android:id="@+id/icon_telefono"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="100dp"
+                    android:padding="5dp"
+                    android:src="@drawable/icon_call"
+                    android:tint="@color/colorPrimary" />
+
+                <EditText
+                    android:id="@+id/text_telefono"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="15dp"
+                    android:inputType="phone"
+                    android:text=""
+                    android:hint="@string/default_phone"/>
+
+
+
+                <ImageView
+                    android:id="@+id/icon_mail"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="140dp"
+                    android:padding="5dp"
+                    android:src="@drawable/icon_mail"
+                    android:tint="@color/colorPrimary" />
+
+                <EditText
+                    android:id="@+id/text_mail"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="140dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="15dp"
+                    android:inputType="textEmailAddress"
+                    android:text=""
+                    android:hint="@string/default_mail"/>
+
+
+
+                <ImageView
+                    android:id="@+id/icon_website"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="180dp"
+                    android:padding="5dp"
+                    android:src="@drawable/icon_website"
+                    android:tint="@color/colorPrimary" />
+
+                <EditText
+                    android:id="@+id/text_website"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="180dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="15dp"
+                    android:inputType="textUri"
+                    android:text=""
+                    android:hint="@string/default_website"/>
+
+
+
+                <ImageView
+                    android:id="@+id/icon_telegram"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="220dp"
+                    android:padding="5dp"
+                    android:src="@drawable/icon_send"
+                    android:tint="@color/colorPrimary" />
+
+                <EditText
+                    android:id="@+id/text_telegram"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="220dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:inputType="textPersonName"
+                    android:text=""
+                    android:hint="@string/telegram_nick"/>
+
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:layout_marginBottom="0dp"
+                android:id="@+id/card_home"
+                android:elevation="8dp">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center_vertical"
+                android:textAlignment="center"
+                android:text="@string/abitazione"
+                android:id="@+id/text_home"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="18sp" />
+
+
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/icon_call"/>
-            <EditText
-                android:id="@+id/text_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="phone"
-                android:text=""
-                android:hint="+39333123456"/>
-        </LinearLayout>
+                android:id="@+id/icon_city"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="60dp"
+                android:padding="5dp"
+                android:src="@drawable/icon_place"
+                android:tint="@color/colorPrimary" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:padding="8dp"
-            android:layout_height="wrap_content">
             <EditText
-                android:id="@+id/text_mail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/text_city"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:ems="10"
-                android:inputType="textEmailAddress"
-                android:text=""
-                android:hint="mail@provider.com"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:padding="8dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/text_website"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="textUri"
-                android:text=""
-                android:hint="sito.com"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:padding="8dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/text_telegram"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
+                android:layout_marginTop="60dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginEnd="15dp"
                 android:inputType="text"
                 android:text=""
-                android:hint="\@telegram"/>
-        </LinearLayout>
+                android:hint="@string/default_city"/>
 
-            <Button
-                android:id="@+id/button_position"
-                android:layout_width="wrap_content"
+
+            <EditText
+                android:id="@+id/text_street"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginTop="100dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginEnd="15dp"
+                android:inputType="text"
+                android:text=""
+                android:hint="@string/default_street"/>
+
+
+            <EditText
+                android:id="@+id/text_home_coord"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginTop="140dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginEnd="15dp"
+                android:inputType="text"
+                android:text=""
+                android:hint="@string/fake_gps_coord"/>
+
+
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="180dp"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/button_home_position"
+                    android:text="@string/scegli_la_sposizione"
+                    android:layout_marginBottom="15dp"
+                    />
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Posizione"/>
+                android:layout_margin="12dp"
+                android:layout_marginBottom="0dp"
+                android:id="@+id/card_work"
+                android:elevation="8dp">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center"
+                    android:text="@string/lavoro"
+                    android:id="@+id/text_work"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="18sp" />
+
+
+                <ImageView
+                    android:id="@+id/icon_work"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="60dp"
+                    android:padding="5dp"
+                    android:src="@drawable/icon_work"
+                    android:tint="@color/colorPrimary" />
+
+                <EditText
+                    android:id="@+id/text_role"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="15dp"
+                    android:inputType="text"
+                    android:text=""
+                    android:hint="@string/default_job_role"/>
+
+
+                <EditText
+                    android:id="@+id/text_jobplace"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="15dp"
+                    android:inputType="text"
+                    android:text=""
+                    android:hint="@string/default_job_place"/>
+
+
+                <EditText
+                    android:id="@+id/text_job_coord"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="140dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="15dp"
+                    android:inputType="text"
+                    android:focusable="false"
+                    android:enabled="false"
+                    android:text=""
+                    android:hint="@string/fake_gps_coord"/>
+
+
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="180dp"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/button_work_position"
+                    android:text="@string/scegli_la_sposizione"
+                    android:layout_marginBottom="15dp"
+                    />
+
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
+
+        </ScrollView>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
@@ -109,8 +363,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:tint="#fff"
+            android:layout_alignParentEnd="true"
+            android:tint="@android:color/white"
             android:src="@drawable/icon_save" />
 
         </RelativeLayout>

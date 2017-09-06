@@ -1,3 +1,21 @@
+/*
+    TODO:
+    - Splash screen
+    - Riconoscimento primo avvio
+    - salvataggio bitmap utente
+    - Pagina crediti
+    - Pagina aiuto
+    - Pagina impostazioni
+    - Pagina modifca profilo
+    - Fix bug selezione su condividi
+    - Database utenti
+    - Marker su mappa
+    - Ricerca su lista
+    - Preferiti e filtro
+    - Export businesscard (testo, vcard, immagine, bluetooth, nfc, wifi)
+    - Import businesscard (testo, vcard, immagine, bluetooth, nfc, wifi)
+ */
+
 package re.gaspa.bcmanager.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;

@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_favourite"
-        android:title="Preferito"
+        android:title="@string/preferito"
         android:orderInCategory="1"
         android:icon="@drawable/icon_star"
         android:checkable="true"

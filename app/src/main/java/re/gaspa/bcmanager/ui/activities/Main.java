@@ -158,10 +158,15 @@ public class Main extends AppCompatActivity
 
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START);
-        } else if (fragmentManager != null && fragmentManager.getBackStackEntryCount() > 0) {
-            fragmentManager.popBackStackImmediate();
         }
-        else super.onBackPressed();
+        else if( binding.navView.getMenu().getItem(0).isChecked() )
+        {
+            finish();
+        }
+        else {
+            this.loadFragment(Home.class);
+            binding.navView.getMenu().getItem(0).setChecked(true);
+        }
 
     }
 

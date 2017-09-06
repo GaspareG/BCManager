@@ -4,10 +4,10 @@
 
     <item
         android:id="@+id/action_search"
-        android:title="Cerca"
-        app:showAsAction="always|collapseActionView"
+        android:title="@string/cerca"
+        app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        android:icon="@drawable/ic_menu_search">
+        android:icon="@drawable/icon_search">
     </item>
 
     <item
@@ -18,7 +18,7 @@
 
     <item
         android:id="@+id/preferite"
-        android:title="Solo preferiti"
+        android:title="@string/solo_preferiti"
         app:showAsAction="never"
         android:orderInCategory="2"
         android:checkable="true"

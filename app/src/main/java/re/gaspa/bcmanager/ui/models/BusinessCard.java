@@ -21,13 +21,13 @@ public class BusinessCard implements Parcelable {
     private String telegram;
     private String colore;
 
-    private String lavoroRuolo;
-    private String lavoroLuogo;
-    private Location lavoroCoordinate;
-
     private String casaCitta;
     private String casaStrada;
     private Location casaCoordinate;
+
+    private String lavoroRuolo;
+    private String lavoroLuogo;
+    private Location lavoroCoordinate;
 
     private Bitmap profilo;
     private Bitmap sfondo;

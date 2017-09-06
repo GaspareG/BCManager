@@ -4,35 +4,35 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_contact"
-            android:title="Home" />
+            android:icon="@drawable/icon_contact"
+            android:title="@string/home" />
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_menu_profile"
-            android:title="Profilo" />
+            android:icon="@drawable/icon_edit"
+            android:title="@string/modifica_profilo" />
         <item
             android:id="@+id/nav_map"
-            android:icon="@drawable/ic_menu_map"
-            android:title="Mappa" />
+            android:icon="@drawable/icon_map"
+            android:title="@string/mappa" />
     </group>
 
     <group android:id="@+id/grp2" android:checkableBehavior="single" >
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Condividi" />
+                android:title="@string/condividi" />
             <item
                 android:id="@+id/nav_setting"
-                android:icon="@drawable/ic_menu_setting"
-                android:title="Impostazioni" />
+                android:icon="@drawable/icon_setting"
+                android:title="@string/impostazioni" />
             <item
                 android:id="@+id/nav_help"
-                android:icon="@drawable/ic_menu_help"
-                android:title="Aiuto" />
+                android:icon="@drawable/icon_help"
+                android:title="@string/aiuto" />
             <item
                 android:id="@+id/nav_credits"
-                android:icon="@drawable/ic_menu_info"
-                android:title="Crediti" />
+                android:icon="@drawable/icon_info"
+                android:title="@string/crediti" />
     </group>
 
 </menu>
