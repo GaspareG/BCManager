@@ -2,6 +2,8 @@ package re.gaspa.bcmanager.ui.activities;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.databinding.ActivityMainBinding;
 import re.gaspa.bcmanager.ui.fragments.Credits;
@@ -22,9 +27,11 @@ import re.gaspa.bcmanager.ui.fragments.EditProfile;
 import re.gaspa.bcmanager.ui.fragments.Home;
 import re.gaspa.bcmanager.ui.fragments.Map;
 import re.gaspa.bcmanager.ui.fragments.Settings;
+import re.gaspa.bcmanager.ui.models.BusinessCard;
+import re.gaspa.bcmanager.utils.Utils;
 
 public class Main extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private FragmentManager fragmentManager;
     private ActivityMainBinding binding;
@@ -37,8 +44,10 @@ public class Main extends AppCompatActivity
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-
         setSupportActionBar(binding.toolbar);
+
+        Utils.getPreferences(binding.getRoot().getContext());
+        BusinessCard personal = Utils.getPersonalBusinessCard(null);
 
         DrawerLayout drawer = binding.drawerLayout;
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -52,6 +61,23 @@ public class Main extends AppCompatActivity
 
         binding.navView.setNavigationItemSelectedListener(this);
 
+        if( personal != null ) {
+            Bitmap profile = personal.getProfilo();
+            Bitmap sfondo = personal.getSfondo();
+            String nome = personal.getNome();
+            String role = personal.getLavoroRuolo();
+
+            if( profile != null ) {
+                CircleImageView profileImage = binding.navView.getHeaderView(0).findViewById(R.id.profile_image);
+                profileImage.setImageBitmap(profile);
+            }
+            if( sfondo != null ) {
+                LinearLayout backgroundImage = binding.navView.getHeaderView(0).findViewById(R.id.background_image);
+                backgroundImage.setBackgroundDrawable(new BitmapDrawable(sfondo));
+            }
+        }
+
+        binding.navView.getHeaderView(0).setOnClickListener(this);
     }
 
     @Override
@@ -171,4 +197,14 @@ public class Main extends AppCompatActivity
     }
 
 
+    @Override
+    public void onClick(View view) {
+
+        int id = view.getId();
+        
+        Intent intent = new Intent(view.getContext(), BusinessCardActivity.class);
+        intent.putExtra("businesscard", Utils.getPersonalBusinessCard(null) );
+        view.getContext().startActivity(intent);
+
+    }
 }

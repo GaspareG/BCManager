@@ -8,4 +8,26 @@
     <color name="colorSecondaryText">#757575</color>
     <color name="colorIcons">#FFFFFF</color>
     <color name="colorDivider">#BDBDBD</color>
+
+
+    <color name="colorPicker1">#F44336</color>
+    <color name="colorPicker2">#E91E63</color>
+    <color name="colorPicker3">#9C27B0</color>
+    <color name="colorPicker4">#673AB7</color>
+
+    <color name="colorPicker5">#3F51B5</color>
+    <color name="colorPicker6">#2196F3</color>
+    <color name="colorPicker7">#03A9F4</color>
+    <color name="colorPicker8">#00BCD4</color>
+
+    <color name="colorPicker9">#009688</color>
+    <color name="colorPicker10">#4CAF50</color>
+    <color name="colorPicker11">#8BC34A</color>
+    <color name="colorPicker12">#CDDC39</color>
+
+    <color name="colorPicker13">#FFEB3B</color>
+    <color name="colorPicker14">#FFC107</color>
+    <color name="colorPicker15">#FF9800</color>
+    <color name="colorPicker16">#FF5722</color>
+
 </resources>

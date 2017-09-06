@@ -35,5 +35,8 @@
     <string name="informazioni_personali">Informazioni personali</string>
     <string name="desc_background_profile">background profile</string>
     <string name="desc_nome">Nome</string>
+    <string name="alert_dialog_ok">Scegli</string>
+    <string name="alert_dialog_cancel">Cancella</string>
+    <string name="choose_color">Scegli un colore</string>
 
 </resources>

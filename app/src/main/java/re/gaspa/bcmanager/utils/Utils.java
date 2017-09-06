@@ -4,10 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Base64;
+import android.util.Log;
+import android.view.View;
+
+import java.io.ByteArrayOutputStream;
 
 import re.gaspa.bcmanager.ui.activities.Splash;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
@@ -95,6 +102,20 @@ public class Utils {
             editor.putFloat("houseLng", (float) casaCoordinate.getLongitude());
         }
 
+        Bitmap profilo = personal.getProfilo();
+        Bitmap sfondo = personal.getSfondo();
+        if( profilo != null )
+        {
+            String profiloString = Utils.encodeTobase64(profilo);
+            Log.d("SHARED", "PROFILO " + profiloString.length());
+            editor.putString("profilo", profiloString);
+        }
+        if( sfondo != null )
+        {
+            String sfondoString = Utils.encodeTobase64(sfondo);
+            Log.d("SHARED", "SFONDO " + sfondoString.length());
+            editor.putString("sfondo", sfondoString );
+        }
         // TODO Bitmap profilo;
         // TODO Bitmap sfondo;
 
@@ -132,8 +153,8 @@ public class Utils {
             casaCoordinate.setLatitude(casaCoordinateLat);
             casaCoordinate.setLongitude(casaCoordinateLng);
 
-            // TODO Bitmap profilo;
-            // TODO Bitmap sfondo;
+            String profilo = preferences.getString("profilo", null);
+            String sfondo = preferences.getString("sfondo", null);
 
             personal = new BusinessCard();
             personal.setId(0);
@@ -152,6 +173,17 @@ public class Utils {
             personal.setCasaCitta(casaCitta);
             personal.setCasaStrada(casaStrada);
             personal.setCasaCoordinate(casaCoordinate);
+
+            if( profilo != null )
+            Log.d("SHARED", "PROFILO " + profilo.length());
+            if( sfondo != null )
+            Log.d("SHARED", "SFONDO " + sfondo.length());
+
+            if( profilo != null )
+                personal.setProfilo( Utils.decodeBase64(profilo) );
+            if( sfondo != null )
+                personal.setSfondo( Utils.decodeBase64(sfondo) );
+
         }
         return personal;
     }
@@ -162,5 +194,29 @@ public class Utils {
             preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
         }
         return preferences;
+    }
+
+    public static String encodeTobase64(Bitmap image)
+    {
+        Bitmap immagex=image;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        immagex.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b,Base64.DEFAULT);
+        return imageEncoded;
+    }
+
+    public static Bitmap decodeBase64(String input)
+    {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
+
+    public static Bitmap loadBitmapFromView(View v) {
+        Bitmap b = Bitmap.createBitmap( v.getLayoutParams().width, v.getLayoutParams().height, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        v.layout(0, 0, v.getLayoutParams().width, v.getLayoutParams().height);
+        v.draw(c);
+        return b;
     }
 }
