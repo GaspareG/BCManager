@@ -7,6 +7,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -124,6 +125,7 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         // TODO menuItem
+        Log.d("MENUITEM", menuItem.getActionView().toString() );
 
         return false;
     }

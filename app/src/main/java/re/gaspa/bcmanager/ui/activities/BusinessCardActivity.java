@@ -56,7 +56,7 @@ public class BusinessCardActivity extends AppCompatActivity implements View.OnCl
         Bitmap background_image = businessCard.getSfondo();
 
         if( profile_image != null ) binding.imageProfile.setImageBitmap(profile_image);
-        if( background_image != null ) binding.imageBackground.setImageBitmap(background_image);
+        if( background_image != null ) binding.backgroundImage.setImageBitmap(background_image);
 
         Integer id = businessCard.getId();
         Boolean preferito = businessCard.getPreferito();

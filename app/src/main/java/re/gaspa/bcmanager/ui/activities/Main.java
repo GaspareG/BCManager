@@ -3,7 +3,6 @@ package re.gaspa.bcmanager.ui.activities;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,7 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import re.gaspa.bcmanager.R;
@@ -28,7 +27,7 @@ import re.gaspa.bcmanager.ui.fragments.Home;
 import re.gaspa.bcmanager.ui.fragments.Map;
 import re.gaspa.bcmanager.ui.fragments.Settings;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
-import re.gaspa.bcmanager.utils.Utils;
+import re.gaspa.bcmanager.utils.Preferences;
 
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -46,8 +45,8 @@ public class Main extends AppCompatActivity
 
         setSupportActionBar(binding.toolbar);
 
-        Utils.getPreferences(binding.getRoot().getContext());
-        BusinessCard personal = Utils.getPersonalBusinessCard(null);
+        Preferences.getPreferences(binding.getRoot().getContext());
+        BusinessCard personal = Preferences.getPersonalBusinessCard(null);
 
         DrawerLayout drawer = binding.drawerLayout;
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -72,8 +71,8 @@ public class Main extends AppCompatActivity
                 profileImage.setImageBitmap(profile);
             }
             if( sfondo != null ) {
-                LinearLayout backgroundImage = binding.navView.getHeaderView(0).findViewById(R.id.background_image);
-                backgroundImage.setBackgroundDrawable(new BitmapDrawable(sfondo));
+                ImageView backgroundImage = binding.navView.getHeaderView(0).findViewById(R.id.default_background);
+                backgroundImage.setImageBitmap(sfondo);
             }
         }
 
@@ -136,6 +135,12 @@ public class Main extends AppCompatActivity
             sendIntent.setType("text/plain");
             startActivity(Intent.createChooser(sendIntent, "Condividi!"));
         }
+        else if( id == R.id.nav_help )
+        {
+            item.setChecked(false);
+            Intent intent = new Intent(this.getApplicationContext(), Help.class);
+            this.getApplicationContext().startActivity(intent);
+        }
         else
         {
             Class fragmentClass = Home.class;
@@ -146,8 +151,6 @@ public class Main extends AppCompatActivity
                 fragmentClass = Map.class;
             } else if (id == R.id.nav_setting) {
                 fragmentClass = Settings.class;
-            } else if (id == R.id.nav_help) {
-                fragmentClass = Help.class;
             } else if (id == R.id.nav_credits) {
                 fragmentClass = Credits.class;
             } else if (id == R.id.nav_profile) {
@@ -202,8 +205,14 @@ public class Main extends AppCompatActivity
         int id = view.getId();
 
         Intent intent = new Intent(view.getContext(), BusinessCardActivity.class);
-        intent.putExtra("businesscard", Utils.getPersonalBusinessCard(null) );
+        intent.putExtra("businesscard", Preferences.getPersonalBusinessCard(null) );
         view.getContext().startActivity(intent);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // TODO
     }
 }

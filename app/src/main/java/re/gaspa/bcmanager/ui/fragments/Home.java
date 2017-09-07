@@ -16,6 +16,7 @@ import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.databinding.FragmentHomeBinding;
 import re.gaspa.bcmanager.ui.adapters.BusinessCardAdapter;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
+import re.gaspa.bcmanager.utils.Database;
 
 /**
  * Created by gaspare on 28/08/17.
@@ -29,15 +30,7 @@ public class Home extends Fragment {
     public Home() {
 
     }
-
-    public static Home newInstance() {
-        Home fragmentFirst = new Home();
-        Bundle args = new Bundle();
-        fragmentFirst.setArguments(args);
-        return fragmentFirst;
-    }
-
-
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,9 +38,7 @@ public class Home extends Fragment {
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
                 R.layout.fragment_home, container, false);
 
-        // Inflate the layout for this fragment
-        FloatingActionButton fab = (FloatingActionButton) mBinding.fab ;
-        fab.setOnClickListener(new View.OnClickListener() {
+        mBinding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -56,46 +47,10 @@ public class Home extends Fragment {
         });
 
         mBcAdapter = new BusinessCardAdapter(getContext());
-
-        ArrayList<BusinessCard> lista = new ArrayList<>();
-
-        BusinessCard item1 = new BusinessCard();
-        BusinessCard item2 = new BusinessCard();
-        BusinessCard item3 = new BusinessCard();
-        BusinessCard item4 = new BusinessCard();
-
-        item1.setNome("Gaspare Ferraro");
-        item2.setNome("Paolo Paperino");
-        item3.setNome("Vincenzo Gervasi");
-        item4.setNome("Arrigo Pierroti");
-
-        item1.setLavoroRuolo("Studente");
-        item2.setLavoroRuolo("Buffone");
-        item3.setLavoroRuolo("Professore");
-        item4.setLavoroRuolo("Studente");
-
-        item1.setColore("#F44336");
-        item2.setColore("#2196F3");
-        item3.setColore("#009688");
-        item4.setColore("#FF9800");
-
-        item1.setTelefono("+393926477802");
-        item2.setTelefono("+393331234567");
-        item3.setTelefono("+393338912345");
-        item4.setTelefono("+393336789123");
-
-        for(int i = 0 ; i < 100 ; i++) {
-            lista.add(item1);
-            lista.add(item2);
-            lista.add(item3);
-            lista.add(item4);
-        }
-
-        mBcAdapter.setBusinessCardItems(lista);
+        mBcAdapter.setBusinessCardItems(Database.getBusinessCards());
 
         mBinding.bcList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mBinding.bcList.setAdapter(mBcAdapter);
-
 
         return mBinding.getRoot();
     }

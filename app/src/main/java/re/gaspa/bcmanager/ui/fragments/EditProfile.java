@@ -2,7 +2,6 @@ package re.gaspa.bcmanager.ui.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -11,17 +10,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -29,13 +24,11 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-import java.io.IOException;
-
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.databinding.DialogColorBinding;
 import re.gaspa.bcmanager.databinding.FragmentEditProfileBinding;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
-import re.gaspa.bcmanager.utils.Utils;
+import re.gaspa.bcmanager.utils.Preferences;
 
 /**
  * Created by gaspare on 28/08/17.
@@ -75,7 +68,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
 
         this.changeColor(ContextCompat.getColor(this.getContext(), R.color.colorPrimary));
 
-        personal = Utils.getPersonalBusinessCard(null);
+        personal = Preferences.getPersonalBusinessCard(null);
         if( personal == null ) personal = new BusinessCard();
         else load_data();
 
@@ -297,7 +290,8 @@ public class EditProfile extends Fragment implements View.OnClickListener {
             }
             personal.setLavoroCoordinate(lavoroCoordinate);
 
-            Utils.setPersonalBusinessCard(null, personal);
+            Preferences.setPersonalBusinessCard(null, personal);
+            Toast.makeText(getContext(), "Profilo salvato!", Toast.LENGTH_LONG).show();
         }
     }
 

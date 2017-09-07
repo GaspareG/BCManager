@@ -3,20 +3,19 @@ package re.gaspa.bcmanager.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 
 import java.io.ByteArrayOutputStream;
 
-import re.gaspa.bcmanager.ui.activities.Splash;
+import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 
 /**
@@ -25,8 +24,6 @@ import re.gaspa.bcmanager.ui.models.BusinessCard;
 
 public class Utils {
 
-    private static BusinessCard personal = null;
-    private static SharedPreferences preferences = null;
 
     public static void openTelegram(String nick, Context context)
     {
@@ -70,134 +67,10 @@ public class Utils {
         context.startActivity(mapIntent);
     }
 
-    public static void setPersonalBusinessCard(Context ctx, BusinessCard personal)
-    {
-        Utils.personal = personal;
-        SharedPreferences preferences = Utils.getPreferences(ctx);
-        SharedPreferences.Editor editor = preferences.edit();
-
-        editor.putString("name", personal.getNome());
-        editor.putString("phone", personal.getTelefono());
-        editor.putString("email", personal.getEmail());
-        editor.putString("website", personal.getSito());
-        editor.putString("telegram", personal.getTelegram());
-        editor.putString("color", personal.getColore());
-
-
-        editor.putString("jobRole",personal.getLavoroRuolo());
-        editor.putString("jobName",personal.getLavoroLuogo());
-        Location lavoroCoordinate = personal.getLavoroCoordinate();
-        if( lavoroCoordinate != null )
-        {
-            editor.putFloat("jobLat", (float) lavoroCoordinate.getLatitude());
-            editor.putFloat("jobLng", (float) lavoroCoordinate.getLongitude());
-        }
-
-        editor.putString("houseCity",personal.getCasaCitta());
-        editor.putString("houseStreet",personal.getCasaStrada());
-        Location casaCoordinate = personal.getCasaCoordinate();
-        if( casaCoordinate != null )
-        {
-            editor.putFloat("houseLat", (float) casaCoordinate.getLatitude());
-            editor.putFloat("houseLng", (float) casaCoordinate.getLongitude());
-        }
-
-        Bitmap profilo = personal.getProfilo();
-        Bitmap sfondo = personal.getSfondo();
-        if( profilo != null )
-        {
-            String profiloString = Utils.encodeTobase64(profilo);
-            Log.d("SHARED", "PROFILO " + profiloString.length());
-            editor.putString("profilo", profiloString);
-        }
-        if( sfondo != null )
-        {
-            String sfondoString = Utils.encodeTobase64(sfondo);
-            Log.d("SHARED", "SFONDO " + sfondoString.length());
-            editor.putString("sfondo", sfondoString );
-        }
-        // TODO Bitmap profilo;
-        // TODO Bitmap sfondo;
-
-        editor.commit();
-    }
-
-    public static BusinessCard getPersonalBusinessCard(Context ctx)
-    {
-        if( personal == null )
-        {
-            SharedPreferences preferences = Utils.getPreferences(ctx);
-
-            //Integer id;
-            //Boolean preferito;
-            String nome = preferences.getString("name", "");
-            String telefono = preferences.getString("phone", "");
-            String email = preferences.getString("email", "");
-            String sito = preferences.getString("website", "");
-            String telegram = preferences.getString("telegram", "");
-            String colore = preferences.getString("color", "");
-
-            String lavoroRuolo = preferences.getString("jobRole", "");
-            String lavoroLuogo = preferences.getString("jobName", "");
-            Float lavoroCoordinateLat = preferences.getFloat("jobLat", 0.f);
-            Float lavoroCoordinateLng = preferences.getFloat("jobLng", 0.f);
-            Location lavoroCoordinate = new Location(LocationManager.GPS_PROVIDER);
-            lavoroCoordinate.setLatitude(lavoroCoordinateLat);
-            lavoroCoordinate.setLongitude(lavoroCoordinateLng);
-
-            String casaCitta = preferences.getString("houseCity", "");
-            String casaStrada = preferences.getString("houseStreet", "");
-            Float casaCoordinateLat = preferences.getFloat("houseLat", 0.f);
-            Float casaCoordinateLng = preferences.getFloat("houseLng", 0.f);
-            Location casaCoordinate = new Location(LocationManager.GPS_PROVIDER);
-            casaCoordinate.setLatitude(casaCoordinateLat);
-            casaCoordinate.setLongitude(casaCoordinateLng);
-
-            String profilo = preferences.getString("profilo", null);
-            String sfondo = preferences.getString("sfondo", null);
-
-            personal = new BusinessCard();
-            personal.setId(0);
-            personal.setPreferito(false);
-            personal.setNome(nome);
-            personal.setTelefono(telefono);
-            personal.setEmail(email);
-            personal.setSito(sito);
-            personal.setTelegram(telegram);
-            personal.setColore(colore);
-
-            personal.setLavoroRuolo(lavoroRuolo);
-            personal.setLavoroLuogo(lavoroLuogo);
-            personal.setLavoroCoordinate(lavoroCoordinate);
-
-            personal.setCasaCitta(casaCitta);
-            personal.setCasaStrada(casaStrada);
-            personal.setCasaCoordinate(casaCoordinate);
-
-            if( profilo != null )
-            Log.d("SHARED", "PROFILO " + profilo.length());
-            if( sfondo != null )
-            Log.d("SHARED", "SFONDO " + sfondo.length());
-
-            if( profilo != null )
-                personal.setProfilo( Utils.decodeBase64(profilo) );
-            if( sfondo != null )
-                personal.setSfondo( Utils.decodeBase64(sfondo) );
-
-        }
-        return personal;
-    }
-
-    public static SharedPreferences getPreferences(Context ctx) {
-        if( preferences == null && ctx != null)
-        {
-            preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
-        }
-        return preferences;
-    }
-
     public static String encodeTobase64(Bitmap image)
     {
+        if( image == null ) return "";
+
         Bitmap immagex=image;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         immagex.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -218,5 +91,55 @@ public class Utils {
         v.layout(0, 0, v.getLayoutParams().width, v.getLayoutParams().height);
         v.draw(c);
         return b;
+    }
+
+    public static BusinessCard[] getFakeBusinessCard() {
+        BusinessCard ret[] = new BusinessCard[2];
+
+        ret[0] = new BusinessCard();
+        ret[0].setNome("Gaspare Ferraro");
+        ret[0].setTelefono("+393926477802");
+        ret[0].setEmail("ferraro@gaspa.re");
+        ret[0].setSito("gaspa.re");
+        ret[0].setTelegram("@GaspareG");
+        ret[0].setColore("#009688");
+        ret[0].setProfilo( BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_profile) );
+        ret[0].setSfondo( BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_background));
+        ret[0].setCasaCitta("Genova");
+        ret[0].setCasaStrada("Passo ca' dei rissi 7");
+        Location casaCoordinate = new Location(LocationManager.GPS_PROVIDER);
+        casaCoordinate.setLatitude(8.0);
+        casaCoordinate.setLongitude(10.0);
+        ret[0].setCasaCoordinate(casaCoordinate);
+        ret[0].setLavoroRuolo("Studente");
+        ret[0].setLavoroLuogo("Università di Pisa");
+        Location lavoroCoordinate = new Location(LocationManager.GPS_PROVIDER);
+        lavoroCoordinate.setLatitude(9.0);
+        lavoroCoordinate.setLongitude(12.0);
+        ret[0].setLavoroCoordinate(lavoroCoordinate);
+
+        ret[1] = new BusinessCard();
+        ret[1].setNome("Vincenzo Gervasi");
+        ret[1].setTelefono("+39333123456");
+        ret[1].setEmail("gervasi@unipi.it");
+        ret[1].setSito("di.unipi.it/~gervasi");
+        ret[1].setTelegram("@VincenzoGervasi");
+        ret[1].setColore("#E91E63");
+        ret[1].setProfilo( BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_profile) );
+        ret[1].setSfondo( BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_background));
+        ret[1].setCasaCitta("Pisa");
+        ret[1].setCasaStrada("Via Garibaldi 1");
+        Location casaCoordinate2 = new Location(LocationManager.GPS_PROVIDER);
+        casaCoordinate2.setLatitude(10.0);
+        casaCoordinate2.setLongitude(12.0);
+        ret[1].setCasaCoordinate(casaCoordinate2);
+        ret[1].setLavoroRuolo("Professore");
+        ret[1].setLavoroLuogo("Università di Pisa");
+        Location lavoroCoordinate2 = new Location(LocationManager.GPS_PROVIDER);
+        lavoroCoordinate2.setLatitude(14.0);
+        lavoroCoordinate2.setLongitude(8.0);
+        ret[1].setLavoroCoordinate(lavoroCoordinate2);
+
+        return ret;
     }
 }

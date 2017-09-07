@@ -1,9 +1,17 @@
 package re.gaspa.bcmanager.ui.models;
 
+import android.content.ContentValues;
+import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import re.gaspa.bcmanager.R;
+import re.gaspa.bcmanager.utils.Utils;
 
 /**
  * Created by gaspare on 29/08/17.
@@ -327,6 +335,74 @@ public class BusinessCard implements Parcelable {
                 ", profilo=" + profilo +
                 ", sfondo=" + sfondo +
                 '}';
+    }
+
+    public ContentValues getContentValues()
+    {
+        ContentValues ret = new ContentValues();
+        // TODO ret.put();
+
+        ret.put("ID", this.getId());
+        ret.put("PREF", this.getPreferito() ? 1 : 0 );
+
+        ret.put("NOME", this.getNome());
+        ret.put("TELEFONO", this.getTelefono());
+        ret.put("EMAIL", this.getEmail());
+        ret.put("SITO", this.getSito());
+        ret.put("TELEGRAM", this.getTelegram());
+        ret.put("COLOR", this.getColore());
+
+        ret.put("CASACITTA", this.getCasaCitta());
+        ret.put("CASASTRADA", this.getCasaStrada());
+        ret.put("CASALAT", this.getCasaCoordinate() == null ? 0.0 : this.getCasaCoordinate().getLatitude());
+        ret.put("CASALNG", this.getCasaCoordinate() == null ? 0.0 : this.getCasaCoordinate().getLongitude());
+
+        ret.put("LAVORORUOLO", this.getLavoroRuolo());
+        ret.put("LAVOROLUOGO", this.getLavoroLuogo());
+        ret.put("LAVOROLAT", this.getLavoroCoordinate() == null ? 0.0 : this.getLavoroCoordinate().getLatitude());
+        ret.put("LAVOROLNG", this.getLavoroCoordinate() == null ? 0.0 : this.getLavoroCoordinate().getLongitude());
+
+        ret.put("PROFILO", this.getProfilo() == null ? "".getBytes() : Utils.encodeTobase64(this.getProfilo()).getBytes());
+        ret.put("SFONDO", this.getProfilo() == null ? "".getBytes() : Utils.encodeTobase64(this.getSfondo()).getBytes());
+
+        return ret;
+    }
+
+    public static BusinessCard loadFromCursor(Cursor cursor)
+    {
+        BusinessCard ret = new BusinessCard();
+
+        ret.setId( cursor.getInt(cursor.getColumnIndex("ID")) );
+        ret.setPreferito( cursor.getInt(cursor.getColumnIndex("PREF")) == 1 );
+        ret.setNome( cursor.getString(cursor.getColumnIndex("NOME")) );
+        ret.setTelefono( cursor.getString(cursor.getColumnIndex("TELEFONO")) );
+
+        ret.setEmail( cursor.getString(cursor.getColumnIndex("EMAIL")) );
+        ret.setSito( cursor.getString(cursor.getColumnIndex("SITO")) );
+        ret.setTelegram( cursor.getString(cursor.getColumnIndex("TELEGRAM")) );
+        ret.setColore( cursor.getString(cursor.getColumnIndex("COLOR")) );
+
+        ret.setProfilo( Utils.decodeBase64( new String(cursor.getBlob(cursor.getColumnIndex("PROFILO")) ) ) );
+        ret.setSfondo( Utils.decodeBase64( new String(cursor.getBlob(cursor.getColumnIndex("SFONDO")) ) ) );
+
+        ret.setProfilo( BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_profile) );
+        ret.setSfondo( BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_background));
+
+        ret.setCasaCitta( cursor.getString(cursor.getColumnIndex("CASACITTA")) );
+        ret.setCasaStrada( cursor.getString(cursor.getColumnIndex("CASASTRADA")) );
+        Location casaCoordinate = new Location(LocationManager.GPS_PROVIDER);
+        casaCoordinate.setLatitude( cursor.getDouble(cursor.getColumnIndex("CASALAT")) );
+        casaCoordinate.setLongitude( cursor.getDouble(cursor.getColumnIndex("CASALNG")) );
+        ret.setCasaCoordinate(casaCoordinate);
+
+        ret.setLavoroRuolo( cursor.getString(cursor.getColumnIndex("LAVORORUOLO")) );
+        ret.setLavoroLuogo( cursor.getString(cursor.getColumnIndex("LAVOROLUOGO")) );
+        Location lavoroCoordinate = new Location(LocationManager.GPS_PROVIDER);
+        lavoroCoordinate.setLatitude( cursor.getDouble(cursor.getColumnIndex("LAVOROLAT")) );
+        lavoroCoordinate.setLongitude( cursor.getDouble(cursor.getColumnIndex("LAVOROLNG")) );
+        ret.setLavoroCoordinate(lavoroCoordinate);
+
+        return ret;
     }
 
 }
