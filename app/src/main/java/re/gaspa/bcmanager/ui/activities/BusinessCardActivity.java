@@ -86,6 +86,7 @@ public class BusinessCardActivity extends AppCompatActivity implements View.OnCl
             else
                 binding.textStreet.setVisibility(View.GONE);
             binding.cardCity.setOnClickListener(this);
+
         }
         else
             binding.cardCity.setVisibility(View.GONE);
@@ -138,6 +139,7 @@ public class BusinessCardActivity extends AppCompatActivity implements View.OnCl
         }
         else
             binding.cardWebsite.setVisibility(View.GONE);
+
 
     }
 

@@ -2,11 +2,9 @@
     TODO:
     - Splash screen
     - Riconoscimento primo avvio
-    - salvataggio bitmap utente
     - Pagina crediti
     - Pagina aiuto
     - Pagina impostazioni
-    - Pagina modifca profilo
     - Fix bug selezione su condividi
     - Database utenti
     - Marker su mappa

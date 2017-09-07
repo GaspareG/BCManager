@@ -147,11 +147,10 @@ public class Main extends AppCompatActivity
             } else if (id == R.id.nav_setting) {
                 fragmentClass = Settings.class;
             } else if (id == R.id.nav_help) {
-                //fragmentClass = Help.class;
+                fragmentClass = Help.class;
             } else if (id == R.id.nav_credits) {
                 fragmentClass = Credits.class;
-            } else if (id == R.id.nav_profile)
-            {
+            } else if (id == R.id.nav_profile) {
                 fragmentClass = EditProfile.class;
             }
 
@@ -201,7 +200,7 @@ public class Main extends AppCompatActivity
     public void onClick(View view) {
 
         int id = view.getId();
-        
+
         Intent intent = new Intent(view.getContext(), BusinessCardActivity.class);
         intent.putExtra("businesscard", Utils.getPersonalBusinessCard(null) );
         view.getContext().startActivity(intent);

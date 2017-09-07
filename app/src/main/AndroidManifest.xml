@@ -45,6 +45,8 @@
             android:authorities="re.gaspa.provider"
             android:enabled="true"
             android:exported="true" />
+
+        <activity android:name=".ui.activities.Help"></activity>
     </application>
 
 </manifest>

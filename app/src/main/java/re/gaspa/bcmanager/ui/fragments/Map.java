@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,10 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMar
         // Inflate the layout for this fragment
 
         mContext = getActivity();
+
+/*        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        ft.remove(fragment);
+        ft.commit();*/
 
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
                 R.layout.fragment_map, container, false);
