@@ -38,5 +38,8 @@
     <string name="alert_dialog_ok">Scegli</string>
     <string name="alert_dialog_cancel">Cancella</string>
     <string name="choose_color">Scegli un colore</string>
+    <string name="bcmanager">BCManager</string>
+    <string name="avanti">Avanti</string>
+    <string name="indietro">Indietro</string>
 
 </resources>

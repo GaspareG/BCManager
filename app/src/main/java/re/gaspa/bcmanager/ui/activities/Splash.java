@@ -1,12 +1,8 @@
 /*
     TODO:
-    - Splash screen
-    - Riconoscimento primo avvio
     - Pagina crediti
-    - Pagina aiuto
     - Pagina impostazioni
     - Fix bug selezione su condividi
-    - Database utenti
     - Marker su mappa
     - Ricerca su lista
     - Preferiti e filtro
@@ -19,7 +15,6 @@ package re.gaspa.bcmanager.ui.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +25,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
 
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.ui.models.BusinessCard;

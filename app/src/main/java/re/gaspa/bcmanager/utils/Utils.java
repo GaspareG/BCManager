@@ -3,6 +3,7 @@ package re.gaspa.bcmanager.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 
@@ -28,11 +30,10 @@ public class Utils {
     public static void openTelegram(String nick, Context context)
     {
         if( nick.startsWith("@") ) nick.replaceFirst("@","");
-        Intent telegram = new Intent(android.content.Intent.ACTION_SEND);
-        telegram.setData(Uri.parse("http://telegram.me/"+nick));
-        telegram.setPackage("org.telegram.messenger");
-        context.startActivity(Intent.createChooser(telegram, "Share with"));
+        Intent telegram = new Intent(Intent.ACTION_VIEW , Uri.parse("https://telegram.me/"+nick));
+        context.startActivity(telegram);
     }
+
 
     public static void openWebsite(String url, Context context)
     {
@@ -61,10 +62,8 @@ public class Utils {
 
     public static void openLocation(Location city, Context context) {
 
-        Uri gmmIntentUri = Uri.parse("google.streetview:cbll="+city.getLatitude()+","+city.getLongitude());
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        context.startActivity(mapIntent);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:"+city.getLatitude()+","+city.getLongitude()));
+        context.startActivity(intent);
     }
 
     public static String encodeTobase64(Bitmap image)

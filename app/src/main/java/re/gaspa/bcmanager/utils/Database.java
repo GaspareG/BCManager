@@ -123,6 +123,11 @@ public class Database {
     {
         Integer id = businessCard.getId();
         SQLiteDatabase db = Database.getDatabase();
+        ArrayList<BusinessCard> list = getBusinessCards();
+        for(int i = 0 ; i < list.size(); i++) {
+            if( list.get(i).getId() == id )
+                list.remove(i);
+        }
         db.delete(tableName, "ID = ?", new String[]{ String.valueOf(id) });
     }
 
@@ -137,5 +142,12 @@ public class Database {
                 ret.add(bc);
         }
         return ret;
+    }
+
+    public static void setPreferite(BusinessCard businessCard, boolean preferite)
+    {
+        businessCard.setPreferito(preferite);
+        SQLiteDatabase db = Database.getDatabase();
+        db.update(tableName, businessCard.getContentValues(), "PREF = ?", new String[]{ ""+(preferite?1:0)} );
     }
 }
