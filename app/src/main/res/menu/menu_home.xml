@@ -4,24 +4,22 @@
 
     <item
         android:id="@+id/action_search"
+        android:icon="@drawable/icon_search"
         android:title="@string/cerca"
-        app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        android:icon="@drawable/icon_search">
-    </item>
+        app:showAsAction="ifRoom|collapseActionView"></item>
 
     <item
         android:id="@+id/action_settings"
-        android:title="@string/action_settings"
         android:orderInCategory="1"
+        android:title="@string/action_settings"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/preferite"
-        android:title="@string/solo_preferiti"
-        app:showAsAction="never"
-        android:orderInCategory="2"
         android:checkable="true"
-        />
+        android:orderInCategory="2"
+        android:title="@string/solo_preferiti"
+        app:showAsAction="never" />
 
 </menu>

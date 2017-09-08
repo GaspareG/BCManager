@@ -2,26 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/delete"
-        android:visible="true"
-        android:title="@string/elimina"
+    <item
+        android:id="@+id/delete"
         android:icon="@drawable/icon_help"
-        app:showAsAction="ifRoom">
-    </item>
-
-    <item android:id="@+id/share"
+        android:title="@string/elimina"
         android:visible="true"
-        android:title="@string/condividi"
+        app:showAsAction="ifRoom"></item>
+
+    <item
+        android:id="@+id/share"
         android:icon="@drawable/ic_menu_share"
-        app:showAsAction="ifRoom">
-    </item>
-
-    <item android:id="@+id/preferite"
+        android:title="@string/condividi"
         android:visible="true"
-        android:title="@string/preferito"
-        android:icon="@drawable/icon_info"
+        app:showAsAction="ifRoom"></item>
+
+    <item
+        android:id="@+id/preferite"
         android:checkable="true"
-        app:showAsAction="ifRoom">
-    </item>
+        android:icon="@drawable/icon_info"
+        android:title="@string/preferito"
+        android:visible="true"
+        app:showAsAction="ifRoom"></item>
 
 </menu>

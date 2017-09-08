@@ -41,6 +41,6 @@
     <string name="bcmanager">BCManager</string>
     <string name="avanti">Avanti</string>
     <string name="indietro">Indietro</string>
-    <string name="credits">App sviluppata da Gaspare Ferraro Corso di Sviluppo di applicazioni mobili</string>
+    <string name="credits">App sviluppata da Gaspare Ferraro\nCorso di Sviluppo di applicazioni mobili</string>
 
 </resources>

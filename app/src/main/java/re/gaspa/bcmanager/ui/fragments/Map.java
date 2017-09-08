@@ -2,8 +2,10 @@ package re.gaspa.bcmanager.ui.fragments;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -23,8 +25,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.databinding.FragmentMapBinding;
+import re.gaspa.bcmanager.ui.activities.BusinessCardActivity;
+import re.gaspa.bcmanager.ui.models.BusinessCard;
+import re.gaspa.bcmanager.utils.Database;
 
 /**
  * Created by gaspare on 28/08/17.
@@ -45,21 +52,26 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMar
         // Inflate the layout for this fragment
 
         mContext = getActivity();
-
-/*        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.remove(fragment);
-        ft.commit();*/
-
-        mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
+                mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
                 R.layout.fragment_map, container, false);
 
 
-        FragmentManager fm = getActivity().getSupportFragmentManager();/// getChildFragmentManager();
-        supportMapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
+        FragmentManager fm = getChildFragmentManager();
+      /*  supportMapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
         if (supportMapFragment == null) {
             supportMapFragment = SupportMapFragment.newInstance();
             fm.beginTransaction().replace(R.id.map_container, supportMapFragment).commit();
+        }*/
+
+        supportMapFragment = (SupportMapFragment) fm.findFragmentByTag("mapFragment");
+        if (supportMapFragment == null) {
+            supportMapFragment = new SupportMapFragment();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.add(R.id.map_container, supportMapFragment, "mapFragment");
+            ft.commit();
+            fm.executePendingTransactions();
         }
+
         supportMapFragment.getMapAsync(this);
 
         return mBinding.getRoot();
@@ -68,27 +80,32 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMar
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        //if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                //   ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // return;
-            //}
-        //map.setMyLocationEnabled(true);
-        //map.animateCamera(CameraUpdateFactory.zoomTo(15));
-
         map.setOnMarkerClickListener(this);
 
-        LatLng latLng = new LatLng(0, 0); // new LatLng(currentLatLng.getLatitude(),currentLatLng.getLongitude());
-        if(currentPositionMarker == null) {
-            currentPositionMarker = new MarkerOptions();
-            currentPositionMarker.position(latLng).title("My Location");
-            currentLocationMarker = map.addMarker(currentPositionMarker);
-            // currentLocationMarker.setTag();
-        }
+        for( BusinessCard bc : Database.getBusinessCards() ) addMarker(bc);
+    }
+
+    public void addMarker(BusinessCard businessCard)
+    {
+        Location casa = businessCard.getCasaCoordinate();
+        if( casa == null || ( casa.getLongitude() == 0.0 && casa.getLatitude() == 0.0 ) ) return;
+
+        LatLng latLng = new LatLng(casa.getLatitude(), casa.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng).title(businessCard.getNome());
+        Marker marker = map.addMarker(markerOptions);
+        marker.setTag(businessCard);
+
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        // marker.getTag();
+
+        BusinessCard obj = (BusinessCard) marker.getTag();
+        Intent intent = new Intent(this.getContext(), BusinessCardActivity.class);
+        intent.putExtra("businesscard", obj);
+        this.getContext().startActivity(intent);
+
         return true;
     }
 }

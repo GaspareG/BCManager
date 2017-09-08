@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.databinding.CardviewBcBinding;
 import re.gaspa.bcmanager.ui.activities.BusinessCardActivity;
+import re.gaspa.bcmanager.ui.listeners.CardMenuClickListener;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.ui.viewholders.BusinessCardVH;
 import re.gaspa.bcmanager.utils.Utils;
@@ -28,7 +29,7 @@ import re.gaspa.bcmanager.utils.Utils;
  * Created by gaspare on 02/09/17.
  */
 
-public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> implements Toolbar.OnMenuItemClickListener, View.OnClickListener {
+public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> implements View.OnClickListener {
 
     private Context mContext;
     private ArrayList<BusinessCard> mBusinessCardItems;
@@ -65,8 +66,7 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
 
         binding.cardToolbar.getMenu().clear();
         binding.cardToolbar.inflateMenu(R.menu.menu_card);
-        binding.cardToolbar.setOnMenuItemClickListener(this);
-
+        binding.cardToolbar.setOnMenuItemClickListener(new CardMenuClickListener(binding.getRoot().getContext(), item));
 
         final String nome = item.getNome();
         final String colore = item.getColore();
@@ -75,14 +75,13 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
         final Bitmap sfondo = item.getSfondo();
         final Bitmap profilo = item.getProfilo();
 
-        if( nome != null && nome.length() > 0 )
+        if (nome != null && nome.length() > 0)
             binding.textName.setText(nome);
 
-        if( ruolo != null && ruolo.length() > 0 )
+        if (ruolo != null && ruolo.length() > 0)
             binding.textRole.setText(ruolo);
 
-        if( colore != null && colore.length() > 0 )
-        {
+        if (colore != null && colore.length() > 0) {
             int background = Color.parseColor(colore);
 
             binding.fabCall.setBackgroundTintList(ColorStateList.valueOf(background));
@@ -92,14 +91,13 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
             binding.textName.setTextColor(background);
         }
 
-        if( sfondo != null )
+        if (sfondo != null)
             binding.backgroundImage.setImageBitmap(sfondo);
 
-        if( profilo != null )
+        if (profilo != null)
             binding.profileImage.setImageBitmap(profilo);
 
-        if( numero != null && numero.length() > 0 )
-        {
+        if (numero != null && numero.length() > 0) {
             binding.fabCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -121,14 +119,6 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
     @Override
     public int getItemCount() {
         return mBusinessCardItems != null ? mBusinessCardItems.size() : 0;
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
-        // TODO menuItem
-        Log.d("MENUITEM", menuItem.getActionView().toString() );
-
-        return false;
     }
 
     @Override

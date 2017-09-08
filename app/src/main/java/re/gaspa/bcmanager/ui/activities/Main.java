@@ -60,17 +60,17 @@ public class Main extends AppCompatActivity
 
         binding.navView.setNavigationItemSelectedListener(this);
 
-        if( personal != null ) {
+        if (personal != null) {
             Bitmap profile = personal.getProfilo();
             Bitmap sfondo = personal.getSfondo();
             String nome = personal.getNome();
             String role = personal.getLavoroRuolo();
 
-            if( profile != null ) {
+            if (profile != null) {
                 CircleImageView profileImage = binding.navView.getHeaderView(0).findViewById(R.id.profile_image);
                 profileImage.setImageBitmap(profile);
             }
-            if( sfondo != null ) {
+            if (sfondo != null) {
                 ImageView backgroundImage = binding.navView.getHeaderView(0).findViewById(R.id.default_background);
                 backgroundImage.setImageBitmap(sfondo);
             }
@@ -79,41 +79,15 @@ public class Main extends AppCompatActivity
         binding.navView.getHeaderView(0).setOnClickListener(this);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-
-
-        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Log.d("SEARCH VIEW", "QUERY SUBMIT "+ query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText)
-            {
-                Log.d("SEARCH VIEW", "TEXT CHANGE " + newText);
-                return false;
-            }
-        });
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }
-        else if( id == R.id.preferite )
-        {
-            item.setChecked( !item.isChecked() );
+        } else if (id == R.id.preferite) {
+            item.setChecked(!item.isChecked());
             // TODO Filter
         }
 
@@ -126,23 +100,18 @@ public class Main extends AppCompatActivity
         int id = item.getItemId();
 
 
-        if( id == R.id.nav_share )
-        {
+        if (id == R.id.nav_share) {
             item.setChecked(false);
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
             sendIntent.putExtra(Intent.EXTRA_TEXT, "Utilizza pure te BCManager! http://gaspa.re/bcmanager");
             sendIntent.setType("text/plain");
             startActivity(Intent.createChooser(sendIntent, "Condividi!"));
-        }
-        else if( id == R.id.nav_help )
-        {
+        } else if (id == R.id.nav_help) {
             item.setChecked(false);
             Intent intent = new Intent(this.getApplicationContext(), Help.class);
             this.getApplicationContext().startActivity(intent);
-        }
-        else
-        {
+        } else {
             Class fragmentClass = Home.class;
 
             if (id == R.id.nav_home) {
@@ -168,8 +137,7 @@ public class Main extends AppCompatActivity
         return true;
     }
 
-    private void loadFragment(Class fragmentClass)
-    {
+    private void loadFragment(Class fragmentClass) {
         Fragment fragment;
 
         try {
@@ -186,12 +154,9 @@ public class Main extends AppCompatActivity
 
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START);
-        }
-        else if( binding.navView.getMenu().getItem(0).isChecked() )
-        {
+        } else if (binding.navView.getMenu().getItem(0).isChecked()) {
             finish();
-        }
-        else {
+        } else {
             this.loadFragment(Home.class);
             binding.navView.getMenu().getItem(0).setChecked(true);
         }
@@ -205,7 +170,7 @@ public class Main extends AppCompatActivity
         int id = view.getId();
 
         Intent intent = new Intent(view.getContext(), BusinessCardActivity.class);
-        intent.putExtra("businesscard", Preferences.getPersonalBusinessCard(null) );
+        intent.putExtra("businesscard", Preferences.getPersonalBusinessCard(null));
         view.getContext().startActivity(intent);
 
     }

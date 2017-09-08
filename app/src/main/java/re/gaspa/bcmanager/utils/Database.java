@@ -25,20 +25,18 @@ public class Database {
     private static final String tableName = "BusinessCard";
     private static ArrayList<BusinessCard> bclist = null;
 
-    public static SQLiteDatabase getDatabase()
-    {
-        if( Database.db == null ) {
-            File dbFile = new File( Environment.getExternalStorageDirectory(), dbName );
+    public static SQLiteDatabase getDatabase() {
+        if (Database.db == null) {
+            File dbFile = new File(Environment.getExternalStorageDirectory(), dbName);
             Database.db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
         }
         return Database.db;
     }
 
-    public static void createTable()
-    {
+    public static void createTable() {
         SQLiteDatabase db = Database.getDatabase();
         StringBuilder query = new StringBuilder();
-        query.append("CREATE TABLE IF NOT EXISTS "+tableName+" (");
+        query.append("CREATE TABLE IF NOT EXISTS " + tableName + " (");
 
         query.append("ID INTEGER PRIMARY KEY AUTOINCREMENT, ");
         query.append("PREF INTEGER, ");
@@ -70,27 +68,23 @@ public class Database {
 
         BusinessCard fake[] = Utils.getFakeBusinessCard();
 
-        for( int i = 0 ; i < fake.length ; i++ )
+        for (int i = 0; i < fake.length; i++)
             Database.addBusinessCard(fake[i]);
     }
 
-    public static ArrayList<BusinessCard> getBusinessCards()
-    {
+    public static ArrayList<BusinessCard> getBusinessCards() {
         SQLiteDatabase db = Database.getDatabase();
-        if( bclist == null )
-        {
+        if (bclist == null) {
             bclist = new ArrayList<>();
             Cursor dbCursor = db.query(tableName, null, null, null, null, null, null);
-            if( dbCursor != null )
-            {
-                if( dbCursor.moveToFirst() )
-                {
+            if (dbCursor != null) {
+                if (dbCursor.moveToFirst()) {
                     do {
                         BusinessCard businessCard = BusinessCard.loadFromCursor(dbCursor);
                         bclist.add(businessCard);
-                        Log.d("DATABASE", "CARICATO ["+businessCard.getNome()+"] ID["+businessCard.getId()+"]");
+                        Log.d("DATABASE", "CARICATO [" + businessCard.getNome() + "] ID[" + businessCard.getId() + "]");
                     }
-                    while ( dbCursor.moveToNext() );
+                    while (dbCursor.moveToNext());
                 }
                 dbCursor.close();
             }
@@ -98,56 +92,50 @@ public class Database {
         return bclist;
     }
 
-    public static void addBusinessCard(BusinessCard businessCard)
-    {
+    public static void addBusinessCard(BusinessCard businessCard) {
         SQLiteDatabase db = Database.getDatabase();
-        businessCard.setId( Database.getNextId() );
+        businessCard.setId(Database.getNextId());
         Long rowId = db.insert(tableName, null, businessCard.getContentValues());
         getBusinessCards().add(businessCard);
-        Log.d("DATABASE", "INSERITO ["+businessCard.getNome()+"] ID["+rowId+"]");
+        Log.d("DATABASE", "INSERITO [" + businessCard.getNome() + "] ID[" + rowId + "]");
     }
 
     private static Integer getNextId() {
         Integer ret = -1;
         ArrayList<BusinessCard> list = Database.getBusinessCards();
-        for(BusinessCard bc : list)
-        {
-            if( bc.getId() > ret )
+        for (BusinessCard bc : list) {
+            if (bc.getId() > ret)
                 ret = bc.getId();
         }
         ret++;
         return ret;
     }
 
-    public static void deleteBusinessCard(BusinessCard businessCard)
-    {
+    public static void deleteBusinessCard(BusinessCard businessCard) {
         Integer id = businessCard.getId();
         SQLiteDatabase db = Database.getDatabase();
         ArrayList<BusinessCard> list = getBusinessCards();
-        for(int i = 0 ; i < list.size(); i++) {
-            if( list.get(i).getId() == id )
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId() == id)
                 list.remove(i);
         }
-        db.delete(tableName, "ID = ?", new String[]{ String.valueOf(id) });
+        db.delete(tableName, "ID = ?", new String[]{String.valueOf(id)});
     }
 
-    public static ArrayList<BusinessCard> getBusinessCards(boolean preferite, String name)
-    {
+    public static ArrayList<BusinessCard> getBusinessCards(boolean preferite, String name) {
         ArrayList<BusinessCard> ret = new ArrayList<>();
         ArrayList<BusinessCard> all = Database.getBusinessCards();
         name = name.toLowerCase();
-        for( BusinessCard bc : all )
-        {
-            if( (!preferite || bc.getPreferito()) && bc.getNome().toLowerCase().contains(name) )
+        for (BusinessCard bc : all) {
+            if ((!preferite || bc.getPreferito()) && bc.getNome().toLowerCase().contains(name))
                 ret.add(bc);
         }
         return ret;
     }
 
-    public static void setPreferite(BusinessCard businessCard, boolean preferite)
-    {
+    public static void setPreferite(BusinessCard businessCard, boolean preferite) {
         businessCard.setPreferito(preferite);
         SQLiteDatabase db = Database.getDatabase();
-        db.update(tableName, businessCard.getContentValues(), "PREF = ?", new String[]{ ""+(preferite?1:0)} );
+        db.update(tableName, businessCard.getContentValues(), "PREF = ?", new String[]{"" + (preferite ? 1 : 0)});
     }
 }

@@ -16,23 +16,25 @@
             android:title="@string/mappa" />
     </group>
 
-    <group android:id="@+id/grp2" android:checkableBehavior="single" >
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/condividi" />
-            <item
-                android:id="@+id/nav_setting"
-                android:icon="@drawable/icon_setting"
-                android:title="@string/impostazioni" />
-            <item
-                android:id="@+id/nav_help"
-                android:icon="@drawable/icon_help"
-                android:title="@string/aiuto" />
-            <item
-                android:id="@+id/nav_credits"
-                android:icon="@drawable/icon_info"
-                android:title="@string/crediti" />
+    <group
+        android:id="@+id/grp2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_menu_share"
+            android:title="@string/condividi" />
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/icon_setting"
+            android:title="@string/impostazioni" />
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/icon_help"
+            android:title="@string/aiuto" />
+        <item
+            android:id="@+id/nav_credits"
+            android:icon="@drawable/icon_info"
+            android:title="@string/crediti" />
     </group>
 
 </menu>

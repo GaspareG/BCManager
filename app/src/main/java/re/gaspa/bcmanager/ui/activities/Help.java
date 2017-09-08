@@ -70,6 +70,7 @@ public class Help extends AppCompatActivity implements View.OnClickListener {
             }
             else if( page == 1 )
             {
+                binding.buttonForward.setText("Fine");
                 loadFragment(EditProfile.class);
                 page = 2 ;
             }

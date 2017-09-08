@@ -94,6 +94,7 @@ public class Utils {
         BusinessCard ret[] = new BusinessCard[2];
 
         ret[0] = new BusinessCard();
+        ret[0].setPreferito(true);
         ret[0].setNome("Gaspare Ferraro");
         ret[0].setTelefono("+393926477802");
         ret[0].setEmail("ferraro@gaspa.re");
@@ -116,6 +117,7 @@ public class Utils {
         ret[0].setLavoroCoordinate(lavoroCoordinate);
 
         ret[1] = new BusinessCard();
+        ret[1].setPreferito(true);
         ret[1].setNome("Vincenzo Gervasi");
         ret[1].setTelefono("+39333123456");
         ret[1].setEmail("gervasi@unipi.it");

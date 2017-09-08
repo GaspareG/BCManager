@@ -40,8 +40,7 @@ public class BusinessCard implements Parcelable {
     private Bitmap profilo;
     private Bitmap sfondo;
 
-    public BusinessCard()
-    {
+    public BusinessCard() {
         this.id = 0;
         this.preferito = false;
         this.nome = "";
@@ -81,7 +80,7 @@ public class BusinessCard implements Parcelable {
 
     protected BusinessCard(Parcel in) {
         id = in.readInt();
-        preferito = in.readByte() != 0 ;
+        preferito = in.readByte() != 0;
         nome = in.readString();
         telefono = in.readString();
         email = in.readString();
@@ -277,12 +276,16 @@ public class BusinessCard implements Parcelable {
         if (telefono != null ? !telefono.equals(that.telefono) : that.telefono != null)
             return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (lavoroRuolo != null ? !lavoroRuolo.equals(that.lavoroRuolo) : that.lavoroRuolo != null) return false;
-        if (lavoroLuogo != null ? !lavoroLuogo.equals(that.lavoroLuogo) : that.lavoroLuogo != null) return false;
+        if (lavoroRuolo != null ? !lavoroRuolo.equals(that.lavoroRuolo) : that.lavoroRuolo != null)
+            return false;
+        if (lavoroLuogo != null ? !lavoroLuogo.equals(that.lavoroLuogo) : that.lavoroLuogo != null)
+            return false;
         if (lavoroCoordinate != null ? !lavoroCoordinate.equals(that.lavoroCoordinate) : that.lavoroCoordinate != null)
             return false;
-        if (casaCitta != null ? !casaCitta.equals(that.casaCitta) : that.casaCitta != null) return false;
-        if (casaStrada != null ? !casaStrada.equals(that.casaStrada) : that.casaStrada != null) return false;
+        if (casaCitta != null ? !casaCitta.equals(that.casaCitta) : that.casaCitta != null)
+            return false;
+        if (casaStrada != null ? !casaStrada.equals(that.casaStrada) : that.casaStrada != null)
+            return false;
         if (casaCoordinate != null ? !casaCoordinate.equals(that.casaCoordinate) : that.casaCoordinate != null)
             return false;
         if (sito != null ? !sito.equals(that.sito) : that.sito != null) return false;
@@ -337,13 +340,12 @@ public class BusinessCard implements Parcelable {
                 '}';
     }
 
-    public ContentValues getContentValues()
-    {
+    public ContentValues getContentValues() {
         ContentValues ret = new ContentValues();
         // TODO ret.put();
 
         ret.put("ID", this.getId());
-        ret.put("PREF", this.getPreferito() ? 1 : 0 );
+        ret.put("PREF", this.getPreferito() ? 1 : 0);
 
         ret.put("NOME", this.getNome());
         ret.put("TELEFONO", this.getTelefono());
@@ -368,38 +370,37 @@ public class BusinessCard implements Parcelable {
         return ret;
     }
 
-    public static BusinessCard loadFromCursor(Cursor cursor)
-    {
+    public static BusinessCard loadFromCursor(Cursor cursor) {
         BusinessCard ret = new BusinessCard();
 
-        ret.setId( cursor.getInt(cursor.getColumnIndex("ID")) );
-        ret.setPreferito( cursor.getInt(cursor.getColumnIndex("PREF")) == 1 );
-        ret.setNome( cursor.getString(cursor.getColumnIndex("NOME")) );
-        ret.setTelefono( cursor.getString(cursor.getColumnIndex("TELEFONO")) );
+        ret.setId(cursor.getInt(cursor.getColumnIndex("ID")));
+        ret.setPreferito(cursor.getInt(cursor.getColumnIndex("PREF")) == 1);
+        ret.setNome(cursor.getString(cursor.getColumnIndex("NOME")));
+        ret.setTelefono(cursor.getString(cursor.getColumnIndex("TELEFONO")));
 
-        ret.setEmail( cursor.getString(cursor.getColumnIndex("EMAIL")) );
-        ret.setSito( cursor.getString(cursor.getColumnIndex("SITO")) );
-        ret.setTelegram( cursor.getString(cursor.getColumnIndex("TELEGRAM")) );
-        ret.setColore( cursor.getString(cursor.getColumnIndex("COLOR")) );
+        ret.setEmail(cursor.getString(cursor.getColumnIndex("EMAIL")));
+        ret.setSito(cursor.getString(cursor.getColumnIndex("SITO")));
+        ret.setTelegram(cursor.getString(cursor.getColumnIndex("TELEGRAM")));
+        ret.setColore(cursor.getString(cursor.getColumnIndex("COLOR")));
 
-        ret.setProfilo( Utils.decodeBase64( new String(cursor.getBlob(cursor.getColumnIndex("PROFILO")) ) ) );
-        ret.setSfondo( Utils.decodeBase64( new String(cursor.getBlob(cursor.getColumnIndex("SFONDO")) ) ) );
+        ret.setProfilo(Utils.decodeBase64(new String(cursor.getBlob(cursor.getColumnIndex("PROFILO")))));
+        ret.setSfondo(Utils.decodeBase64(new String(cursor.getBlob(cursor.getColumnIndex("SFONDO")))));
 
-        ret.setProfilo( BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_profile) );
-        ret.setSfondo( BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_background));
+        ret.setProfilo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_profile));
+        ret.setSfondo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_background));
 
-        ret.setCasaCitta( cursor.getString(cursor.getColumnIndex("CASACITTA")) );
-        ret.setCasaStrada( cursor.getString(cursor.getColumnIndex("CASASTRADA")) );
+        ret.setCasaCitta(cursor.getString(cursor.getColumnIndex("CASACITTA")));
+        ret.setCasaStrada(cursor.getString(cursor.getColumnIndex("CASASTRADA")));
         Location casaCoordinate = new Location(LocationManager.GPS_PROVIDER);
-        casaCoordinate.setLatitude( cursor.getDouble(cursor.getColumnIndex("CASALAT")) );
-        casaCoordinate.setLongitude( cursor.getDouble(cursor.getColumnIndex("CASALNG")) );
+        casaCoordinate.setLatitude(cursor.getDouble(cursor.getColumnIndex("CASALAT")));
+        casaCoordinate.setLongitude(cursor.getDouble(cursor.getColumnIndex("CASALNG")));
         ret.setCasaCoordinate(casaCoordinate);
 
-        ret.setLavoroRuolo( cursor.getString(cursor.getColumnIndex("LAVORORUOLO")) );
-        ret.setLavoroLuogo( cursor.getString(cursor.getColumnIndex("LAVOROLUOGO")) );
+        ret.setLavoroRuolo(cursor.getString(cursor.getColumnIndex("LAVORORUOLO")));
+        ret.setLavoroLuogo(cursor.getString(cursor.getColumnIndex("LAVOROLUOGO")));
         Location lavoroCoordinate = new Location(LocationManager.GPS_PROVIDER);
-        lavoroCoordinate.setLatitude( cursor.getDouble(cursor.getColumnIndex("LAVOROLAT")) );
-        lavoroCoordinate.setLongitude( cursor.getDouble(cursor.getColumnIndex("LAVOROLNG")) );
+        lavoroCoordinate.setLatitude(cursor.getDouble(cursor.getColumnIndex("LAVOROLAT")));
+        lavoroCoordinate.setLongitude(cursor.getDouble(cursor.getColumnIndex("LAVOROLNG")));
         ret.setLavoroCoordinate(lavoroCoordinate);
 
         return ret;

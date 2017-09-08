@@ -3,10 +3,11 @@
     - Pagina Aiuto 0
     - Pagina Aiuto 1
 
-    - Fix bug selezione su condividi
-    - Marker su mappa
-    - Ricerca su lista
-    - Preferiti e filtro
+    - Fix bug selezione su condividi/aiuto
+    - Fix bug mappa
+
+    - Preferiti
+
     - Export businesscard (testo, vcard, immagine, bluetooth, nfc, wifi)
     - Import businesscard (testo, vcard, immagine, bluetooth, nfc, wifi)
  */
@@ -66,7 +67,7 @@ public class Splash extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     continueSplash();
                 } else {
-                    Toast.makeText(this, "NO", Toast.LENGTH_SHORT);
+                    Toast.makeText(this, "NO", Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 break;

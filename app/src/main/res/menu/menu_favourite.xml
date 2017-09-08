@@ -4,10 +4,10 @@
 
     <item
         android:id="@+id/menu_favourite"
-        android:title="@string/preferito"
-        android:orderInCategory="1"
-        android:icon="@drawable/icon_star"
         android:checkable="true"
+        android:icon="@drawable/icon_star"
+        android:orderInCategory="1"
+        android:title="@string/preferito"
         app:showAsAction="never" />
 
 </menu>

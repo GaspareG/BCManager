@@ -19,8 +19,7 @@ public class Preferences {
     private static BusinessCard personal = null;
     private static SharedPreferences preferences = null;
 
-    public static void setPersonalBusinessCard(Context ctx, BusinessCard personal)
-    {
+    public static void setPersonalBusinessCard(Context ctx, BusinessCard personal) {
         Preferences.personal = personal;
         SharedPreferences preferences = getPreferences(ctx);
         SharedPreferences.Editor editor = preferences.edit();
@@ -33,50 +32,42 @@ public class Preferences {
         editor.putString("color", personal.getColore());
 
 
-        editor.putString("jobRole",personal.getLavoroRuolo());
-        editor.putString("jobName",personal.getLavoroLuogo());
+        editor.putString("jobRole", personal.getLavoroRuolo());
+        editor.putString("jobName", personal.getLavoroLuogo());
         Location lavoroCoordinate = personal.getLavoroCoordinate();
-        if( lavoroCoordinate != null )
-        {
+        if (lavoroCoordinate != null) {
             editor.putFloat("jobLat", (float) lavoroCoordinate.getLatitude());
             editor.putFloat("jobLng", (float) lavoroCoordinate.getLongitude());
         }
 
-        editor.putString("houseCity",personal.getCasaCitta());
-        editor.putString("houseStreet",personal.getCasaStrada());
+        editor.putString("houseCity", personal.getCasaCitta());
+        editor.putString("houseStreet", personal.getCasaStrada());
         Location casaCoordinate = personal.getCasaCoordinate();
-        if( casaCoordinate != null )
-        {
+        if (casaCoordinate != null) {
             editor.putFloat("houseLat", (float) casaCoordinate.getLatitude());
             editor.putFloat("houseLng", (float) casaCoordinate.getLongitude());
         }
 
         Bitmap profilo = personal.getProfilo();
         Bitmap sfondo = personal.getSfondo();
-        if( profilo != null )
-        {
+        if (profilo != null) {
             String profiloString = Utils.encodeTobase64(profilo);
             Log.d("SHARED", "PROFILO " + profiloString.length());
             editor.putString("profilo", profiloString);
         }
-        if( sfondo != null )
-        {
+        if (sfondo != null) {
             String sfondoString = Utils.encodeTobase64(sfondo);
             Log.d("SHARED", "SFONDO " + sfondoString.length());
-            editor.putString("sfondo", sfondoString );
+            editor.putString("sfondo", sfondoString);
         }
 
         editor.commit();
     }
 
-    public static BusinessCard getPersonalBusinessCard(Context ctx)
-    {
-        if( Preferences.personal == null )
-        {
+    public static BusinessCard getPersonalBusinessCard(Context ctx) {
+        if (Preferences.personal == null) {
             SharedPreferences preferences = getPreferences(ctx);
 
-            //Integer id;
-            //Boolean preferito;
             String nome = preferences.getString("name", "");
             String telefono = preferences.getString("phone", "");
             String email = preferences.getString("email", "");
@@ -121,37 +112,34 @@ public class Preferences {
             Preferences.personal.setCasaStrada(casaStrada);
             Preferences.personal.setCasaCoordinate(casaCoordinate);
 
-            if( profilo != null )
-            Log.d("SHARED", "PROFILO " + profilo.length());
-            if( sfondo != null )
-            Log.d("SHARED", "SFONDO " + sfondo.length());
+            if (profilo != null)
+                Log.d("SHARED", "PROFILO " + profilo.length());
+            if (sfondo != null)
+                Log.d("SHARED", "SFONDO " + sfondo.length());
 
-            if( profilo != null )
-                Preferences.personal.setProfilo( Utils.decodeBase64(profilo) );
-            if( sfondo != null )
-                Preferences.personal.setSfondo( Utils.decodeBase64(sfondo) );
+            if (profilo != null)
+                Preferences.personal.setProfilo(Utils.decodeBase64(profilo));
+            if (sfondo != null)
+                Preferences.personal.setSfondo(Utils.decodeBase64(sfondo));
 
         }
         return Preferences.personal;
     }
 
     public static SharedPreferences getPreferences(Context ctx) {
-        if( Preferences.preferences == null && ctx != null)
-        {
+        if (Preferences.preferences == null && ctx != null) {
             Preferences.preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
         }
         return Preferences.preferences;
     }
 
-    public static boolean getFirstOpen(Context ctx)
-    {
+    public static boolean getFirstOpen(Context ctx) {
         SharedPreferences preferences = Preferences.getPreferences(ctx);
         boolean ret = preferences.getBoolean("open", true);
         return ret;
     }
 
-    public static void setFirstOpen(Context ctx, boolean value)
-    {
+    public static void setFirstOpen(Context ctx, boolean value) {
         SharedPreferences preferences = Preferences.getPreferences(ctx);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("open", false);

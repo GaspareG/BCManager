@@ -227,7 +227,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
             mBindingColor.fabColor16.setOnClickListener(this);
 
 
-            AlertDialog.Builder builder = new AlertDialog.Builder( getActivity() );
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setView(mBindingColor.getRoot());
             builder.setTitle(getActivity().getString(R.string.choose_color));
             builder.setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
