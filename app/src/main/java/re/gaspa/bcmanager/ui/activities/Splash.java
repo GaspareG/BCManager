@@ -2,11 +2,12 @@
     TODO:
     - Pagina Aiuto 0
     - Pagina Aiuto 1
-
+    - Geo decoding citta e via in Modifica Profilo
+    - Scelta foto da galleria / risoluzione maggiore
     - Fix bug selezione su condividi/aiuto
     - Fix bug mappa
-
-    - Preferiti
+    - Implementazione cancellazione dati
+    - Filtro preferiti
 
     - Export businesscard (testo, vcard, immagine, bluetooth, nfc, wifi)
     - Import businesscard (testo, vcard, immagine, bluetooth, nfc, wifi)
@@ -41,12 +42,6 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-    }
-
-    // TODO FIX?
-    @Override
-    protected void onResume() {
-        super.onResume();
 
         Preferences.getPreferences(this.getBaseContext());
 
@@ -58,6 +53,7 @@ public class Splash extends AppCompatActivity {
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION);
 
         } else continueSplash();
+
     }
 
     @Override
@@ -79,13 +75,16 @@ public class Splash extends AppCompatActivity {
             @Override
             public void run() {
 
-                if (Preferences.getFirstOpen(null)) {
+                Log.d("FIRST_OPEN", Preferences.getFirstOpen(null) + "");
+
+                if ( Preferences.getFirstOpen(null) ) {
                     // Creo DB e apro HELP
                     Log.d("FIRST_OPEN", "APRO HELP");
                     Preferences.setFirstOpen(null, false);
 
                     // Creo DB e apro HELP
                     Log.d("FIRST_OPEN", "CREO DB");
+                    Database.getDatabase(true);
                     Database.createTable();
 
                     Log.d("FIRST_OPEN", "CARICO BC");
@@ -97,7 +96,7 @@ public class Splash extends AppCompatActivity {
                 } else {
                     Log.d("FIRST_OPEN", "CARICO BC");
                     ArrayList<BusinessCard> bc = Database.getBusinessCards();
-                    Log.d("FIRST_OPEN", "CARIATE " + bc.size());
+                    Log.d("FIRST_OPEN", "CARICATE " + bc.size());
 
                     Log.d("FIRST_OPEN", "APRO MAIN");
                     Intent intent = new Intent(getApplicationContext(), Main.class);

@@ -16,20 +16,20 @@
     <string name="crediti">Crediti</string>
     <string name="elimina">Elimina</string>
     <string name="modifica_profilo">Modifica profilo</string>
-    <string name="default_name">Gaspare Ferraro</string>
-    <string name="default_job">Studente</string>
+    <string name="default_name">Nome Cognome</string>
+    <string name="default_job">Ruolo Lavorativo</string>
     <string name="background_image">background image</string>
     <string name="fake_gps_coord">8.123456, 8.123456</string>
-    <string name="default_job_place">Google Inc.</string>
-    <string name="default_job_role">Ruolo</string>
+    <string name="default_job_place">Nome Azienda S.P.A.</string>
+    <string name="default_job_role">Ruolo Lavorativo</string>
     <string name="lavoro">Lavoro</string>
-    <string name="scegli_la_sposizione">Scegli la sposizione</string>
-    <string name="default_street">via garibaldi</string>
-    <string name="default_city">Pisa</string>
+    <string name="scegli_la_sposizione">Scegli la posizione</string>
+    <string name="default_street">Via Garibaldi</string>
+    <string name="default_city">Citta</string>
     <string name="abitazione">Abitazione</string>
     <string name="telegram_nick">\@TelegramNick</string>
-    <string name="default_website">website.org</string>
-    <string name="default_mail">prova@mail.com</string>
+    <string name="default_website">sitopersonale.org</string>
+    <string name="default_mail">nome@mail.com</string>
     <string name="default_phone">+39333123456</string>
     <string name="name">Nome</string>
     <string name="informazioni_personali">Informazioni personali</string>
@@ -42,5 +42,10 @@
     <string name="avanti">Avanti</string>
     <string name="indietro">Indietro</string>
     <string name="credits">App sviluppata da Gaspare Ferraro\nCorso di Sviluppo di applicazioni mobili</string>
+    <string name="hello_help_0">Hello Help 0!</string>
+    <string name="numero_telefono">Numero di telefono</string>
+    <string name="e_mail">E-Mail</string>
+    <string name="telegram">Telegram</string>
+    <string name="sito_web">Sito web</string>
 
 </resources>

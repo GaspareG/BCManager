@@ -10,12 +10,6 @@
         app:showAsAction="ifRoom|collapseActionView"></item>
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="1"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/preferite"
         android:checkable="true"
         android:orderInCategory="2"

@@ -25,6 +25,16 @@ public class Database {
     private static final String tableName = "BusinessCard";
     private static ArrayList<BusinessCard> bclist = null;
 
+    public static SQLiteDatabase getDatabase(boolean clear) {
+        if( clear )
+        {
+            File dbFile = new File(Environment.getExternalStorageDirectory(), dbName);
+            dbFile.delete();
+            Database.db = null;
+        }
+        return getDatabase();
+    }
+
     public static SQLiteDatabase getDatabase() {
         if (Database.db == null) {
             File dbFile = new File(Environment.getExternalStorageDirectory(), dbName);
@@ -134,8 +144,8 @@ public class Database {
     }
 
     public static void setPreferite(BusinessCard businessCard, boolean preferite) {
-        businessCard.setPreferito(preferite);
         SQLiteDatabase db = Database.getDatabase();
-        db.update(tableName, businessCard.getContentValues(), "PREF = ?", new String[]{"" + (preferite ? 1 : 0)});
+        businessCard.setPreferito(preferite);
+        db.update(tableName, businessCard.getContentValues(), "ID = ?", new String[]{ businessCard.getId().toString()} );
     }
 }

@@ -365,7 +365,7 @@ public class BusinessCard implements Parcelable {
         ret.put("LAVOROLNG", this.getLavoroCoordinate() == null ? 0.0 : this.getLavoroCoordinate().getLongitude());
 
         ret.put("PROFILO", this.getProfilo() == null ? "".getBytes() : Utils.encodeTobase64(this.getProfilo()).getBytes());
-        ret.put("SFONDO", this.getProfilo() == null ? "".getBytes() : Utils.encodeTobase64(this.getSfondo()).getBytes());
+        ret.put("SFONDO", this.getSfondo() == null ? "".getBytes() : Utils.encodeTobase64(this.getSfondo()).getBytes());
 
         return ret;
     }
@@ -385,9 +385,6 @@ public class BusinessCard implements Parcelable {
 
         ret.setProfilo(Utils.decodeBase64(new String(cursor.getBlob(cursor.getColumnIndex("PROFILO")))));
         ret.setSfondo(Utils.decodeBase64(new String(cursor.getBlob(cursor.getColumnIndex("SFONDO")))));
-
-        ret.setProfilo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_profile));
-        ret.setSfondo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_background));
 
         ret.setCasaCitta(cursor.getString(cursor.getColumnIndex("CASACITTA")));
         ret.setCasaStrada(cursor.getString(cursor.getColumnIndex("CASASTRADA")));

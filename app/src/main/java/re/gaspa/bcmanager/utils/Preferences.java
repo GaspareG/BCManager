@@ -142,7 +142,7 @@ public class Preferences {
     public static void setFirstOpen(Context ctx, boolean value) {
         SharedPreferences preferences = Preferences.getPreferences(ctx);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("open", false);
+        editor.putBoolean("open", value);
         editor.commit();
     }
 }

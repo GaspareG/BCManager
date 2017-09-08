@@ -66,6 +66,10 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
 
         binding.cardToolbar.getMenu().clear();
         binding.cardToolbar.inflateMenu(R.menu.menu_card);
+
+        MenuItem preferiteItem = binding.cardToolbar.getMenu().getItem(2);
+        preferiteItem.setChecked( item.getPreferito() );
+
         binding.cardToolbar.setOnMenuItemClickListener(new CardMenuClickListener(binding.getRoot().getContext(), item));
 
         final String nome = item.getNome();

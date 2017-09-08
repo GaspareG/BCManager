@@ -94,15 +94,15 @@ public class Utils {
         BusinessCard ret[] = new BusinessCard[2];
 
         ret[0] = new BusinessCard();
-        ret[0].setPreferito(true);
+        ret[0].setPreferito(false);
         ret[0].setNome("Gaspare Ferraro");
         ret[0].setTelefono("+393926477802");
         ret[0].setEmail("ferraro@gaspa.re");
         ret[0].setSito("gaspa.re");
         ret[0].setTelegram("@GaspareG");
         ret[0].setColore("#009688");
-        ret[0].setProfilo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_profile));
-        ret[0].setSfondo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_background));
+        ret[0].setProfilo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_profile1));
+        ret[0].setSfondo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_background1));
         ret[0].setCasaCitta("Genova");
         ret[0].setCasaStrada("Passo ca' dei rissi 7");
         Location casaCoordinate = new Location(LocationManager.GPS_PROVIDER);
@@ -124,8 +124,8 @@ public class Utils {
         ret[1].setSito("di.unipi.it/~gervasi");
         ret[1].setTelegram("@VincenzoGervasi");
         ret[1].setColore("#E91E63");
-        ret[1].setProfilo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_profile));
-        ret[1].setSfondo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_background));
+        ret[1].setProfilo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_profile2));
+        ret[1].setSfondo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_background2));
         ret[1].setCasaCitta("Pisa");
         ret[1].setCasaStrada("Via Garibaldi 1");
         Location casaCoordinate2 = new Location(LocationManager.GPS_PROVIDER);
@@ -139,11 +139,13 @@ public class Utils {
         lavoroCoordinate2.setLongitude(8.0);
         ret[1].setLavoroCoordinate(lavoroCoordinate2);
 
+        // TODO Aggiungere altri 2 fake
         return ret;
     }
 
     public static void deleteAll() {
-        // TODO
+        deleteContacts();
+        deleteProfile();
     }
 
     public static void deletePreferite() {
@@ -151,10 +153,13 @@ public class Utils {
     }
 
     public static void deleteProfile() {
-        // TODO
+        // TO FIX
+        Preferences.setPersonalBusinessCard(null, new BusinessCard());
     }
 
     public static void deleteContacts() {
-        // TODO
+        // TO FIX
+        Database.getDatabase(true);
+        Database.createTable();
     }
 }

@@ -84,9 +84,7 @@ public class Main extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == R.id.preferite) {
+        if (id == R.id.preferite) {
             item.setChecked(!item.isChecked());
             // TODO Filter
         }
