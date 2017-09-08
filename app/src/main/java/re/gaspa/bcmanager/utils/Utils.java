@@ -146,20 +146,18 @@ public class Utils {
     public static void deleteAll() {
         deleteContacts();
         deleteProfile();
+        Preferences.setFirstOpen(null, true);
     }
 
     public static void deletePreferite() {
-        // TODO
+        Database.resetPreferite();
     }
 
     public static void deleteProfile() {
-        // TO FIX
         Preferences.setPersonalBusinessCard(null, new BusinessCard());
     }
 
     public static void deleteContacts() {
-        // TO FIX
-        Database.getDatabase(true);
-        Database.createTable();
+        Database.clearTable();
     }
 }

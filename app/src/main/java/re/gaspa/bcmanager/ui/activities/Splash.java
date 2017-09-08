@@ -2,12 +2,11 @@
     TODO:
     - Pagina Aiuto 0
     - Pagina Aiuto 1
-    - Geo decoding citta e via in Modifica Profilo
     - Scelta foto da galleria / risoluzione maggiore
     - Fix bug selezione su condividi/aiuto
     - Fix bug mappa
-    - Implementazione cancellazione dati
     - Filtro preferiti
+    - Check Immagini
 
     - Export businesscard (testo, vcard, immagine, bluetooth, nfc, wifi)
     - Import businesscard (testo, vcard, immagine, bluetooth, nfc, wifi)
@@ -77,7 +76,7 @@ public class Splash extends AppCompatActivity {
 
                 Log.d("FIRST_OPEN", Preferences.getFirstOpen(null) + "");
 
-                if ( Preferences.getFirstOpen(null) ) {
+                if (Preferences.getFirstOpen(null)) {
                     // Creo DB e apro HELP
                     Log.d("FIRST_OPEN", "APRO HELP");
                     Preferences.setFirstOpen(null, false);

@@ -1,5 +1,6 @@
 package re.gaspa.bcmanager.utils;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -26,8 +27,7 @@ public class Database {
     private static ArrayList<BusinessCard> bclist = null;
 
     public static SQLiteDatabase getDatabase(boolean clear) {
-        if( clear )
-        {
+        if (clear) {
             File dbFile = new File(Environment.getExternalStorageDirectory(), dbName);
             dbFile.delete();
             Database.db = null;
@@ -146,6 +146,18 @@ public class Database {
     public static void setPreferite(BusinessCard businessCard, boolean preferite) {
         SQLiteDatabase db = Database.getDatabase();
         businessCard.setPreferito(preferite);
-        db.update(tableName, businessCard.getContentValues(), "ID = ?", new String[]{ businessCard.getId().toString()} );
+        db.update(tableName, businessCard.getContentValues(), "ID = ?", new String[]{businessCard.getId().toString()});
+    }
+
+    public static void clearTable() {
+        SQLiteDatabase db = Database.getDatabase();
+        db.delete(tableName, null, null);
+    }
+
+    public static void resetPreferite() {
+        SQLiteDatabase db = Database.getDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("PREF", 0);
+        db.update(tableName, cv, null, null);
     }
 }

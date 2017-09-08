@@ -8,8 +8,11 @@ import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -23,6 +26,10 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.databinding.DialogColorBinding;
@@ -44,8 +51,8 @@ public class EditProfile extends Fragment implements View.OnClickListener {
 
     private int PLACE_HOME_REQUEST = 1;
     private int PLACE_WORK_REQUEST = 2;
-    private int CHOOSE_PROFILE = 3 ;
-    private int CHOOSE_BACKGROUND = 4 ;
+    private int CHOOSE_PROFILE = 3;
+    private int CHOOSE_BACKGROUND = 4;
     private Bitmap profileBitmap = null;
     private Bitmap backgroundBitmap = null;
 
@@ -69,7 +76,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
         this.changeColor(ContextCompat.getColor(this.getContext(), R.color.colorPrimary));
 
         personal = Preferences.getPersonalBusinessCard(null);
-        if( personal == null ) personal = new BusinessCard();
+        if (personal == null) personal = new BusinessCard();
         else load_data();
 
         return mBinding.getRoot();
@@ -77,7 +84,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
 
     private void load_data() {
 
-        if( personal == null ) return;
+        if (personal == null) return;
 
         String nome = personal.getNome();
         String telefono = personal.getTelefono();
@@ -94,47 +101,47 @@ public class EditProfile extends Fragment implements View.OnClickListener {
         String casaStrada = personal.getCasaStrada();
         Location casaCoordinate = personal.getCasaCoordinate();
 
-        Bitmap profilo =personal.getProfilo();
+        Bitmap profilo = personal.getProfilo();
         Bitmap sfondo = personal.getSfondo();
 
-        if( profilo != null )
+        if (profilo != null)
             mBinding.imageProfile.setImageBitmap(profilo);
 
-        if( sfondo != null )
+        if (sfondo != null)
             mBinding.imageBackground.setImageBitmap(sfondo);
 
-        if( nome != null )
+        if (nome != null)
             mBinding.textName.setText(nome);
 
-        if( telefono != null )
+        if (telefono != null)
             mBinding.textTelefono.setText(telefono);
 
-        if( email != null )
+        if (email != null)
             mBinding.textMail.setText(email);
 
-        if( sito != null )
+        if (sito != null)
             mBinding.textWebsite.setText(sito);
 
-        if( telegam != null )
+        if (telegam != null)
             mBinding.textTelegram.setText(telegam);
 
-        if( colore != null && colore.length() > 0 ) {
+        if (colore != null && colore.length() > 0) {
             choosed_color = Color.parseColor(colore);
             changeColor(choosed_color);
         }
 
-        if( lavoroLuogo != null )
+        if (lavoroLuogo != null)
             mBinding.textJobplace.setText(lavoroLuogo);
-        if( lavoroRuolo != null )
+        if (lavoroRuolo != null)
             mBinding.textRole.setText(lavoroRuolo);
-        if( lavoroCoordinate != null )
+        if (lavoroCoordinate != null)
             mBinding.textJobCoord.setText(lavoroCoordinate.getLongitude() + " " + lavoroCoordinate.getLatitude());
 
-        if( casaCitta != null )
+        if (casaCitta != null)
             mBinding.textCity.setText(casaCitta);
-        if( casaStrada != null )
+        if (casaStrada != null)
             mBinding.textStreet.setText(casaStrada);
-        if( casaCoordinate != null )
+        if (casaCoordinate != null)
             mBinding.textHomeCoord.setText(casaCoordinate.getLongitude() + " " + casaCoordinate.getLatitude());
 
 
@@ -144,28 +151,59 @@ public class EditProfile extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
 
-        switch (id)
-        {
-            case R.id.fab_color1: select_color(1); break;
-            case R.id.fab_color2: select_color(2); break;
-            case R.id.fab_color3: select_color(3); break;
-            case R.id.fab_color4: select_color(4); break;
-            case R.id.fab_color5: select_color(5); break;
-            case R.id.fab_color6: select_color(6); break;
-            case R.id.fab_color7: select_color(7); break;
-            case R.id.fab_color8: select_color(8); break;
-            case R.id.fab_color9: select_color(9); break;
-            case R.id.fab_color10: select_color(10); break;
-            case R.id.fab_color11: select_color(11); break;
-            case R.id.fab_color12: select_color(12); break;
-            case R.id.fab_color13: select_color(13); break;
-            case R.id.fab_color14: select_color(14); break;
-            case R.id.fab_color15: select_color(15); break;
-            case R.id.fab_color16: select_color(16); break;
-            default: break;
+        switch (id) {
+            case R.id.fab_color1:
+                select_color(1);
+                break;
+            case R.id.fab_color2:
+                select_color(2);
+                break;
+            case R.id.fab_color3:
+                select_color(3);
+                break;
+            case R.id.fab_color4:
+                select_color(4);
+                break;
+            case R.id.fab_color5:
+                select_color(5);
+                break;
+            case R.id.fab_color6:
+                select_color(6);
+                break;
+            case R.id.fab_color7:
+                select_color(7);
+                break;
+            case R.id.fab_color8:
+                select_color(8);
+                break;
+            case R.id.fab_color9:
+                select_color(9);
+                break;
+            case R.id.fab_color10:
+                select_color(10);
+                break;
+            case R.id.fab_color11:
+                select_color(11);
+                break;
+            case R.id.fab_color12:
+                select_color(12);
+                break;
+            case R.id.fab_color13:
+                select_color(13);
+                break;
+            case R.id.fab_color14:
+                select_color(14);
+                break;
+            case R.id.fab_color15:
+                select_color(15);
+                break;
+            case R.id.fab_color16:
+                select_color(16);
+                break;
+            default:
+                break;
         }
-        if( id == R.id.button_home_position )
-        {
+        if (id == R.id.button_home_position) {
 
             PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
@@ -174,9 +212,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
             } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
                 e.printStackTrace();
             }
-        }
-        else if( id == R.id.button_work_position )
-        {
+        } else if (id == R.id.button_work_position) {
 
             PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
@@ -186,24 +222,18 @@ public class EditProfile extends Fragment implements View.OnClickListener {
                 e.printStackTrace();
             }
 
-        }
-        else if( id == R.id.fab_profile )
-        {
+        } else if (id == R.id.fab_profile) {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                 startActivityForResult(takePictureIntent, CHOOSE_PROFILE);
             }
 
-        }
-        else if( id == R.id.fab_background )
-        {
+        } else if (id == R.id.fab_background) {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                 startActivityForResult(takePictureIntent, CHOOSE_BACKGROUND);
             }
-        }
-        else if( id == R.id.fab_color )
-        {
+        } else if (id == R.id.fab_color) {
             mBindingColor = DataBindingUtil.inflate(getActivity().getLayoutInflater(),
                     R.layout.dialog_color, (ViewGroup) this.getView().getParent(), false);
 
@@ -245,31 +275,27 @@ public class EditProfile extends Fragment implements View.OnClickListener {
                 }
             });
             builder.create().show();
-        }
-        else if( id == R.id.fab )
-        {
+        } else if (id == R.id.fab) {
             personal.setNome(mBinding.textName.getText().toString());
             personal.setTelefono(mBinding.textTelefono.getText().toString());
             personal.setEmail(mBinding.textMail.getText().toString());
             personal.setSito(mBinding.textWebsite.getText().toString());
             personal.setTelegram(mBinding.textTelegram.getText().toString());
-            personal.setColore( String.format("#%06X", (0xFFFFFF & choosed_color)) );
+            personal.setColore(String.format("#%06X", (0xFFFFFF & choosed_color)));
 
-            personal.setProfilo( profileBitmap );
-            personal.setSfondo( backgroundBitmap );
+            personal.setProfilo(profileBitmap);
+            personal.setSfondo(backgroundBitmap);
 
             personal.setCasaCitta(mBinding.textCity.getText().toString());
             personal.setCasaStrada(mBinding.textStreet.getText().toString());
 
             Location casaCoordinate = new Location(LocationManager.GPS_PROVIDER);
             String casaCoordinateString = mBinding.textHomeCoord.getText().toString();
-            if( casaCoordinateString.length() > 0 )
-            {
+            if (casaCoordinateString.length() > 0) {
                 String v[] = casaCoordinateString.split(" ");
-                if( v.length == 2 )
-                {
-                    casaCoordinate.setLatitude( Double.valueOf(v[0]));
-                    casaCoordinate.setLongitude( Double.valueOf(v[1]));
+                if (v.length == 2) {
+                    casaCoordinate.setLatitude(Double.valueOf(v[0]));
+                    casaCoordinate.setLongitude(Double.valueOf(v[1]));
                 }
             }
             personal.setCasaCoordinate(casaCoordinate);
@@ -279,13 +305,11 @@ public class EditProfile extends Fragment implements View.OnClickListener {
 
             Location lavoroCoordinate = new Location(LocationManager.GPS_PROVIDER);
             String lavoroCoordinateString = mBinding.textJobCoord.getText().toString();
-            if( lavoroCoordinateString.length() > 0 )
-            {
+            if (lavoroCoordinateString.length() > 0) {
                 String v[] = lavoroCoordinateString.split(" ");
-                if( v.length == 2 )
-                {
-                    lavoroCoordinate.setLatitude( Double.valueOf(v[0]));
-                    lavoroCoordinate.setLongitude( Double.valueOf(v[1]));
+                if (v.length == 2) {
+                    lavoroCoordinate.setLatitude(Double.valueOf(v[0]));
+                    lavoroCoordinate.setLongitude(Double.valueOf(v[1]));
                 }
             }
             personal.setLavoroCoordinate(lavoroCoordinate);
@@ -312,8 +336,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
         mBindingColor.fabColor14.setImageDrawable(null);
         mBindingColor.fabColor15.setImageDrawable(null);
         mBindingColor.fabColor16.setImageDrawable(null);
-        switch (i)
-        {
+        switch (i) {
             case 1:
                 mBindingColor.fabColor1.setImageResource(R.drawable.icon_done);
                 choose_color = ContextCompat.getColor(getContext(), R.color.colorPicker1);
@@ -387,41 +410,43 @@ public class EditProfile extends Fragment implements View.OnClickListener {
         if (requestCode == PLACE_HOME_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, getActivity());
-                //locationButton.setText(String.format("Place: %s", place.getName()));
-                String toastMsg = String.format("Place: %s", place.getName());
-                place.getLatLng();
 
                 mBinding.textCity.setText(place.getAddress());
                 mBinding.textStreet.setText(place.getAddress());
                 mBinding.textHomeCoord.setText(place.getLatLng().latitude + " " + place.getLatLng().longitude);
-                Toast.makeText(getContext(), toastMsg, Toast.LENGTH_LONG).show();
+
+                Geocoder gc = new Geocoder(this.getContext(), Locale.getDefault());
+
+                // TODO May in async task?
+                if (gc.isPresent()) {
+                    List<Address> addresses = null;
+                    try {
+                        addresses = gc.getFromLocation(place.getLatLng().latitude, place.getLatLng().longitude, 1);
+
+                        if (addresses.size() > 0) {
+                            mBinding.textCity.setText(addresses.get(0).getLocality());
+                            mBinding.textStreet.setText(addresses.get(0).getAddressLine(0));
+                        }
+                    } catch (IOException e) {
+
+                    }
+                }
             }
-        }
-        else if (requestCode == PLACE_WORK_REQUEST) {
+        } else if (requestCode == PLACE_WORK_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, getActivity());
-                //locationButton.setText(String.format("Place: %s", place.getName()));
-                String toastMsg = String.format("Place: %s", place.getName());
-                place.getLatLng();
 
                 mBinding.textJobplace.setText(place.getAddress());
                 mBinding.textJobCoord.setText(place.getLatLng().latitude + " " + place.getLatLng().longitude);
-                Toast.makeText(getContext(), toastMsg, Toast.LENGTH_LONG).show();
             }
-        }
-        else if( requestCode == CHOOSE_PROFILE )
-        {
-            if(resultCode==Activity.RESULT_OK)
-            {
+        } else if (requestCode == CHOOSE_PROFILE) {
+            if (resultCode == Activity.RESULT_OK) {
                 Bundle extras = data.getExtras();
                 profileBitmap = (Bitmap) extras.get("data");
                 mBinding.imageProfile.setImageBitmap(profileBitmap);
             }
-        }
-        else if( requestCode == CHOOSE_BACKGROUND )
-        {
-            if(resultCode==Activity.RESULT_OK)
-            {
+        } else if (requestCode == CHOOSE_BACKGROUND) {
+            if (resultCode == Activity.RESULT_OK) {
                 Bundle extras = data.getExtras();
                 backgroundBitmap = (Bitmap) extras.get("data");
                 mBinding.imageBackground.setImageBitmap(backgroundBitmap);
@@ -429,8 +454,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void changeColor(int color)
-    {
+    public void changeColor(int color) {
         mBinding.iconHome.setImageTintList(ColorStateList.valueOf(color));
         mBinding.iconHomeCoord.setImageTintList(ColorStateList.valueOf(color));
         mBinding.iconJobCoord.setImageTintList(ColorStateList.valueOf(color));
