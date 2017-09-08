@@ -27,17 +27,15 @@ import re.gaspa.bcmanager.ui.models.BusinessCard;
 public class Utils {
 
 
-    public static void openTelegram(String nick, Context context)
-    {
-        if( nick.startsWith("@") ) nick.replaceFirst("@","");
-        Intent telegram = new Intent(Intent.ACTION_VIEW , Uri.parse("https://telegram.me/"+nick));
+    public static void openTelegram(String nick, Context context) {
+        if (nick.startsWith("@")) nick.replaceFirst("@", "");
+        Intent telegram = new Intent(Intent.ACTION_VIEW, Uri.parse("https://telegram.me/" + nick));
         context.startActivity(telegram);
     }
 
 
-    public static void openWebsite(String url, Context context)
-    {
-        if( !url.startsWith("http://") && !url.startsWith("https://") )
+    public static void openWebsite(String url, Context context) {
+        if (!url.startsWith("http://") && !url.startsWith("https://"))
             url = "http://" + url;
 
         Intent i = new Intent(Intent.ACTION_VIEW);
@@ -45,14 +43,16 @@ public class Utils {
         context.startActivity(i);
     }
 
-    public static void openMail(String mail, Context context)
-    {
+    public static void openMail(String mail, Context context) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         Uri data = Uri.parse("mailto:" + mail);
         intent.setData(data);
         context.startActivity(intent);
     }
 
+    public static void openMessage(String numero, Context context) {
+        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", numero, null)));
+    }
 
     public static void openNumber(String number, Context context) {
         Uri call = Uri.parse("tel:" + number);
@@ -62,30 +62,28 @@ public class Utils {
 
     public static void openLocation(Location city, Context context) {
 
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:"+city.getLatitude()+","+city.getLongitude()));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + city.getLatitude() + "," + city.getLongitude()));
         context.startActivity(intent);
     }
 
-    public static String encodeTobase64(Bitmap image)
-    {
-        if( image == null ) return "";
+    public static String encodeTobase64(Bitmap image) {
+        if (image == null) return "";
 
-        Bitmap immagex=image;
+        Bitmap immagex = image;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         immagex.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] b = baos.toByteArray();
-        String imageEncoded = Base64.encodeToString(b,Base64.DEFAULT);
+        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
         return imageEncoded;
     }
 
-    public static Bitmap decodeBase64(String input)
-    {
+    public static Bitmap decodeBase64(String input) {
         byte[] decodedByte = Base64.decode(input, 0);
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 
     public static Bitmap loadBitmapFromView(View v) {
-        Bitmap b = Bitmap.createBitmap( v.getLayoutParams().width, v.getLayoutParams().height, Bitmap.Config.ARGB_8888);
+        Bitmap b = Bitmap.createBitmap(v.getLayoutParams().width, v.getLayoutParams().height, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(b);
         v.layout(0, 0, v.getLayoutParams().width, v.getLayoutParams().height);
         v.draw(c);
@@ -102,8 +100,8 @@ public class Utils {
         ret[0].setSito("gaspa.re");
         ret[0].setTelegram("@GaspareG");
         ret[0].setColore("#009688");
-        ret[0].setProfilo( BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_profile) );
-        ret[0].setSfondo( BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_background));
+        ret[0].setProfilo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_profile));
+        ret[0].setSfondo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_background));
         ret[0].setCasaCitta("Genova");
         ret[0].setCasaStrada("Passo ca' dei rissi 7");
         Location casaCoordinate = new Location(LocationManager.GPS_PROVIDER);
@@ -124,8 +122,8 @@ public class Utils {
         ret[1].setSito("di.unipi.it/~gervasi");
         ret[1].setTelegram("@VincenzoGervasi");
         ret[1].setColore("#E91E63");
-        ret[1].setProfilo( BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_profile) );
-        ret[1].setSfondo( BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_background));
+        ret[1].setProfilo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_profile));
+        ret[1].setSfondo(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.default_background));
         ret[1].setCasaCitta("Pisa");
         ret[1].setCasaStrada("Via Garibaldi 1");
         Location casaCoordinate2 = new Location(LocationManager.GPS_PROVIDER);
@@ -140,5 +138,21 @@ public class Utils {
         ret[1].setLavoroCoordinate(lavoroCoordinate2);
 
         return ret;
+    }
+
+    public static void deleteAll() {
+        // TODO
+    }
+
+    public static void deletePreferite() {
+        // TODO
+    }
+
+    public static void deleteProfile() {
+        // TODO
+    }
+
+    public static void deleteContacts() {
+        // TODO
     }
 }

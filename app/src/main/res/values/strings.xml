@@ -35,11 +35,12 @@
     <string name="informazioni_personali">Informazioni personali</string>
     <string name="desc_background_profile">background profile</string>
     <string name="desc_nome">Nome</string>
-    <string name="alert_dialog_ok">Scegli</string>
+    <string name="alert_dialog_ok">Conferma</string>
     <string name="alert_dialog_cancel">Cancella</string>
     <string name="choose_color">Scegli un colore</string>
     <string name="bcmanager">BCManager</string>
     <string name="avanti">Avanti</string>
     <string name="indietro">Indietro</string>
+    <string name="credits">App sviluppata da Gaspare Ferraro Corso di Sviluppo di applicazioni mobili</string>
 
 </resources>

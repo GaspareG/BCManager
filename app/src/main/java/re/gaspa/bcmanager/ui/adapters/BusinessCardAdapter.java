@@ -22,6 +22,7 @@ import re.gaspa.bcmanager.databinding.CardviewBcBinding;
 import re.gaspa.bcmanager.ui.activities.BusinessCardActivity;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.ui.viewholders.BusinessCardVH;
+import re.gaspa.bcmanager.utils.Utils;
 
 /**
  * Created by gaspare on 02/09/17.
@@ -102,14 +103,14 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
             binding.fabCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(view.getContext(), "CHIAMATA " + numero, Toast.LENGTH_SHORT).show();
+                    Utils.openNumber(numero, view.getContext());
                 }
             });
 
             binding.fabMessage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(view.getContext(), "MESSAGGIO " + numero, Toast.LENGTH_SHORT).show();
+                    Utils.openMessage(numero, view.getContext());
                 }
             });
 

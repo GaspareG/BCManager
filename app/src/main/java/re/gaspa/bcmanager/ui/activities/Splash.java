@@ -1,7 +1,8 @@
 /*
     TODO:
-    - Pagina crediti
-    - Pagina impostazioni
+    - Pagina Aiuto 0
+    - Pagina Aiuto 1
+
     - Fix bug selezione su condividi
     - Marker su mappa
     - Ricerca su lista
@@ -34,30 +35,33 @@ import re.gaspa.bcmanager.utils.Preferences;
 public class Splash extends AppCompatActivity {
 
     private final int STORAGE_PERMISSION = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+    }
+
+    // TODO FIX?
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         Preferences.getPreferences(this.getBaseContext());
 
         int statoPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
 
-        if( statoPermission == PackageManager.PERMISSION_DENIED )
-        {
+        if (statoPermission == PackageManager.PERMISSION_DENIED) {
             Toast.makeText(this, "PERMISSION DENIED", Toast.LENGTH_SHORT);
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION);
 
-        }
-        else continueSplash();
-
-
+        } else continueSplash();
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case STORAGE_PERMISSION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     continueSplash();
@@ -69,14 +73,12 @@ public class Splash extends AppCompatActivity {
         }
     }
 
-    public void continueSplash()
-    {
+    public void continueSplash() {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
 
-                if( Preferences.getFirstOpen(null) )
-                {
+                if (Preferences.getFirstOpen(null)) {
                     // Creo DB e apro HELP
                     Log.d("FIRST_OPEN", "APRO HELP");
                     Preferences.setFirstOpen(null, false);
@@ -87,13 +89,11 @@ public class Splash extends AppCompatActivity {
 
                     Log.d("FIRST_OPEN", "CARICO BC");
                     ArrayList<BusinessCard> bc = Database.getBusinessCards();
-                    Log.d("FIRST_OPEN", "CARIATE " + bc.size());
+                    Log.d("FIRST_OPEN", "CARICATE " + bc.size());
 
                     Intent intent = new Intent(getApplicationContext(), Help.class);
                     getApplicationContext().startActivity(intent);
-                }
-                else
-                {
+                } else {
                     Log.d("FIRST_OPEN", "CARICO BC");
                     ArrayList<BusinessCard> bc = Database.getBusinessCards();
                     Log.d("FIRST_OPEN", "CARIATE " + bc.size());

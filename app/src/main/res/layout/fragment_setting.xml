@@ -1,101 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <ScrollView
-         xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:orientation="vertical"
-    tools:context="re.gaspa.bcmanager.ui.fragments.Settings">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:padding="8dp"
-        android:clickable="true"
-        android:background="?android:attr/selectableItemBackground"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:textColor="@color/colorPrimaryText"
-            android:gravity="bottom"
-            android:textSize="16sp"
-            android:text="Cancella tutti i dati"/>
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context="re.gaspa.bcmanager.ui.fragments.Settings">
 
-        <View style="@style/Divider"/>
+            <LinearLayout
+                android:id="@+id/layout_delete_favourite"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:paddingStart="16dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:padding="8dp"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:background="?android:attr/selectableItemBackground"
-        android:gravity="center">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:gravity="bottom"
+                    android:text="Resetta i preferiti"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:textColor="@color/colorPrimaryText"
-            android:gravity="bottom"
-            android:textSize="16sp"
-            android:text="Cancella tutti i dati"/>
-    </LinearLayout>
+            <View style="@style/Divider" />
 
-        <View style="@style/Divider"/>
+            <LinearLayout
+                android:id="@+id/layout_delete_profile"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:paddingStart="16dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:padding="8dp"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:background="?android:attr/selectableItemBackground"
-        android:gravity="center">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:gravity="bottom"
+                    android:text="Cancella profilo personale"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:textColor="@color/colorPrimaryText"
-            android:gravity="bottom"
-            android:textSize="16sp"
-            android:text="Cancella tutti i dati"/>
-    </LinearLayout>
+            <View style="@style/Divider" />
 
-        <View style="@style/Divider"/>
+            <LinearLayout
+                android:id="@+id/layout_delete_contacts"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:paddingStart="16dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:padding="8dp"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:background="?android:attr/selectableItemBackground"
-        android:gravity="center">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:gravity="bottom"
+                    android:text="Cancella contatti salvati"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:textColor="@color/colorPrimaryText"
-            android:gravity="bottom"
-            android:textSize="16sp"
-            android:text="Cancella tutti i dati"/>
-    </LinearLayout>
+            <View style="@style/Divider" />
+
+            <LinearLayout
+                android:id="@+id/layout_delete_all"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:paddingStart="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:gravity="bottom"
+                    android:text="Cancella tutti i dati"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
 
+        </LinearLayout>
 
-</LinearLayout>
-
-</ScrollView>
+    </ScrollView>
 </layout>

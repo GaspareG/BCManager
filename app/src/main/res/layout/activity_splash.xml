@@ -11,25 +11,25 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
+        android:layout_weight="33"
         android:gravity="center"
         android:orientation="vertical"
-        android:weightSum="99"
-        android:layout_weight="33">
+        android:weightSum="99">
 
         <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="33"
-            android:src="@drawable/icon_contact"
-            android:tint="#FFF"/>
+            android:src="@drawable/bc_icon" />
+
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="16"
-            android:textColor="#FFFFFF"
-            android:textSize="24sp"
             android:gravity="center_horizontal|center"
-            android:text="@string/bcmanager"/>
+            android:text="@string/bcmanager"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp" />
 
     </LinearLayout>
 
