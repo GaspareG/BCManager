@@ -1,4 +1,4 @@
-/*
+git /*
     TODO:
     - Pagina Aiuto 0
     - Pagina Aiuto 1
@@ -8,7 +8,6 @@
 
     - NFC, serializzazione (TO CHECK)
 
-    - Export Immagine
     - Import/Export bluetooth
 
  */

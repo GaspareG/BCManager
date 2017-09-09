@@ -5,6 +5,10 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Parcel;
@@ -14,6 +18,11 @@ import android.util.StringBuilderPrinter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.utils.Utils;
@@ -201,6 +210,13 @@ public class BusinessCard implements Parcelable {
 
     public void setLavoroCoordinate(Location lavoroCoordinate) {
         this.lavoroCoordinate = lavoroCoordinate;
+        if( lavoroCoordinate == null ) return;
+        double lat = this.lavoroCoordinate.getLatitude();
+        double lng = this.lavoroCoordinate.getLongitude();
+        lat = ((int)(lat*1000000))/1000000;
+        lng = ((int)(lng*1000000))/1000000;
+        this.lavoroCoordinate.setLatitude(lat);
+        this.lavoroCoordinate.setLongitude(lng);
     }
 
     public String getCasaCitta() {
@@ -225,6 +241,13 @@ public class BusinessCard implements Parcelable {
 
     public void setCasaCoordinate(Location casaCoordinate) {
         this.casaCoordinate = casaCoordinate;
+        if( casaCoordinate == null ) return;
+        double lat = this.casaCoordinate.getLatitude();
+        double lng = this.casaCoordinate.getLongitude();
+        lat = ((int)(lat*1000000))/1000000;
+        lng = ((int)(lng*1000000))/1000000;
+        this.casaCoordinate.setLatitude(lat);
+        this.casaCoordinate.setLongitude(lng);
     }
 
     public String getSito() {
@@ -622,5 +645,93 @@ public class BusinessCard implements Parcelable {
             }
         }
         return toAdd;
+    }
+
+    public Bitmap getImage() {
+        List<Map.Entry<String, String>> prop = this.getProp();
+
+        Bitmap b = Bitmap.createBitmap(256, 256 + 20 * (1+prop.size()), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        Paint p = new Paint();
+        p.setAntiAlias(true);
+
+
+        p.setColor(Color.WHITE);
+        c.drawRect(0, 0, b.getWidth(), b.getHeight(), p);
+
+
+        // Disegna Background
+        Bitmap background = this.getSfondo();
+        int height = background.getHeight();
+        int width = background.getWidth();
+        c.drawCircle(50, 50, 25, p);
+        Rect src = new Rect( width/2 - height/2 , 0, width/2 + height/2 , height );
+        Rect dest = new Rect(0,0, 256, 256);
+        c.drawBitmap(background, src, dest, null);
+
+        // Disegna Profilo
+        Bitmap profilo = this.getProfilo();
+        Bitmap cProfilo = Utils.getCircularBitmap(profilo);
+        src = new Rect(0,0, cProfilo.getWidth(), cProfilo.getWidth());
+        dest = new Rect(64,64, 192, 192);
+        c.drawBitmap(cProfilo, src, dest, null);
+
+        // Scrivi dati
+        int i = 1 ;
+        p.setColor(Color.BLACK);
+        try {
+            p.setColor( Color.parseColor( this.getColore() ));
+        }
+        catch (Exception e)
+        {
+
+        }
+        p.setTextAlign(Paint.Align.LEFT);
+        for (Map.Entry<String, String> entry : prop) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            c.drawText( key + " = " + value, 10, 256 + 20*i++, p   );
+        }
+
+        return b;
+    }
+
+    private List<Map.Entry<String, String>> getProp() {
+        List<Map.Entry<String, String>> ret = new ArrayList<>();
+
+        if (this.getNome() != null && this.getNome().length() > 0)
+            ret.add(new AbstractMap.SimpleEntry<>("Nome", this.getNome()));
+
+        if (this.getTelefono() != null && this.getTelefono().length() > 0)
+            ret.add(new AbstractMap.SimpleEntry<>("Telefono", this.getTelefono()));
+
+        if (this.getEmail() != null && this.getEmail().length() > 0)
+            ret.add(new AbstractMap.SimpleEntry<>("E-Mail", this.getEmail()));
+
+        if (this.getSito() != null && this.getSito().length() > 0)
+            ret.add(new AbstractMap.SimpleEntry<>("Sito", this.getSito()));
+
+        if (this.getTelegram() != null && this.getTelegram().length() > 0)
+            ret.add(new AbstractMap.SimpleEntry<>("Telegram", this.getTelegram()));
+
+        if (this.getCasaCitta() != null && this.getCasaCitta().length() > 0)
+            ret.add(new AbstractMap.SimpleEntry<>("Città", this.getCasaCitta()));
+
+        if (this.getCasaStrada() != null && this.getCasaStrada().length() > 0)
+            ret.add(new AbstractMap.SimpleEntry<>("Indirizzo", this.getCasaStrada()));
+
+        if (this.getCasaCoordinate() != null)
+            ret.add(new AbstractMap.SimpleEntry<>("Coordinate abitazione", this.getCasaCoordinate().getLatitude() + ", " + this.getCasaCoordinate().getLongitude()));
+
+        if (this.getLavoroRuolo() != null && this.getLavoroRuolo().length() > 0)
+            ret.add(new AbstractMap.SimpleEntry<>("Occupazione", this.getLavoroRuolo()));
+
+        if (this.getLavoroLuogo() != null && this.getLavoroLuogo().length() > 0)
+            ret.add(new AbstractMap.SimpleEntry<>("Luogo di lavoro", this.getLavoroLuogo()));
+
+        if (this.getLavoroCoordinate() != null)
+            ret.add(new AbstractMap.SimpleEntry<>("Coordinate lavoro", this.getLavoroCoordinate().getLatitude() + ", " + this.getLavoroCoordinate().getLongitude()));
+
+        return ret;
     }
 }
