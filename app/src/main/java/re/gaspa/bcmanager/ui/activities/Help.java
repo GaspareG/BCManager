@@ -39,37 +39,28 @@ public class Help extends AppCompatActivity implements View.OnClickListener {
 
     }
 
-    public void backPage()
-    {
-        if( page == 1 )
-        {
+    public void backPage() {
+        if (page == 1) {
             page = 0;
             binding.buttonBack.setVisibility(View.INVISIBLE);
             loadFragment(HelpPage0.class);
-        }
-        else if( page == 2 )
-        {
+        } else if (page == 2) {
             page = 1;
             loadFragment(HelpPage1.class);
             binding.buttonForward.setText("Avanti");
         }
     }
 
-    public void forwardPage(){
-        if( page == 0 )
-        {
+    public void forwardPage() {
+        if (page == 0) {
             loadFragment(HelpPage1.class);
             binding.buttonBack.setVisibility(View.VISIBLE);
-            page = 1 ;
-        }
-        else if( page == 1 )
-        {
+            page = 1;
+        } else if (page == 1) {
             binding.buttonForward.setText("Fine");
             loadFragment(EditProfile.class);
-            page = 2 ;
-        }
-        else if( page == 2 )
-        {
+            page = 2;
+        } else if (page == 2) {
             AlertDialog.Builder alert = new AlertDialog.Builder(Help.this);
             alert.setTitle("Sei sicuro?")
                     .setMessage("Prima di proseguire ricorda di salvare il tuo profilo!")
@@ -93,18 +84,14 @@ public class Help extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
 
-        if( id == R.id.button_back )
-        {
+        if (id == R.id.button_back) {
             backPage();
-        }
-        else if( id == R.id.button_forward )
-        {
+        } else if (id == R.id.button_forward) {
             forwardPage();
         }
     }
 
-    private void loadFragment(Class fragmentClass)
-    {
+    private void loadFragment(Class fragmentClass) {
         Fragment fragment;
 
         try {
@@ -118,7 +105,7 @@ public class Help extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onBackPressed() {
-        if( page > 0 ) backPage();
+        if (page > 0) backPage();
         else super.onBackPressed();
     }
 }

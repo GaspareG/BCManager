@@ -32,13 +32,13 @@ import re.gaspa.bcmanager.ui.models.BusinessCard;
 public class Utils {
 
 
-    public static final int MAX_PROFILE_SIZE = 100 ;
-    public static final int MAX_BACKGROUND_SIZE = 400 ;
+    public static final int MAX_PROFILE_SIZE = 100;
+    public static final int MAX_BACKGROUND_SIZE = 400;
 
     public static void openTelegram(String nick, Context context) {
         if (nick.startsWith("@")) nick.replaceFirst("@", "");
-        Intent telegram = new Intent(Intent.ACTION_VIEW, Uri.parse("https://telegram.me/" + nick));
-        context.startActivity(telegram);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=" + nick));
+        context.startActivity(intent);
     }
 
 
@@ -110,9 +110,9 @@ public class Utils {
         ret[0].setTelegram("@GaspareG");
         ret[0].setColore("#009688");
 
-        ret[0].setProfilo( BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_profile1) );
+        ret[0].setProfilo(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_profile1));
         Log.d("DATABASE", "SET PROFILO " + Utils.encodeTobase64(ret[0].getProfilo()).length() + " bytes");
-        ret[0].setSfondo( BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_background1) );
+        ret[0].setSfondo(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_background1));
         Log.d("DATABASE", "SET SFONDO " + Utils.encodeTobase64(ret[0].getSfondo()).length() + " bytes");
 
         ret[0].setCasaCitta("Genova");
@@ -136,8 +136,8 @@ public class Utils {
         ret[1].setSito("elonmusknews.org");
         ret[1].setTelegram("@ElonMusk");
         ret[1].setColore("#2196F3");
-        ret[1].setProfilo( BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_profile2) );
-        ret[1].setSfondo( BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_background2) );
+        ret[1].setProfilo(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_profile2));
+        ret[1].setSfondo(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_background2));
         ret[1].setCasaCitta("Bel Air");
         ret[1].setCasaStrada("Maraga Dr 1");
         Location casaCoordinate2 = new Location(LocationManager.GPS_PROVIDER);
@@ -159,8 +159,8 @@ public class Utils {
         ret[2].setSito("donaldjtrump.com");
         ret[2].setTelegram("@realDonaldTrump");
         ret[2].setColore("#FF9800");
-        ret[2].setProfilo( BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_profile3) );
-        ret[2].setSfondo( BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_background3) );
+        ret[2].setProfilo(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_profile3));
+        ret[2].setSfondo(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_background3));
         ret[2].setCasaCitta("New York");
         ret[2].setCasaStrada("5th Avenue");
         Location casaCoordinate3 = new Location(LocationManager.GPS_PROVIDER);
@@ -199,7 +199,7 @@ public class Utils {
         int width = image.getWidth();
         int height = image.getHeight();
 
-        float bitmapRatio = (float)width / (float) height;
+        float bitmapRatio = (float) width / (float) height;
         if (bitmapRatio > 1) {
             width = maxSize;
             height = (int) (width / bitmapRatio);
@@ -243,14 +243,13 @@ public class Utils {
     }
 
 
-    public static double truncate(double number, int precision)
-    {
+    public static double truncate(double number, int precision) {
         double prec = Math.pow(10, precision);
         int integerPart = (int) number;
         double fractionalPart = number - integerPart;
         fractionalPart *= prec;
         int fractPart = (int) fractionalPart;
-        fractionalPart = (double) (integerPart) + (double) (fractPart)/prec;
+        fractionalPart = (double) (integerPart) + (double) (fractPart) / prec;
         return fractionalPart;
     }
 }

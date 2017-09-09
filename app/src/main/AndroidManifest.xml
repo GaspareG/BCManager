@@ -73,12 +73,6 @@
             android:name=".ui.activities.BusinessCardActivity"
             android:screenOrientation="portrait" />
 
-        <provider
-            android:name=".contentprovider.ContentProviderBC"
-            android:authorities="re.gaspa.provider"
-            android:enabled="true"
-            android:exported="true" />
-
         <activity
             android:name=".ui.activities.Help"
             android:screenOrientation="portrait" />

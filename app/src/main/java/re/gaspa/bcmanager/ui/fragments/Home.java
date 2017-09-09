@@ -41,17 +41,11 @@ import re.gaspa.bcmanager.ui.adapters.BusinessCardAdapter;
 import re.gaspa.bcmanager.utils.Database;
 import re.gaspa.bcmanager.utils.Preferences;
 
-/**
- * Created by gaspare on 28/08/17.
- */
-
 public class Home extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private FragmentHomeBinding mBinding;
     private BusinessCardAdapter mBcAdapter;
     private boolean preferite = false;
-
-    // NFC
     private boolean mAndroidBeamAvailable = false;
 
     public Home() {
@@ -88,7 +82,6 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
         mBinding.bcList.setAdapter(mBcAdapter);
 
         mBinding.fab.setOnClickListener(this);
-
 
         return mBinding.getRoot();
     }
@@ -193,7 +186,6 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
                         break;
 
                     case 3: // NFC
-                        // NFC isn't available on the device
                         if (mAndroidBeamAvailable) {
                             Toast.makeText(context, "Avvicina Telefono", Toast.LENGTH_LONG).show();
                         } else {
@@ -219,7 +211,6 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
 
     }
 
-
     @Override
     public boolean onQueryTextSubmit(String query) {
         mBcAdapter.setBusinessCardItems(Database.getBusinessCards(preferite, query));
@@ -238,12 +229,9 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
         return true;
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-
     }
 
     public void setPreferite(boolean preferite) {

@@ -20,7 +20,6 @@ import re.gaspa.bcmanager.utils.Utils;
 
 public class BusinessCardActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ActivityBusinesscardBinding binding;
     private BusinessCard businessCard;
 
     @Override
@@ -28,11 +27,11 @@ public class BusinessCardActivity extends AppCompatActivity implements View.OnCl
 
         super.onCreate(savedInstanceState);
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_businesscard);
+        ActivityBusinesscardBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_businesscard);
 
         businessCard = getIntent().getExtras().getParcelable("businesscard");
 
-        if( businessCard == null ) return;
+        if (businessCard == null) return;
 
         try {
             int color = Color.parseColor(businessCard.getColore());
@@ -46,17 +45,15 @@ public class BusinessCardActivity extends AppCompatActivity implements View.OnCl
 
             ActionBar bar = getActionBar();
             bar.setBackgroundDrawable(new ColorDrawable(color));
-        }
-        catch ( Exception e )
-        {
+        } catch (Exception e) {
 
         }
 
         Bitmap profile_image = businessCard.getProfilo();
         Bitmap background_image = businessCard.getSfondo();
 
-        if( profile_image != null ) binding.imageProfile.setImageBitmap(profile_image);
-        if( background_image != null ) binding.backgroundImage.setImageBitmap(background_image);
+        if (profile_image != null) binding.imageProfile.setImageBitmap(profile_image);
+        if (background_image != null) binding.backgroundImage.setImageBitmap(background_image);
 
         Integer id = businessCard.getId();
         Boolean preferito = businessCard.getPreferito();
@@ -72,72 +69,59 @@ public class BusinessCardActivity extends AppCompatActivity implements View.OnCl
         String sito = businessCard.getSito();
         String telegram = businessCard.getTelegram();
 
-        if( nome != null && nome.length() > 0 )
-        {
+        if (nome != null && nome.length() > 0) {
             binding.textName.setText(nome);
         }
 
         // Abitazione
-        if( citta != null && citta.length() > 0 )
-        {
+        if (citta != null && citta.length() > 0) {
             binding.textCity.setText(citta);
-            if( strada != null && strada.length() > 0 )
+            if (strada != null && strada.length() > 0)
                 binding.textStreet.setText(strada);
             else
                 binding.textStreet.setVisibility(View.GONE);
             binding.cardCity.setOnClickListener(this);
 
-        }
-        else
+        } else
             binding.cardCity.setVisibility(View.GONE);
 
         // Luogo di lavoro
-        if( ruolo != null && ruolo.length() > 0 )
-        {
+        if (ruolo != null && ruolo.length() > 0) {
             binding.textRole.setText(ruolo);
-            if( luogo != null && luogo.length() > 0 )
+            if (luogo != null && luogo.length() > 0)
                 binding.textJobplace.setText(luogo);
             else
                 binding.textJobplace.setVisibility(View.GONE);
             binding.cardWork.setOnClickListener(this);
-        }
-        else
+        } else
             binding.cardWork.setVisibility(View.GONE);
 
         // Numero di telefono
-        if( telefono != null && telefono.length() > 0 )
-        {
+        if (telefono != null && telefono.length() > 0) {
             binding.textNumber.setText(telefono);
             binding.cardNumber.setOnClickListener(this);
-        }
-        else
+        } else
             binding.cardNumber.setVisibility(View.GONE);
 
         // Email
-        if( email != null && email.length() > 0 )
-        {
+        if (email != null && email.length() > 0) {
             binding.textMail.setText(email);
             binding.cardMail.setOnClickListener(this);
-        }
-        else
+        } else
             binding.cardMail.setVisibility(View.GONE);
 
         // Telegram
-        if( telegram != null && telegram.length() > 0 )
-        {
+        if (telegram != null && telegram.length() > 0) {
             binding.textTelegram.setText(telegram);
             binding.cardTelegram.setOnClickListener(this);
-        }
-        else
+        } else
             binding.cardTelegram.setVisibility(View.GONE);
 
         // Sito web
-        if( sito != null && sito.length() > 0 )
-        {
+        if (sito != null && sito.length() > 0) {
             binding.textWebsite.setText(sito);
             binding.cardWebsite.setOnClickListener(this);
-        }
-        else
+        } else
             binding.cardWebsite.setVisibility(View.GONE);
 
 
@@ -154,52 +138,45 @@ public class BusinessCardActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
         int id = view.getId();
 
-        switch (id)
-        {
+        switch (id) {
             case R.id.card_city:
                 Location city = businessCard.getCasaCoordinate();
-                if( city != null )
-                {
+                if (city != null) {
                     Utils.openLocation(city, view.getContext());
                 }
                 break;
 
             case R.id.card_mail:
                 String mail = businessCard.getEmail();
-                if( mail != null && mail.length() > 0 )
-                {
+                if (mail != null && mail.length() > 0) {
                     Utils.openMail(mail, view.getContext());
                 }
                 break;
 
             case R.id.card_number:
                 String number = businessCard.getTelefono();
-                if( number != null && number.length() > 0 )
-                {
+                if (number != null && number.length() > 0) {
                     Utils.openNumber(number, view.getContext());
                 }
                 break;
 
             case R.id.card_telegram:
                 String nick = businessCard.getTelegram();
-                if( nick != null && nick.length() > 0 )
-                {
+                if (nick != null && nick.length() > 0) {
                     Utils.openTelegram(nick, view.getContext());
                 }
                 break;
 
             case R.id.card_website:
                 String website = businessCard.getSito();
-                if( website != null && website.length() > 0 )
-                {
+                if (website != null && website.length() > 0) {
                     Utils.openWebsite(website, view.getContext());
                 }
                 break;
 
             case R.id.card_work:
                 Location jCity = businessCard.getLavoroCoordinate();
-                if( jCity != null )
-                {
+                if (jCity != null) {
                     Utils.openLocation(jCity, view.getContext());
                 }
                 break;
@@ -208,14 +185,12 @@ public class BusinessCardActivity extends AppCompatActivity implements View.OnCl
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if( id == R.id.menu_favourite )
-        {
-            item.setChecked( !item.isChecked() );
+        if (id == R.id.menu_favourite) {
+            item.setChecked(!item.isChecked());
             // TODO Filter
         }
 

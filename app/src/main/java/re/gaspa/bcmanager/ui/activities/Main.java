@@ -9,6 +9,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.SearchView;
@@ -44,7 +45,6 @@ public class Main extends AppCompatActivity
 
     private FragmentManager fragmentManager;
     private ActivityMainBinding binding;
-    private NfcAdapter mNfcAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,6 @@ public class Main extends AppCompatActivity
         setSupportActionBar(binding.toolbar);
 
         Preferences.getPreferences(binding.getRoot().getContext());
-        BusinessCard personal = Preferences.getPersonalBusinessCard(null);
 
         DrawerLayout drawer = binding.drawerLayout;
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -76,7 +75,7 @@ public class Main extends AppCompatActivity
         binding.navView.getHeaderView(0).setOnClickListener(this);
 
         // Check for available NFC Adapter
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter != null) {
             Log.d("NFC", "ADAPTER FOUND");
             mNfcAdapter.setNdefPushMessageCallback(this, this);
@@ -95,9 +94,7 @@ public class Main extends AppCompatActivity
             try {
                 Home fragment = (Home) fragmentManager.findFragmentById(R.id.flContent);
                 fragment.setPreferite(item.isChecked());
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
 
             }
         }
@@ -106,8 +103,8 @@ public class Main extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
         int id = item.getItemId();
 
 

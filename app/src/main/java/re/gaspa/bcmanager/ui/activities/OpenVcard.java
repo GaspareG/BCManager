@@ -52,14 +52,11 @@ public class OpenVcard extends AppCompatActivity {
 
         setResult(RESULT_OK);
 
-
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
-
-        Log.d("INTENT", "RICEVUTO QUALCOSA");
-
+        setIntent(intent);
     }
 
 

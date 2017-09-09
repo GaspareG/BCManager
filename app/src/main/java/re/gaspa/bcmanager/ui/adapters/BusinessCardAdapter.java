@@ -25,10 +25,6 @@ import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.ui.viewholders.BusinessCardVH;
 import re.gaspa.bcmanager.utils.Utils;
 
-/**
- * Created by gaspare on 02/09/17.
- */
-
 public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> implements View.OnClickListener {
 
     private Context mContext;
@@ -37,10 +33,6 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
     public BusinessCardAdapter(Context mContext) {
         this.mContext = mContext;
         mBusinessCardItems = new ArrayList<>();
-    }
-
-    public ArrayList<BusinessCard> getBusinessCardItems() {
-        return mBusinessCardItems;
     }
 
     public void setBusinessCardItems(ArrayList<BusinessCard> mBusinessCardItems) {
@@ -68,7 +60,7 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
         binding.cardToolbar.inflateMenu(R.menu.menu_card);
 
         MenuItem preferiteItem = binding.cardToolbar.getMenu().getItem(1);
-        preferiteItem.setChecked( item.getPreferito() );
+        preferiteItem.setChecked(item.getPreferito());
 
         binding.cardToolbar.setOnMenuItemClickListener(new CardMenuClickListener(this, binding.getRoot().getContext(), item));
 
@@ -133,7 +125,6 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
     @Override
     public void onClick(View view) {
         BusinessCard obj = (BusinessCard) view.getTag();
-        Toast.makeText(view.getContext(), "TOCCATO" + obj.getNome(), Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(view.getContext(), BusinessCardActivity.class);
         intent.putExtra("businesscard", obj);
