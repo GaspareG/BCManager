@@ -61,7 +61,7 @@ public class Preferences {
             editor.putString("sfondo", sfondoString);
         }
 
-        editor.commit();
+        editor.apply();
     }
 
     public static BusinessCard getPersonalBusinessCard(Context ctx) {
@@ -135,14 +135,20 @@ public class Preferences {
 
     public static boolean getFirstOpen(Context ctx) {
         SharedPreferences preferences = Preferences.getPreferences(ctx);
-        boolean ret = preferences.getBoolean("open", true);
-        return ret;
+        return preferences.getBoolean("open", true);
     }
 
     public static void setFirstOpen(Context ctx, boolean value) {
         SharedPreferences preferences = Preferences.getPreferences(ctx);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("open", value);
-        editor.commit();
+        editor.apply();
+    }
+
+    public static void clearData() {
+        SharedPreferences preferences = Preferences.getPreferences(null);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
     }
 }

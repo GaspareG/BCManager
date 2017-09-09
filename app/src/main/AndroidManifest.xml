@@ -14,7 +14,9 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.NFC" />
 
-    <uses-feature android:name="android.hardware.nfc" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -40,13 +42,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
 
-                <intent-filter>
-                    <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-                    <category android:name="android.intent.category.DEFAULT" />
-                    <data android:mimeType="application/re.gaspa.bcmanager" />
-                </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/re.gaspa.bcmanager" />
+            </intent-filter>
 
-            </activity>
+        </activity>
 
         <activity
             android:name=".ui.activities.Splash"
@@ -88,6 +90,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:mimeType="text/vcard" />
             </intent-filter>
 
@@ -96,12 +99,14 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:mimeType="text/x-vcard" />
             </intent-filter>
 
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="*/*" />
                 <data android:scheme="content" />
             </intent-filter>

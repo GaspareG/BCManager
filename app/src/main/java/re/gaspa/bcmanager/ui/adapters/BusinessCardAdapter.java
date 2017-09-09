@@ -67,10 +67,10 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
         binding.cardToolbar.getMenu().clear();
         binding.cardToolbar.inflateMenu(R.menu.menu_card);
 
-        MenuItem preferiteItem = binding.cardToolbar.getMenu().getItem(2);
+        MenuItem preferiteItem = binding.cardToolbar.getMenu().getItem(1);
         preferiteItem.setChecked( item.getPreferito() );
 
-        binding.cardToolbar.setOnMenuItemClickListener(new CardMenuClickListener(binding.getRoot().getContext(), item));
+        binding.cardToolbar.setOnMenuItemClickListener(new CardMenuClickListener(this, binding.getRoot().getContext(), item));
 
         final String nome = item.getNome();
         final String colore = item.getColore();
@@ -97,9 +97,13 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
 
         if (sfondo != null)
             binding.backgroundImage.setImageBitmap(sfondo);
+        else
+            binding.backgroundImage.setImageResource(R.drawable.default_background);
 
         if (profilo != null)
             binding.profileImage.setImageBitmap(profilo);
+        else
+            binding.profileImage.setImageResource(R.drawable.default_profile);
 
         if (numero != null && numero.length() > 0) {
             binding.fabCall.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +121,7 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
             });
 
         }
+
 
     }
 

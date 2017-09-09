@@ -253,7 +253,7 @@ public class BusinessCard implements Parcelable {
     }
 
     public void setProfilo(Bitmap profilo) {
-        if( profilo == null ) return;
+        if (profilo == null) return;
         this.profilo = Utils.getResizedBitmap(profilo, Utils.MAX_PROFILE_SIZE);
     }
 
@@ -262,7 +262,7 @@ public class BusinessCard implements Parcelable {
     }
 
     public void setSfondo(Bitmap sfondo) {
-        if( sfondo == null ) return;
+        if (sfondo == null) return;
         this.sfondo = Utils.getResizedBitmap(sfondo, Utils.MAX_BACKGROUND_SIZE);
     }
 
@@ -372,7 +372,7 @@ public class BusinessCard implements Parcelable {
         byte sfondoB[] = this.getSfondo() == null ? "".getBytes() : Utils.encodeTobase64(this.getSfondo()).getBytes();
         Log.d("DATABASE", "PROFILO = " + profiloB.length);
         Log.d("DATABASE", "SFONDO = " + sfondoB.length);
-        ret.put("PROFILO", profiloB );
+        ret.put("PROFILO", profiloB);
         ret.put("SFONDO", sfondoB);
 
         return ret;
@@ -408,9 +408,7 @@ public class BusinessCard implements Parcelable {
             lavoroCoordinate.setLatitude(cursor.getDouble(cursor.getColumnIndex("LAVOROLAT")));
             lavoroCoordinate.setLongitude(cursor.getDouble(cursor.getColumnIndex("LAVOROLNG")));
             ret.setLavoroCoordinate(lavoroCoordinate);
-        }
-        catch ( Exception e)
-        {
+        } catch (Exception e) {
             Log.d("DATABASE", e.toString());
         }
 
@@ -421,33 +419,33 @@ public class BusinessCard implements Parcelable {
     public String toVCard() {
         StringBuilder builder = new StringBuilder();
 
-        if( this.getNome() != null && this.getNome().length() > 0 )
+        if (this.getNome() != null && this.getNome().length() > 0)
             builder.append("NAME=").append(this.getNome()).append("\n");
-        if( this.getTelefono() != null && this.getTelefono().length() > 0 )
+        if (this.getTelefono() != null && this.getTelefono().length() > 0)
             builder.append("PHONE=").append(this.getTelefono()).append("\n");
-        if( this.getEmail() != null && this.getEmail().length() > 0 )
+        if (this.getEmail() != null && this.getEmail().length() > 0)
             builder.append("EMAIL=").append(this.getEmail()).append("\n");
-        if( this.getSito() != null && this.getSito().length() > 0 )
+        if (this.getSito() != null && this.getSito().length() > 0)
             builder.append("WEBSITE=").append(this.getSito()).append("\n");
-        if( this.getTelegram() != null && this.getTelegram().length() > 0 )
+        if (this.getTelegram() != null && this.getTelegram().length() > 0)
             builder.append("TELEGRAM=").append(this.getTelegram()).append("\n");
-        if( this.getColore() != null && this.getColore().length() > 0 )
+        if (this.getColore() != null && this.getColore().length() > 0)
             builder.append("COLOR=").append(this.getColore()).append("\n");
-        if( this.getCasaCitta() != null && this.getCasaCitta().length() > 0 )
+        if (this.getCasaCitta() != null && this.getCasaCitta().length() > 0)
             builder.append("HOMECITY=").append(this.getCasaCitta()).append("\n");
-        if( this.getCasaStrada() != null && this.getCasaStrada().length() > 0 )
-            builder.append("HOMESTREET").append(this.getCasaStrada()).append("\n");
-        if( this.getCasaCoordinate() != null )
+        if (this.getCasaStrada() != null && this.getCasaStrada().length() > 0)
+            builder.append("HOMESTREET=").append(this.getCasaStrada()).append("\n");
+        if (this.getCasaCoordinate() != null)
             builder.append("HOMECOORD=").append(this.getCasaCoordinate().getLatitude()).append(", ").append(this.getCasaCoordinate().getLongitude()).append("\n");
-        if( this.getLavoroRuolo() != null && this.getLavoroRuolo().length() > 0 )
-            builder.append("JOBROLE").append(this.getLavoroRuolo()).append("\n");
-        if( this.getLavoroLuogo() != null && this.getLavoroLuogo().length() > 0 )
-            builder.append("JOBPLACE").append(this.getLavoroLuogo()).append("\n");
-        if( this.getLavoroCoordinate() != null  )
+        if (this.getLavoroRuolo() != null && this.getLavoroRuolo().length() > 0)
+            builder.append("JOBROLE=").append(this.getLavoroRuolo()).append("\n");
+        if (this.getLavoroLuogo() != null && this.getLavoroLuogo().length() > 0)
+            builder.append("JOBPLACE=").append(this.getLavoroLuogo()).append("\n");
+        if (this.getLavoroCoordinate() != null)
             builder.append("JOBCOORD=").append(this.getLavoroCoordinate().getLatitude()).append(", ").append(this.getLavoroCoordinate().getLongitude()).append("\n");
-        if( this.getProfilo() != null )
+        if (this.getProfilo() != null)
             builder.append("PROFILE=").append(Utils.encodeTobase64(this.getProfilo())).append("\n");
-        if( this.getSfondo() != null )
+        if (this.getSfondo() != null)
             builder.append("BACKGROUND=").append(Utils.encodeTobase64(this.getSfondo())).append("\n");
 
         return builder.toString();
@@ -456,27 +454,27 @@ public class BusinessCard implements Parcelable {
     public String toTextMessage() {
         StringBuilder builder = new StringBuilder();
 
-        if( this.getNome() != null && this.getNome().length() > 0 )
+        if (this.getNome() != null && this.getNome().length() > 0)
             builder.append("Nome: ").append(this.getNome()).append("\n");
-        if( this.getTelefono() != null && this.getTelefono().length() > 0 )
+        if (this.getTelefono() != null && this.getTelefono().length() > 0)
             builder.append("Telefono: ").append(this.getTelefono()).append("\n");
-        if( this.getEmail() != null && this.getEmail().length() > 0 )
+        if (this.getEmail() != null && this.getEmail().length() > 0)
             builder.append("Email: ").append(this.getEmail()).append("\n");
-        if( this.getSito() != null && this.getSito().length() > 0 )
+        if (this.getSito() != null && this.getSito().length() > 0)
             builder.append("Sito: ").append(this.getSito()).append("\n");
-        if( this.getTelegram() != null && this.getTelegram().length() > 0 )
+        if (this.getTelegram() != null && this.getTelegram().length() > 0)
             builder.append("Telegram: ").append(this.getTelegram()).append("\n");
-        if( this.getCasaCitta() != null && this.getCasaCitta().length() > 0 )
+        if (this.getCasaCitta() != null && this.getCasaCitta().length() > 0)
             builder.append("Città: ").append(this.getCasaCitta()).append("\n");
-        if( this.getCasaStrada() != null && this.getCasaStrada().length() > 0 )
+        if (this.getCasaStrada() != null && this.getCasaStrada().length() > 0)
             builder.append("Indirizzo: ").append(this.getCasaStrada()).append("\n");
-        if( this.getCasaCoordinate() != null )
+        if (this.getCasaCoordinate() != null)
             builder.append("Coordinate abitazione: ").append(this.getCasaCoordinate().getLatitude()).append(", ").append(this.getCasaCoordinate().getLongitude()).append("\n");
-        if( this.getLavoroRuolo() != null && this.getLavoroRuolo().length() > 0 )
+        if (this.getLavoroRuolo() != null && this.getLavoroRuolo().length() > 0)
             builder.append("Professione: ").append(this.getLavoroRuolo()).append("\n");
-        if( this.getLavoroLuogo() != null && this.getLavoroLuogo().length() > 0 )
+        if (this.getLavoroLuogo() != null && this.getLavoroLuogo().length() > 0)
             builder.append("Azienda: ").append(this.getLavoroLuogo()).append("\n");
-        if( this.getLavoroCoordinate() != null  )
+        if (this.getLavoroCoordinate() != null)
             builder.append("Coordinate azienda: ").append(this.getLavoroCoordinate().getLatitude()).append(", ").append(this.getLavoroCoordinate().getLongitude()).append("\n");
 
         return builder.toString();

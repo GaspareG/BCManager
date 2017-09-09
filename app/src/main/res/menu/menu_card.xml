@@ -9,13 +9,6 @@
         app:showAsAction="ifRoom">
     </item>
 
-    <item android:id="@+id/share"
-        android:visible="true"
-        android:title="@string/condividi"
-        android:icon="@drawable/ic_menu_share"
-        app:showAsAction="ifRoom">
-    </item>
-
     <item android:id="@+id/preferite"
         android:visible="true"
         android:title="@string/preferito"

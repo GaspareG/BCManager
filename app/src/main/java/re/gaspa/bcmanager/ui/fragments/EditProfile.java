@@ -34,6 +34,7 @@ import java.util.Locale;
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.databinding.DialogColorBinding;
 import re.gaspa.bcmanager.databinding.FragmentEditProfileBinding;
+import re.gaspa.bcmanager.ui.activities.Main;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.utils.Preferences;
 
@@ -203,6 +204,7 @@ public class EditProfile extends Fragment implements View.OnClickListener {
             default:
                 break;
         }
+
         if (id == R.id.button_home_position) {
 
             PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
@@ -237,7 +239,6 @@ public class EditProfile extends Fragment implements View.OnClickListener {
             mBindingColor = DataBindingUtil.inflate(getActivity().getLayoutInflater(),
                     R.layout.dialog_color, (ViewGroup) this.getView().getParent(), false);
 
-
             choose_color = ContextCompat.getColor(getContext(), R.color.colorPicker1);
             mBindingColor.fabColor1.setOnClickListener(this);
             mBindingColor.fabColor2.setOnClickListener(this);
@@ -255,7 +256,6 @@ public class EditProfile extends Fragment implements View.OnClickListener {
             mBindingColor.fabColor14.setOnClickListener(this);
             mBindingColor.fabColor15.setOnClickListener(this);
             mBindingColor.fabColor16.setOnClickListener(this);
-
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setView(mBindingColor.getRoot());
@@ -316,6 +316,14 @@ public class EditProfile extends Fragment implements View.OnClickListener {
 
             Preferences.setPersonalBusinessCard(null, personal);
             Toast.makeText(getContext(), "Profilo salvato!", Toast.LENGTH_LONG).show();
+
+            try {
+                ((Main)getActivity()).updateProfile();
+            }
+            catch ( Exception e )
+            {
+
+            }
         }
     }
 

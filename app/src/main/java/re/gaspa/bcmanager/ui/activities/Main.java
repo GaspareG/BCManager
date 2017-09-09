@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.nio.charset.Charset;
@@ -65,25 +66,11 @@ public class Main extends AppCompatActivity
         toggle.syncState();
 
         this.loadFragment(Home.class);
-        binding.navView.getMenu().getItem(0).setChecked(true);
 
+        binding.navView.getMenu().getItem(0).setChecked(true);
         binding.navView.setNavigationItemSelectedListener(this);
 
-        if (personal != null) {
-            Bitmap profile = personal.getProfilo();
-            Bitmap sfondo = personal.getSfondo();
-            String nome = personal.getNome();
-            String role = personal.getLavoroRuolo();
-
-            if (profile != null) {
-                CircleImageView profileImage = binding.navView.getHeaderView(0).findViewById(R.id.profile_image);
-                profileImage.setImageBitmap(profile);
-            }
-            if (sfondo != null) {
-                ImageView backgroundImage = binding.navView.getHeaderView(0).findViewById(R.id.default_background);
-                backgroundImage.setImageBitmap(sfondo);
-            }
-        }
+        updateProfile();
 
         binding.navView.getHeaderView(0).setOnClickListener(this);
 
@@ -101,7 +88,6 @@ public class Main extends AppCompatActivity
 
         if (id == R.id.preferite) {
             item.setChecked(!item.isChecked());
-            // TODO Filter
         }
 
         return super.onOptionsItemSelected(item);
@@ -191,7 +177,7 @@ public class Main extends AppCompatActivity
                 "Beam Time: " + System.currentTimeMillis());
         // TODO Serializza
         NdefMessage msg = new NdefMessage(
-                new NdefRecord[] { createMimeRecord( "application/re.gaspa.bcmanager", text.getBytes()) });
+                new NdefRecord[]{createMimeRecord("application/re.gaspa.bcmanager", text.getBytes())});
         return msg;
     }
 
@@ -202,6 +188,7 @@ public class Main extends AppCompatActivity
             processIntent(getIntent());
         }
     }
+
     @Override
     public void onNewIntent(Intent intent) {
         setIntent(intent);
@@ -219,5 +206,34 @@ public class Main extends AppCompatActivity
         byte[] mimeBytes = mimeType.getBytes(Charset.forName("US-ASCII"));
         return new NdefRecord(
                 NdefRecord.TNF_MIME_MEDIA, mimeBytes, new byte[0], payload);
+    }
+
+    public void updateProfile() {
+        BusinessCard personal = Preferences.getPersonalBusinessCard(null);
+        if (personal != null) {
+            Bitmap profile = personal.getProfilo();
+            Bitmap sfondo = personal.getSfondo();
+            String nome = personal.getNome();
+            String role = personal.getLavoroRuolo();
+
+            if (profile != null) {
+                CircleImageView profileImage = binding.navView.getHeaderView(0).findViewById(R.id.profile_image);
+                profileImage.setImageBitmap(profile);
+            }
+            if (sfondo != null) {
+                ImageView backgroundImage = binding.navView.getHeaderView(0).findViewById(R.id.default_background);
+                backgroundImage.setImageBitmap(sfondo);
+            }
+            if( nome != null )
+            {
+                TextView nameText = binding.navView.getHeaderView(0).findViewById(R.id.text_name);
+                nameText.setText(nome);
+            }
+            if( role != null )
+            {
+                TextView roleText = binding.navView.getHeaderView(0).findViewById(R.id.text_role);
+                roleText.setText(role);
+            }
+        }
     }
 }

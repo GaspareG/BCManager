@@ -102,6 +102,12 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mBcAdapter.setBusinessCardItems(Database.getBusinessCards());
+    }
+
+    @Override
     public void onClick(View view) {
 
         if (view.getId() != R.id.fab) return;
@@ -221,6 +227,7 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
 
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
+
     }
 
 

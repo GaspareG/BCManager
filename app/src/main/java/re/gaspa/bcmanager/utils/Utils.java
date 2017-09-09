@@ -77,7 +77,7 @@ public class Utils {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         immagex.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] b = baos.toByteArray();
-        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+        String imageEncoded = Base64.encodeToString(b, Base64.NO_WRAP);
         return imageEncoded;
     }
 
@@ -166,7 +166,7 @@ public class Utils {
     }
 
     public static void deleteProfile() {
-        Preferences.setPersonalBusinessCard(null, new BusinessCard());
+        Preferences.clearData();
     }
 
     public static void deleteContacts() {

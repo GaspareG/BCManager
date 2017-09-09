@@ -6,6 +6,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import re.gaspa.bcmanager.R;
+import re.gaspa.bcmanager.ui.adapters.BusinessCardAdapter;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.utils.Database;
 
@@ -17,8 +18,10 @@ public class CardMenuClickListener implements Toolbar.OnMenuItemClickListener
 {
     private Context context;
     private BusinessCard businessCard;
+    private BusinessCardAdapter businessCardAdapter;
 
-    public CardMenuClickListener(Context ctx, BusinessCard item) {
+    public CardMenuClickListener(BusinessCardAdapter businessCardAdapter, Context ctx, BusinessCard item) {
+        this.businessCardAdapter = businessCardAdapter;
         this.businessCard = item;
         this.context = ctx;
     }
@@ -33,11 +36,7 @@ public class CardMenuClickListener implements Toolbar.OnMenuItemClickListener
         {
             Database.deleteBusinessCard(businessCard);
             Toast.makeText(context, "Cancello " + businessCard.getNome(), Toast.LENGTH_LONG).show();
-        }
-        else if( id == R.id.share )
-        {
-            // TODO
-            Toast.makeText(context, "Condivido " + businessCard.getNome(), Toast.LENGTH_LONG).show();
+            this.businessCardAdapter.setBusinessCardItems(Database.getBusinessCards());
         }
         else if( id == R.id.preferite )
         {
