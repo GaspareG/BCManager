@@ -3,7 +3,12 @@ package re.gaspa.bcmanager.ui.activities;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcEvent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.SearchView;
@@ -17,6 +22,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.nio.charset.Charset;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import re.gaspa.bcmanager.R;
@@ -30,10 +38,11 @@ import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.utils.Preferences;
 
 public class Main extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements NfcAdapter.CreateNdefMessageCallback, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private FragmentManager fragmentManager;
     private ActivityMainBinding binding;
+    private NfcAdapter mNfcAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +86,12 @@ public class Main extends AppCompatActivity
         }
 
         binding.navView.getHeaderView(0).setOnClickListener(this);
+
+        // Check for available NFC Adapter
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if (mNfcAdapter != null)
+            mNfcAdapter.setNdefPushMessageCallback(this, this);
+
     }
 
 
@@ -102,7 +117,7 @@ public class Main extends AppCompatActivity
             item.setChecked(false);
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "Utilizza pure te BCManager! http://gaspa.re/bcmanager");
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "Utilizza pure te BCManager! http://gaspa.re/bcmanager.apk");
             sendIntent.setType("text/plain");
             startActivity(Intent.createChooser(sendIntent, "Condividi!"));
         } else if (id == R.id.nav_help) {
@@ -161,12 +176,9 @@ public class Main extends AppCompatActivity
 
     }
 
-
     @Override
     public void onClick(View view) {
-
         int id = view.getId();
-
         Intent intent = new Intent(view.getContext(), BusinessCardActivity.class);
         intent.putExtra("businesscard", Preferences.getPersonalBusinessCard(null));
         view.getContext().startActivity(intent);
@@ -174,8 +186,38 @@ public class Main extends AppCompatActivity
     }
 
     @Override
-    protected void onResume() {
+    public NdefMessage createNdefMessage(NfcEvent event) {
+        String text = ("Beam me up, Android!\n\n" +
+                "Beam Time: " + System.currentTimeMillis());
+        // TODO Serializza
+        NdefMessage msg = new NdefMessage(
+                new NdefRecord[] { createMimeRecord( "application/re.gaspa.bcmanager", text.getBytes()) });
+        return msg;
+    }
+
+    @Override
+    public void onResume() {
         super.onResume();
-        // TODO
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
+            processIntent(getIntent());
+        }
+    }
+    @Override
+    public void onNewIntent(Intent intent) {
+        setIntent(intent);
+    }
+
+    void processIntent(Intent intent) {
+        Parcelable[] rawMsgs = intent.getParcelableArrayExtra(
+                NfcAdapter.EXTRA_NDEF_MESSAGES);
+        NdefMessage msg = (NdefMessage) rawMsgs[0];
+        Toast.makeText(this, new String(msg.getRecords()[0].getPayload()), Toast.LENGTH_LONG).show();
+        // TODO De-Serializza
+    }
+
+    public NdefRecord createMimeRecord(String mimeType, byte[] payload) {
+        byte[] mimeBytes = mimeType.getBytes(Charset.forName("US-ASCII"));
+        return new NdefRecord(
+                NdefRecord.TNF_MIME_MEDIA, mimeBytes, new byte[0], payload);
     }
 }

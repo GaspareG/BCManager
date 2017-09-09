@@ -6,15 +6,19 @@
     - Fix bug selezione su condividi/aiuto
     - Fix bug mappa
     - Filtro preferiti
-    - Check Immagini
+    - Aggiornamento homepage quando cambiano i dati
+    - VCard, controllo immagini
+    - NFC, serializzazione
 
-    - Export businesscard (testo, vcard, immagine, bluetooth, nfc, wifi)
-    - Import businesscard (testo, vcard, immagine, bluetooth, nfc, wifi)
+    - Export Immagine
+    - Import/Export bluetooth
+
  */
 
 package re.gaspa.bcmanager.ui.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -70,6 +74,7 @@ public class Splash extends AppCompatActivity {
     }
 
     public void continueSplash() {
+        final Context context = this.getApplicationContext();
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -84,7 +89,7 @@ public class Splash extends AppCompatActivity {
                     // Creo DB e apro HELP
                     Log.d("FIRST_OPEN", "CREO DB");
                     Database.getDatabase(true);
-                    Database.createTable();
+                    Database.createTable(context);
 
                     Log.d("FIRST_OPEN", "CARICO BC");
                     ArrayList<BusinessCard> bc = Database.getBusinessCards();
@@ -99,6 +104,7 @@ public class Splash extends AppCompatActivity {
 
                     Log.d("FIRST_OPEN", "APRO MAIN");
                     Intent intent = new Intent(getApplicationContext(), Main.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     getApplicationContext().startActivity(intent);
                 }
             }

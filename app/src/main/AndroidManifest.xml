@@ -4,11 +4,17 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.NFC" />
+
+    <uses-feature android:name="android.hardware.nfc" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -17,13 +23,34 @@
         android:roundIcon="@drawable/bc_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="re.gaspa.bcmanager.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
+
         <activity
             android:name=".ui.activities.Main"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-        </activity>
 
-        <activity android:name=".ui.activities.Splash">
+                <intent-filter>
+                    <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <data android:mimeType="application/re.gaspa.bcmanager" />
+                </intent-filter>
+
+            </activity>
+
+        <activity
+            android:name=".ui.activities.Splash"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,7 +67,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBu28hg-J-vF0DywdlPGbntHaROsVmNLLk" />
 
-        <activity android:name=".ui.activities.BusinessCardActivity" />
+        <activity
+            android:name=".ui.activities.BusinessCardActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name=".contentprovider.ContentProviderBC"
@@ -48,7 +77,37 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".ui.activities.Help"></activity>
+        <activity
+            android:name=".ui.activities.Help"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".ui.activities.OpenVcard">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:mimeType="text/vcard" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:mimeType="text/x-vcard" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="*/*" />
+                <data android:scheme="content" />
+            </intent-filter>
+
+        </activity>
+
     </application>
 
 </manifest>

@@ -9,6 +9,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+import android.util.StringBuilderPrinter;
 
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.utils.Utils;
@@ -251,7 +253,8 @@ public class BusinessCard implements Parcelable {
     }
 
     public void setProfilo(Bitmap profilo) {
-        this.profilo = profilo;
+        if( profilo == null ) return;
+        this.profilo = Utils.getResizedBitmap(profilo, Utils.MAX_PROFILE_SIZE);
     }
 
     public Bitmap getSfondo() {
@@ -259,7 +262,8 @@ public class BusinessCard implements Parcelable {
     }
 
     public void setSfondo(Bitmap sfondo) {
-        this.sfondo = sfondo;
+        if( sfondo == null ) return;
+        this.sfondo = Utils.getResizedBitmap(sfondo, Utils.MAX_BACKGROUND_SIZE);
     }
 
     @Override
@@ -364,8 +368,12 @@ public class BusinessCard implements Parcelable {
         ret.put("LAVOROLAT", this.getLavoroCoordinate() == null ? 0.0 : this.getLavoroCoordinate().getLatitude());
         ret.put("LAVOROLNG", this.getLavoroCoordinate() == null ? 0.0 : this.getLavoroCoordinate().getLongitude());
 
-        ret.put("PROFILO", this.getProfilo() == null ? "".getBytes() : Utils.encodeTobase64(this.getProfilo()).getBytes());
-        ret.put("SFONDO", this.getSfondo() == null ? "".getBytes() : Utils.encodeTobase64(this.getSfondo()).getBytes());
+        byte profiloB[] = this.getProfilo() == null ? "".getBytes() : Utils.encodeTobase64(this.getProfilo()).getBytes();
+        byte sfondoB[] = this.getSfondo() == null ? "".getBytes() : Utils.encodeTobase64(this.getSfondo()).getBytes();
+        Log.d("DATABASE", "PROFILO = " + profiloB.length);
+        Log.d("DATABASE", "SFONDO = " + sfondoB.length);
+        ret.put("PROFILO", profiloB );
+        ret.put("SFONDO", sfondoB);
 
         return ret;
     }
@@ -373,34 +381,104 @@ public class BusinessCard implements Parcelable {
     public static BusinessCard loadFromCursor(Cursor cursor) {
         BusinessCard ret = new BusinessCard();
 
-        ret.setId(cursor.getInt(cursor.getColumnIndex("ID")));
-        ret.setPreferito(cursor.getInt(cursor.getColumnIndex("PREF")) == 1);
-        ret.setNome(cursor.getString(cursor.getColumnIndex("NOME")));
-        ret.setTelefono(cursor.getString(cursor.getColumnIndex("TELEFONO")));
+        try {
+            ret.setId(cursor.getInt(cursor.getColumnIndex("ID")));
+            ret.setPreferito(cursor.getInt(cursor.getColumnIndex("PREF")) == 1);
+            ret.setNome(cursor.getString(cursor.getColumnIndex("NOME")));
+            ret.setTelefono(cursor.getString(cursor.getColumnIndex("TELEFONO")));
 
-        ret.setEmail(cursor.getString(cursor.getColumnIndex("EMAIL")));
-        ret.setSito(cursor.getString(cursor.getColumnIndex("SITO")));
-        ret.setTelegram(cursor.getString(cursor.getColumnIndex("TELEGRAM")));
-        ret.setColore(cursor.getString(cursor.getColumnIndex("COLOR")));
+            ret.setEmail(cursor.getString(cursor.getColumnIndex("EMAIL")));
+            ret.setSito(cursor.getString(cursor.getColumnIndex("SITO")));
+            ret.setTelegram(cursor.getString(cursor.getColumnIndex("TELEGRAM")));
+            ret.setColore(cursor.getString(cursor.getColumnIndex("COLOR")));
 
-        ret.setProfilo(Utils.decodeBase64(new String(cursor.getBlob(cursor.getColumnIndex("PROFILO")))));
-        ret.setSfondo(Utils.decodeBase64(new String(cursor.getBlob(cursor.getColumnIndex("SFONDO")))));
+            ret.setProfilo(Utils.decodeBase64(new String(cursor.getBlob(cursor.getColumnIndex("PROFILO")))));
+            ret.setSfondo(Utils.decodeBase64(new String(cursor.getBlob(cursor.getColumnIndex("SFONDO")))));
 
-        ret.setCasaCitta(cursor.getString(cursor.getColumnIndex("CASACITTA")));
-        ret.setCasaStrada(cursor.getString(cursor.getColumnIndex("CASASTRADA")));
-        Location casaCoordinate = new Location(LocationManager.GPS_PROVIDER);
-        casaCoordinate.setLatitude(cursor.getDouble(cursor.getColumnIndex("CASALAT")));
-        casaCoordinate.setLongitude(cursor.getDouble(cursor.getColumnIndex("CASALNG")));
-        ret.setCasaCoordinate(casaCoordinate);
+            ret.setCasaCitta(cursor.getString(cursor.getColumnIndex("CASACITTA")));
+            ret.setCasaStrada(cursor.getString(cursor.getColumnIndex("CASASTRADA")));
+            Location casaCoordinate = new Location(LocationManager.GPS_PROVIDER);
+            casaCoordinate.setLatitude(cursor.getDouble(cursor.getColumnIndex("CASALAT")));
+            casaCoordinate.setLongitude(cursor.getDouble(cursor.getColumnIndex("CASALNG")));
+            ret.setCasaCoordinate(casaCoordinate);
 
-        ret.setLavoroRuolo(cursor.getString(cursor.getColumnIndex("LAVORORUOLO")));
-        ret.setLavoroLuogo(cursor.getString(cursor.getColumnIndex("LAVOROLUOGO")));
-        Location lavoroCoordinate = new Location(LocationManager.GPS_PROVIDER);
-        lavoroCoordinate.setLatitude(cursor.getDouble(cursor.getColumnIndex("LAVOROLAT")));
-        lavoroCoordinate.setLongitude(cursor.getDouble(cursor.getColumnIndex("LAVOROLNG")));
-        ret.setLavoroCoordinate(lavoroCoordinate);
+            ret.setLavoroRuolo(cursor.getString(cursor.getColumnIndex("LAVORORUOLO")));
+            ret.setLavoroLuogo(cursor.getString(cursor.getColumnIndex("LAVOROLUOGO")));
+            Location lavoroCoordinate = new Location(LocationManager.GPS_PROVIDER);
+            lavoroCoordinate.setLatitude(cursor.getDouble(cursor.getColumnIndex("LAVOROLAT")));
+            lavoroCoordinate.setLongitude(cursor.getDouble(cursor.getColumnIndex("LAVOROLNG")));
+            ret.setLavoroCoordinate(lavoroCoordinate);
+        }
+        catch ( Exception e)
+        {
+            Log.d("DATABASE", e.toString());
+        }
 
         return ret;
     }
 
+
+    public String toVCard() {
+        StringBuilder builder = new StringBuilder();
+
+        if( this.getNome() != null && this.getNome().length() > 0 )
+            builder.append("NAME=").append(this.getNome()).append("\n");
+        if( this.getTelefono() != null && this.getTelefono().length() > 0 )
+            builder.append("PHONE=").append(this.getTelefono()).append("\n");
+        if( this.getEmail() != null && this.getEmail().length() > 0 )
+            builder.append("EMAIL=").append(this.getEmail()).append("\n");
+        if( this.getSito() != null && this.getSito().length() > 0 )
+            builder.append("WEBSITE=").append(this.getSito()).append("\n");
+        if( this.getTelegram() != null && this.getTelegram().length() > 0 )
+            builder.append("TELEGRAM=").append(this.getTelegram()).append("\n");
+        if( this.getColore() != null && this.getColore().length() > 0 )
+            builder.append("COLOR=").append(this.getColore()).append("\n");
+        if( this.getCasaCitta() != null && this.getCasaCitta().length() > 0 )
+            builder.append("HOMECITY=").append(this.getCasaCitta()).append("\n");
+        if( this.getCasaStrada() != null && this.getCasaStrada().length() > 0 )
+            builder.append("HOMESTREET").append(this.getCasaStrada()).append("\n");
+        if( this.getCasaCoordinate() != null )
+            builder.append("HOMECOORD=").append(this.getCasaCoordinate().getLatitude()).append(", ").append(this.getCasaCoordinate().getLongitude()).append("\n");
+        if( this.getLavoroRuolo() != null && this.getLavoroRuolo().length() > 0 )
+            builder.append("JOBROLE").append(this.getLavoroRuolo()).append("\n");
+        if( this.getLavoroLuogo() != null && this.getLavoroLuogo().length() > 0 )
+            builder.append("JOBPLACE").append(this.getLavoroLuogo()).append("\n");
+        if( this.getLavoroCoordinate() != null  )
+            builder.append("JOBCOORD=").append(this.getLavoroCoordinate().getLatitude()).append(", ").append(this.getLavoroCoordinate().getLongitude()).append("\n");
+        if( this.getProfilo() != null )
+            builder.append("PROFILE=").append(Utils.encodeTobase64(this.getProfilo())).append("\n");
+        if( this.getSfondo() != null )
+            builder.append("BACKGROUND=").append(Utils.encodeTobase64(this.getSfondo())).append("\n");
+
+        return builder.toString();
+    }
+
+    public String toTextMessage() {
+        StringBuilder builder = new StringBuilder();
+
+        if( this.getNome() != null && this.getNome().length() > 0 )
+            builder.append("Nome: ").append(this.getNome()).append("\n");
+        if( this.getTelefono() != null && this.getTelefono().length() > 0 )
+            builder.append("Telefono: ").append(this.getTelefono()).append("\n");
+        if( this.getEmail() != null && this.getEmail().length() > 0 )
+            builder.append("Email: ").append(this.getEmail()).append("\n");
+        if( this.getSito() != null && this.getSito().length() > 0 )
+            builder.append("Sito: ").append(this.getSito()).append("\n");
+        if( this.getTelegram() != null && this.getTelegram().length() > 0 )
+            builder.append("Telegram: ").append(this.getTelegram()).append("\n");
+        if( this.getCasaCitta() != null && this.getCasaCitta().length() > 0 )
+            builder.append("Città: ").append(this.getCasaCitta()).append("\n");
+        if( this.getCasaStrada() != null && this.getCasaStrada().length() > 0 )
+            builder.append("Indirizzo: ").append(this.getCasaStrada()).append("\n");
+        if( this.getCasaCoordinate() != null )
+            builder.append("Coordinate abitazione: ").append(this.getCasaCoordinate().getLatitude()).append(", ").append(this.getCasaCoordinate().getLongitude()).append("\n");
+        if( this.getLavoroRuolo() != null && this.getLavoroRuolo().length() > 0 )
+            builder.append("Professione: ").append(this.getLavoroRuolo()).append("\n");
+        if( this.getLavoroLuogo() != null && this.getLavoroLuogo().length() > 0 )
+            builder.append("Azienda: ").append(this.getLavoroLuogo()).append("\n");
+        if( this.getLavoroCoordinate() != null  )
+            builder.append("Coordinate azienda: ").append(this.getLavoroCoordinate().getLatitude()).append(", ").append(this.getLavoroCoordinate().getLongitude()).append("\n");
+
+        return builder.toString();
+    }
 }

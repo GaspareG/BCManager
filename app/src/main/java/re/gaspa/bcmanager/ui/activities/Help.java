@@ -39,61 +39,67 @@ public class Help extends AppCompatActivity implements View.OnClickListener {
 
     }
 
+    public void backPage()
+    {
+        if( page == 1 )
+        {
+            page = 0;
+            binding.buttonBack.setVisibility(View.INVISIBLE);
+            loadFragment(HelpPage0.class);
+        }
+        else if( page == 2 )
+        {
+            page = 1;
+            loadFragment(HelpPage1.class);
+            binding.buttonForward.setText("Avanti");
+        }
+    }
+
+    public void forwardPage(){
+        if( page == 0 )
+        {
+            loadFragment(HelpPage1.class);
+            binding.buttonBack.setVisibility(View.VISIBLE);
+            page = 1 ;
+        }
+        else if( page == 1 )
+        {
+            binding.buttonForward.setText("Fine");
+            loadFragment(EditProfile.class);
+            page = 2 ;
+        }
+        else if( page == 2 )
+        {
+            AlertDialog.Builder alert = new AlertDialog.Builder(Help.this);
+            alert.setTitle("Sei sicuro?")
+                    .setMessage("Prima di proseguire ricorda di salvare il tuo profilo!")
+                    .setPositiveButton("Continua", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Intent intent = new Intent(getApplicationContext(), Main.class);
+                            getApplicationContext().startActivity(intent);
+                        }
+                    }).setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).show();
+        }
+    }
+
     @Override
     public void onClick(View view) {
         int id = view.getId();
 
         if( id == R.id.button_back )
         {
-            if( page == 1 )
-            {
-                page = 0;
-                binding.buttonBack.setVisibility(View.INVISIBLE);
-                loadFragment(HelpPage0.class);
-            }
-            else if( page == 2 )
-            {
-                page = 1;
-                loadFragment(HelpPage1.class);
-                binding.buttonForward.setText("Avanti");
-            }
-
-
+            backPage();
         }
         else if( id == R.id.button_forward )
         {
-            if( page == 0 )
-            {
-                loadFragment(HelpPage1.class);
-                binding.buttonBack.setVisibility(View.VISIBLE);
-                page = 1 ;
-            }
-            else if( page == 1 )
-            {
-                binding.buttonForward.setText("Fine");
-                loadFragment(EditProfile.class);
-                page = 2 ;
-            }
-            else if( page == 2 )
-            {
-                AlertDialog.Builder alert = new AlertDialog.Builder(Help.this);
-                alert.setTitle("Sei sicuro?")
-                .setMessage("Prima di proseguire ricorda di salvare il tuo profilo!")
-                .setPositiveButton("Continua", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        Intent intent = new Intent(getApplicationContext(), Main.class);
-                        getApplicationContext().startActivity(intent);
-                    }
-                }).setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
-            }
-
+            forwardPage();
         }
     }
 
@@ -112,6 +118,7 @@ public class Help extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if( page > 0 ) backPage();
+        else super.onBackPressed();
     }
 }

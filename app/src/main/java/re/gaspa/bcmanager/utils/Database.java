@@ -43,7 +43,7 @@ public class Database {
         return Database.db;
     }
 
-    public static void createTable() {
+    public static void createTable(Context context) {
         SQLiteDatabase db = Database.getDatabase();
         StringBuilder query = new StringBuilder();
         query.append("CREATE TABLE IF NOT EXISTS " + tableName + " (");
@@ -76,7 +76,7 @@ public class Database {
         db.execSQL(query.toString());
         Log.d("DATABASE", "OK");
 
-        BusinessCard fake[] = Utils.getFakeBusinessCard();
+        BusinessCard fake[] = Utils.getFakeBusinessCard(context);
 
         for (int i = 0; i < fake.length; i++)
             Database.addBusinessCard(fake[i]);
@@ -93,6 +93,7 @@ public class Database {
                         BusinessCard businessCard = BusinessCard.loadFromCursor(dbCursor);
                         bclist.add(businessCard);
                         Log.d("DATABASE", "CARICATO [" + businessCard.getNome() + "] ID[" + businessCard.getId() + "]");
+                        Log.d("DATABASE", "PROFILO LENGTH [" + Utils.encodeTobase64(businessCard.getProfilo()).length() + "] ID[" + businessCard.getId() + "]");
                     }
                     while (dbCursor.moveToNext());
                 }
@@ -108,6 +109,8 @@ public class Database {
         Long rowId = db.insert(tableName, null, businessCard.getContentValues());
         getBusinessCards().add(businessCard);
         Log.d("DATABASE", "INSERITO [" + businessCard.getNome() + "] ID[" + rowId + "]");
+        Log.d("DATABASE", "DATI: " + businessCard.toString() );
+
     }
 
     private static Integer getNextId() {
