@@ -7,16 +7,19 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +30,9 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -231,10 +236,13 @@ public class EditProfile extends Fragment implements View.OnClickListener {
             }
 
         } else if (id == R.id.fab_background) {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            startActivityForResult(photoPickerIntent, CHOOSE_BACKGROUND);
+           /* Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                 startActivityForResult(takePictureIntent, CHOOSE_BACKGROUND);
-            }
+            }*/
         } else if (id == R.id.fab_color) {
             mBindingColor = DataBindingUtil.inflate(getActivity().getLayoutInflater(),
                     R.layout.dialog_color, (ViewGroup) this.getView().getParent(), false);
@@ -318,10 +326,8 @@ public class EditProfile extends Fragment implements View.OnClickListener {
             Toast.makeText(getContext(), "Profilo salvato!", Toast.LENGTH_LONG).show();
 
             try {
-                ((Main)getActivity()).updateProfile();
-            }
-            catch ( Exception e )
-            {
+                ((Main) getActivity()).updateProfile();
+            } catch (Exception e) {
 
             }
         }
@@ -455,9 +461,14 @@ public class EditProfile extends Fragment implements View.OnClickListener {
             }
         } else if (requestCode == CHOOSE_BACKGROUND) {
             if (resultCode == Activity.RESULT_OK) {
-                Bundle extras = data.getExtras();
-                backgroundBitmap = (Bitmap) extras.get("data");
-                mBinding.imageBackground.setImageBitmap(backgroundBitmap);
+                try {
+                    Uri selectedImage = data.getData();
+                    InputStream imageStream = getActivity().getContentResolver().openInputStream(selectedImage);
+                    backgroundBitmap = BitmapFactory.decodeStream(imageStream);
+                    mBinding.imageBackground.setImageBitmap(backgroundBitmap);
+                } catch (FileNotFoundException e) {
+                    Log.d("EXCEPTION", e.toString());
+                }
             }
         }
     }

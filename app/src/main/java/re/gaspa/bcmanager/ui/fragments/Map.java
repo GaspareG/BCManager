@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -40,41 +41,50 @@ import re.gaspa.bcmanager.utils.Database;
 public class Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private FragmentMapBinding mBinding;
-    private SupportMapFragment supportMapFragment;
     private GoogleMap map;
-    private MarkerOptions currentPositionMarker = null;
-    private Marker currentLocationMarker;
     private Context mContext;
+
+    private MapView mapView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         mContext = getActivity();
-                mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
+        mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
                 R.layout.fragment_map, container, false);
 
-
-        FragmentManager fm = getChildFragmentManager();
-      /*  supportMapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
-        if (supportMapFragment == null) {
-            supportMapFragment = SupportMapFragment.newInstance();
-            fm.beginTransaction().replace(R.id.map_container, supportMapFragment).commit();
-        }*/
-
-        supportMapFragment = (SupportMapFragment) fm.findFragmentByTag("mapFragment");
-        if (supportMapFragment == null) {
-            supportMapFragment = new SupportMapFragment();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.add(R.id.map_container, supportMapFragment, "mapFragment");
-            ft.commit();
-            fm.executePendingTransactions();
-        }
-
-        supportMapFragment.getMapAsync(this);
+        mapView = mBinding.mapView;
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(this);
 
         return mBinding.getRoot();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 
     @Override
@@ -82,13 +92,12 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMar
         map = googleMap;
         map.setOnMarkerClickListener(this);
 
-        for( BusinessCard bc : Database.getBusinessCards() ) addMarker(bc);
+        for (BusinessCard bc : Database.getBusinessCards()) addMarker(bc);
     }
 
-    public void addMarker(BusinessCard businessCard)
-    {
+    public void addMarker(BusinessCard businessCard) {
         Location casa = businessCard.getCasaCoordinate();
-        if( casa == null || ( casa.getLongitude() == 0.0 && casa.getLatitude() == 0.0 ) ) return;
+        if (casa == null || (casa.getLongitude() == 0.0 && casa.getLatitude() == 0.0)) return;
 
         LatLng latLng = new LatLng(casa.getLatitude(), casa.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
@@ -105,7 +114,6 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMar
         Intent intent = new Intent(this.getContext(), BusinessCardActivity.class);
         intent.putExtra("businesscard", obj);
         this.getContext().startActivity(intent);
-
         return true;
     }
 }

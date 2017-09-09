@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
+import re.gaspa.bcmanager.utils.Database;
+
 public class ContentProviderBC extends ContentProvider {
 
     public ContentProviderBC() {
@@ -31,7 +33,8 @@ public class ContentProviderBC extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        // TODO: Implement this to initialize your content provider on startup.
+        Database.getDatabase();
+        Database.getBusinessCards();
         return false;
     }
 

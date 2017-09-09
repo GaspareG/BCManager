@@ -36,6 +36,7 @@ import re.gaspa.bcmanager.ui.fragments.Home;
 import re.gaspa.bcmanager.ui.fragments.Map;
 import re.gaspa.bcmanager.ui.fragments.Settings;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
+import re.gaspa.bcmanager.utils.Database;
 import re.gaspa.bcmanager.utils.Preferences;
 
 public class Main extends AppCompatActivity
@@ -76,8 +77,11 @@ public class Main extends AppCompatActivity
 
         // Check for available NFC Adapter
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (mNfcAdapter != null)
+        if (mNfcAdapter != null) {
+            Log.d("NFC", "ADAPTER FOUND");
             mNfcAdapter.setNdefPushMessageCallback(this, this);
+        } else
+            Log.d("NFC", "NO ADAPTER");
 
     }
 
@@ -173,36 +177,40 @@ public class Main extends AppCompatActivity
 
     @Override
     public NdefMessage createNdefMessage(NfcEvent event) {
-        String text = ("Beam me up, Android!\n\n" +
-                "Beam Time: " + System.currentTimeMillis());
-        // TODO Serializza
-        NdefMessage msg = new NdefMessage(
-                new NdefRecord[]{createMimeRecord("application/re.gaspa.bcmanager", text.getBytes())});
-        return msg;
+        Log.d("NFC", "CREATE NDEF MESSAGE");
+        String text = Preferences.getPersonalBusinessCard(null).toVCard();
+        return new NdefMessage(new NdefRecord[]{createMimeRecord("application/re.gaspa.bcmanager", text.getBytes())});
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
+            Log.d("NFC", "NDEF DISCOVERED");
             processIntent(getIntent());
         }
     }
 
     @Override
     public void onNewIntent(Intent intent) {
+
+        Log.d("NFC", "NEW NTENT");
         setIntent(intent);
     }
 
     void processIntent(Intent intent) {
+        Log.d("NFC", "PROCESS INTENT");
         Parcelable[] rawMsgs = intent.getParcelableArrayExtra(
                 NfcAdapter.EXTRA_NDEF_MESSAGES);
         NdefMessage msg = (NdefMessage) rawMsgs[0];
-        Toast.makeText(this, new String(msg.getRecords()[0].getPayload()), Toast.LENGTH_LONG).show();
-        // TODO De-Serializza
+        String vcard = new String(msg.getRecords()[0].getPayload());
+        BusinessCard toAdd = BusinessCard.loadFromBuffer(vcard.split("\n"));
+        Database.addBusinessCard(toAdd);
+        Toast.makeText(this, "Aggiunto nuovo contatto", Toast.LENGTH_LONG).show();
     }
 
     public NdefRecord createMimeRecord(String mimeType, byte[] payload) {
+        Log.d("NFC", "CREATE MIME RECORD");
         byte[] mimeBytes = mimeType.getBytes(Charset.forName("US-ASCII"));
         return new NdefRecord(
                 NdefRecord.TNF_MIME_MEDIA, mimeBytes, new byte[0], payload);
@@ -224,13 +232,11 @@ public class Main extends AppCompatActivity
                 ImageView backgroundImage = binding.navView.getHeaderView(0).findViewById(R.id.default_background);
                 backgroundImage.setImageBitmap(sfondo);
             }
-            if( nome != null )
-            {
+            if (nome != null) {
                 TextView nameText = binding.navView.getHeaderView(0).findViewById(R.id.text_name);
                 nameText.setText(nome);
             }
-            if( role != null )
-            {
+            if (role != null) {
                 TextView roleText = binding.navView.getHeaderView(0).findViewById(R.id.text_role);
                 roleText.setText(role);
             }

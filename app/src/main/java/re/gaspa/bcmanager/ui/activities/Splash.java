@@ -2,13 +2,11 @@
     TODO:
     - Pagina Aiuto 0
     - Pagina Aiuto 1
-    - Scelta foto da galleria / risoluzione maggiore
-    - Fix bug selezione su condividi/aiuto
-    - Fix bug mappa
+
     - Filtro preferiti
     - Aggiornamento homepage quando cambiano i dati
-    - VCard, controllo immagini
-    - NFC, serializzazione
+
+    - NFC, serializzazione (TO CHECK)
 
     - Export Immagine
     - Import/Export bluetooth
@@ -96,6 +94,7 @@ public class Splash extends AppCompatActivity {
                     Log.d("FIRST_OPEN", "CARICATE " + bc.size());
 
                     Intent intent = new Intent(getApplicationContext(), Help.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     getApplicationContext().startActivity(intent);
                 } else {
                     Log.d("FIRST_OPEN", "CARICO BC");
