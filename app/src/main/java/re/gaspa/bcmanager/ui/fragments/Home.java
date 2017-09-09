@@ -49,15 +49,10 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
 
     private FragmentHomeBinding mBinding;
     private BusinessCardAdapter mBcAdapter;
+    private boolean preferite = false;
 
     // NFC
-    private NfcAdapter mNfcAdapter;
     private boolean mAndroidBeamAvailable = false;
-
-    // Bluetooth
-    private BluetoothAdapter mBluetoothAdapter = null;
-    private int REQUEST_ENABLE_BT = 17;
-    private IntentFilter bluetoothFilter;
 
     public Home() {
 
@@ -76,7 +71,6 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
             mAndroidBeamAvailable = false;
         } else {
             mAndroidBeamAvailable = true;
-            mNfcAdapter = NfcAdapter.getDefaultAdapter(this.getContext());
         }
 
         mBinding.fab.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +89,6 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
 
         mBinding.fab.setOnClickListener(this);
 
-        bluetoothFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 
         return mBinding.getRoot();
     }
@@ -112,8 +105,7 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
         if (view.getId() != R.id.fab) return;
 
         final CharSequence[] items = {
-                "Esporta VCard", "Esporta Testo", "Esporta Immagine",
-                "Condividi via Bluetooth", "Condividi via NFC"
+                "Esporta VCard", "Esporta Testo", "Esporta Immagine", "Condividi via NFC"
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
@@ -200,18 +192,7 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
                         }
                         break;
 
-                    case 3: // Bluetooth
-
-                        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                        if (mBluetoothAdapter == null) {
-                            Toast.makeText(context, "Bluetooth non disponibile!", Toast.LENGTH_LONG).show();
-                        } else if (!mBluetoothAdapter.isEnabled()) {
-                            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-                        } else startBluetoothShare();
-
-                        break;
-                    case 4: // NFC
+                    case 3: // NFC
                         // NFC isn't available on the device
                         if (mAndroidBeamAvailable) {
                             Toast.makeText(context, "Avvicina Telefono", Toast.LENGTH_LONG).show();
@@ -219,33 +200,12 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
                             Toast.makeText(context, "NFC Non disponibile", Toast.LENGTH_LONG).show();
                         }
                         break;
-                    case 5: // Wi-Fi
-
-                        break;
                 }
             }
 
 
         });
         builder.create().show();
-    }
-
-    // Create a BroadcastReceiver for ACTION_FOUND.
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Discovery has found a device. Get the BluetoothDevice
-                // object and its info from the Intent.
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress(); // MAC address
-            }
-        }
-    };
-
-    private void startBluetoothShare() {
-        getActivity().registerReceiver(mReceiver, bluetoothFilter);
     }
 
     @Override
@@ -262,13 +222,13 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        mBcAdapter.setBusinessCardItems(Database.getBusinessCards(false, query));
+        mBcAdapter.setBusinessCardItems(Database.getBusinessCards(preferite, query));
         return true;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        mBcAdapter.setBusinessCardItems(Database.getBusinessCards(false, newText));
+        mBcAdapter.setBusinessCardItems(Database.getBusinessCards(preferite, newText));
         return true;
     }
 
@@ -278,24 +238,16 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
         return true;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_ENABLE_BT) {
-            if (resultCode == Activity.RESULT_OK)
-                startBluetoothShare();
-            else
-                Toast.makeText(this.getContext(), "Bluetooth non disponibile!", Toast.LENGTH_LONG).show();
-        }
-    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        try {
-            getActivity().unregisterReceiver(mReceiver);
-        } catch (Exception e) {
 
-        }
 
+    }
+
+    public void setPreferite(boolean preferite) {
+        this.preferite = preferite;
+        mBcAdapter.setBusinessCardItems(Database.getBusinessCards(preferite, ""));
     }
 }

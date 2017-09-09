@@ -1,19 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="re.gaspa.bcmanager.ui.fragments.Settings">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello Help 1!"
+        android:layout_margin="16dp"
+        android:text="L'applicazione permette di creare e raccogliere biglietti da visita con informazioni personali.\nQua sotto un esempio, toccandolo in app si accederanno ai campi scritti dall'autore e interagire in vari modi."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:inputType="textMultiLine"
+        android:layout_gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:textAlignment="center"
         app:layout_constraintTop_toTopOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:src="@drawable/card_preview"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Nella prossima pagina ti verrà chiesto di personalizzare il tuo profilo (potrei eventualmente modificarlo in seguito).\n In app potrai esportare o condividere il tuo profilo con altre persone, cercare, impostare preferiti e visualizzare i biglietti su mappa."
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:inputType="textMultiLine"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</LinearLayout>

@@ -70,7 +70,7 @@ public class Utils {
 
     public static void openLocation(Location city, Context context) {
 
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + city.getLatitude() + "," + city.getLongitude()));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + city.getLatitude() + "," + city.getLongitude() + "?q=" + city.getLatitude() + "," + city.getLongitude()));
         context.startActivity(intent);
     }
 
@@ -99,7 +99,7 @@ public class Utils {
     }
 
     public static BusinessCard[] getFakeBusinessCard(Context ctx) {
-        BusinessCard ret[] = new BusinessCard[2];
+        BusinessCard ret[] = new BusinessCard[3];
 
         ret[0] = new BusinessCard();
         ret[0].setPreferito(false);
@@ -112,50 +112,68 @@ public class Utils {
 
         ret[0].setProfilo( BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_profile1) );
         Log.d("DATABASE", "SET PROFILO " + Utils.encodeTobase64(ret[0].getProfilo()).length() + " bytes");
-        ret[0].setSfondo( BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_background) );
+        ret[0].setSfondo( BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_background1) );
         Log.d("DATABASE", "SET SFONDO " + Utils.encodeTobase64(ret[0].getSfondo()).length() + " bytes");
 
         ret[0].setCasaCitta("Genova");
         ret[0].setCasaStrada("Passo ca' dei rissi 7");
         Location casaCoordinate = new Location(LocationManager.GPS_PROVIDER);
-        casaCoordinate.setLatitude(8.0);
-        casaCoordinate.setLongitude(10.0);
+        casaCoordinate.setLatitude(44.455902);
+        casaCoordinate.setLongitude(8.977273);
         ret[0].setCasaCoordinate(casaCoordinate);
         ret[0].setLavoroRuolo("Studente");
         ret[0].setLavoroLuogo("Università di Pisa");
         Location lavoroCoordinate = new Location(LocationManager.GPS_PROVIDER);
-        lavoroCoordinate.setLatitude(9.0);
-        lavoroCoordinate.setLongitude(12.0);
+        lavoroCoordinate.setLatitude(43.720563);
+        lavoroCoordinate.setLongitude(10.408381);
         ret[0].setLavoroCoordinate(lavoroCoordinate);
 
         ret[1] = new BusinessCard();
         ret[1].setPreferito(true);
-        ret[1].setNome("Vincenzo Gervasi");
-        ret[1].setTelefono("+39333123456");
-        ret[1].setEmail("gervasi@unipi.it");
-        ret[1].setSito("di.unipi.it/~gervasi");
-        ret[1].setTelegram("@VincenzoGervasi");
-        ret[1].setColore("#E91E63");
-
+        ret[1].setNome("Elon Musk");
+        ret[1].setTelefono("+01333123456");
+        ret[1].setEmail("info@elonmusknews.org");
+        ret[1].setSito("elonmusknews.org");
+        ret[1].setTelegram("@ElonMusk");
+        ret[1].setColore("#2196F3");
         ret[1].setProfilo( BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_profile2) );
-        Log.d("DATABASE", "SET PROFILO " + Utils.encodeTobase64(ret[1].getProfilo()).length() + " bytes");
         ret[1].setSfondo( BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_background2) );
-        Log.d("DATABASE", "SET SFONDO " + Utils.encodeTobase64(ret[1].getSfondo()).length() + " bytes");
-
-        ret[1].setCasaCitta("Pisa");
-        ret[1].setCasaStrada("Via Garibaldi 1");
+        ret[1].setCasaCitta("Bel Air");
+        ret[1].setCasaStrada("Maraga Dr 1");
         Location casaCoordinate2 = new Location(LocationManager.GPS_PROVIDER);
-        casaCoordinate2.setLatitude(10.0);
-        casaCoordinate2.setLongitude(12.0);
+        casaCoordinate2.setLatitude(34.095165);
+        casaCoordinate2.setLongitude(-118.469207);
         ret[1].setCasaCoordinate(casaCoordinate2);
-        ret[1].setLavoroRuolo("Professore");
-        ret[1].setLavoroLuogo("Università di Pisa");
+        ret[1].setLavoroRuolo("CEO");
+        ret[1].setLavoroLuogo("Tesla");
         Location lavoroCoordinate2 = new Location(LocationManager.GPS_PROVIDER);
-        lavoroCoordinate2.setLatitude(14.0);
-        lavoroCoordinate2.setLongitude(8.0);
+        lavoroCoordinate2.setLatitude(33.921303);
+        lavoroCoordinate2.setLongitude(-118.330186);
         ret[1].setLavoroCoordinate(lavoroCoordinate2);
 
-        // TODO Aggiungere altri 2 fake
+        ret[2] = new BusinessCard();
+        ret[2].setPreferito(true);
+        ret[2].setNome("DonalD Trump");
+        ret[2].setTelefono("+01001001001");
+        ret[2].setEmail("info@donaldjtrump.com");
+        ret[2].setSito("donaldjtrump.com");
+        ret[2].setTelegram("@realDonaldTrump");
+        ret[2].setColore("#FF9800");
+        ret[2].setProfilo( BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_profile3) );
+        ret[2].setSfondo( BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_background3) );
+        ret[2].setCasaCitta("New York");
+        ret[2].setCasaStrada("5th Avenue");
+        Location casaCoordinate3 = new Location(LocationManager.GPS_PROVIDER);
+        casaCoordinate3.setLatitude(40.762286);
+        casaCoordinate3.setLongitude(-73.973766);
+        ret[2].setCasaCoordinate(casaCoordinate3);
+        ret[2].setLavoroRuolo("USA President");
+        ret[2].setLavoroLuogo("White House");
+        Location lavoroCoordinate3 = new Location(LocationManager.GPS_PROVIDER);
+        lavoroCoordinate3.setLatitude(38.897421);
+        lavoroCoordinate3.setLongitude(-77.036588);
+        ret[2].setLavoroCoordinate(lavoroCoordinate3);
+
         return ret;
     }
 
@@ -222,5 +240,17 @@ public class Utils {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
         return output;
+    }
+
+
+    public static double truncate(double number, int precision)
+    {
+        double prec = Math.pow(10, precision);
+        int integerPart = (int) number;
+        double fractionalPart = number - integerPart;
+        fractionalPart *= prec;
+        int fractPart = (int) fractionalPart;
+        fractionalPart = (double) (integerPart) + (double) (fractPart)/prec;
+        return fractionalPart;
     }
 }

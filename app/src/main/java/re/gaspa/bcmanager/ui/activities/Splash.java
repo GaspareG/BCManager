@@ -1,14 +1,7 @@
-git /*
+/*
     TODO:
-    - Pagina Aiuto 0
-    - Pagina Aiuto 1
-
-    - Filtro preferiti
-    - Aggiornamento homepage quando cambiano i dati
 
     - NFC, serializzazione (TO CHECK)
-
-    - Import/Export bluetooth
 
  */
 

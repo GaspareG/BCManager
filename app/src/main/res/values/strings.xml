@@ -42,10 +42,10 @@
     <string name="avanti">Avanti</string>
     <string name="indietro">Indietro</string>
     <string name="credits">App sviluppata da Gaspare Ferraro\nCorso di Sviluppo di applicazioni mobili</string>
-    <string name="hello_help_0">Hello Help 0!</string>
     <string name="numero_telefono">Numero di telefono</string>
     <string name="e_mail">E-Mail</string>
     <string name="telegram">Telegram</string>
     <string name="sito_web">Sito web</string>
+    <string name="hello_help_0">Benvenuto in BCManager!\n\nPrima di iniziare l\'esperienza\n una breve spiegazione dell\'uso…</string>
 
 </resources>

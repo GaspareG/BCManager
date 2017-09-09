@@ -18,6 +18,8 @@ import android.util.StringBuilderPrinter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -210,11 +212,12 @@ public class BusinessCard implements Parcelable {
 
     public void setLavoroCoordinate(Location lavoroCoordinate) {
         this.lavoroCoordinate = lavoroCoordinate;
-        if( lavoroCoordinate == null ) return;
-        double lat = this.lavoroCoordinate.getLatitude();
-        double lng = this.lavoroCoordinate.getLongitude();
-        lat = ((int)(lat*1000000))/1000000;
-        lng = ((int)(lng*1000000))/1000000;
+        if (lavoroCoordinate == null) return;
+        Double lat = this.lavoroCoordinate.getLatitude();
+        Double lng = this.lavoroCoordinate.getLongitude();
+        lat = Utils.truncate(lat, 6);
+        lng = Utils.truncate(lng, 6);
+        Log.d("POS", lat + " " + lng);
         this.lavoroCoordinate.setLatitude(lat);
         this.lavoroCoordinate.setLongitude(lng);
     }
@@ -241,11 +244,12 @@ public class BusinessCard implements Parcelable {
 
     public void setCasaCoordinate(Location casaCoordinate) {
         this.casaCoordinate = casaCoordinate;
-        if( casaCoordinate == null ) return;
+        if (casaCoordinate == null) return;
         double lat = this.casaCoordinate.getLatitude();
         double lng = this.casaCoordinate.getLongitude();
-        lat = ((int)(lat*1000000))/1000000;
-        lng = ((int)(lng*1000000))/1000000;
+        lat = Utils.truncate(lat, 6);
+        lng = Utils.truncate(lng, 6);
+        Log.d("POS", lat + " " + lng);
         this.casaCoordinate.setLatitude(lat);
         this.casaCoordinate.setLongitude(lng);
     }
@@ -650,7 +654,7 @@ public class BusinessCard implements Parcelable {
     public Bitmap getImage() {
         List<Map.Entry<String, String>> prop = this.getProp();
 
-        Bitmap b = Bitmap.createBitmap(256, 256 + 20 * (1+prop.size()), Bitmap.Config.ARGB_8888);
+        Bitmap b = Bitmap.createBitmap(256, 256 + 20 * (1 + prop.size()), Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(b);
         Paint p = new Paint();
         p.setAntiAlias(true);
@@ -665,32 +669,30 @@ public class BusinessCard implements Parcelable {
         int height = background.getHeight();
         int width = background.getWidth();
         c.drawCircle(50, 50, 25, p);
-        Rect src = new Rect( width/2 - height/2 , 0, width/2 + height/2 , height );
-        Rect dest = new Rect(0,0, 256, 256);
+        Rect src = new Rect(width / 2 - height / 2, 0, width / 2 + height / 2, height);
+        Rect dest = new Rect(0, 0, 256, 256);
         c.drawBitmap(background, src, dest, null);
 
         // Disegna Profilo
         Bitmap profilo = this.getProfilo();
         Bitmap cProfilo = Utils.getCircularBitmap(profilo);
-        src = new Rect(0,0, cProfilo.getWidth(), cProfilo.getWidth());
-        dest = new Rect(64,64, 192, 192);
+        src = new Rect(0, 0, cProfilo.getWidth(), cProfilo.getWidth());
+        dest = new Rect(64, 64, 192, 192);
         c.drawBitmap(cProfilo, src, dest, null);
 
         // Scrivi dati
-        int i = 1 ;
+        int i = 1;
         p.setColor(Color.BLACK);
         try {
-            p.setColor( Color.parseColor( this.getColore() ));
-        }
-        catch (Exception e)
-        {
+            p.setColor(Color.parseColor(this.getColore()));
+        } catch (Exception e) {
 
         }
         p.setTextAlign(Paint.Align.LEFT);
         for (Map.Entry<String, String> entry : prop) {
             String key = entry.getKey();
             String value = entry.getValue();
-            c.drawText( key + " = " + value, 10, 256 + 20*i++, p   );
+            c.drawText(key + " = " + value, 10, 256 + 20 * i++, p);
         }
 
         return b;

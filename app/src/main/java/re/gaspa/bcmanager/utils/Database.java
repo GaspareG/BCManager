@@ -155,6 +155,7 @@ public class Database {
     public static void clearTable() {
         SQLiteDatabase db = Database.getDatabase();
         db.delete(tableName, null, null);
+        bclist = new ArrayList<>();
     }
 
     public static void resetPreferite() {

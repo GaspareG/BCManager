@@ -141,14 +141,14 @@ public class EditProfile extends Fragment implements View.OnClickListener {
         if (lavoroRuolo != null)
             mBinding.textRole.setText(lavoroRuolo);
         if (lavoroCoordinate != null)
-            mBinding.textJobCoord.setText(lavoroCoordinate.getLongitude() + " " + lavoroCoordinate.getLatitude());
+            mBinding.textJobCoord.setText(lavoroCoordinate.getLatitude() + " " + lavoroCoordinate.getLongitude());
 
         if (casaCitta != null)
             mBinding.textCity.setText(casaCitta);
         if (casaStrada != null)
             mBinding.textStreet.setText(casaStrada);
         if (casaCoordinate != null)
-            mBinding.textHomeCoord.setText(casaCoordinate.getLongitude() + " " + casaCoordinate.getLatitude());
+            mBinding.textHomeCoord.setText(casaCoordinate.getLatitude() + " " + casaCoordinate.getLongitude());
 
 
     }

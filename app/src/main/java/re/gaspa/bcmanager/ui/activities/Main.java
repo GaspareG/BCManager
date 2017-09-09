@@ -92,6 +92,14 @@ public class Main extends AppCompatActivity
 
         if (id == R.id.preferite) {
             item.setChecked(!item.isChecked());
+            try {
+                Home fragment = (Home) fragmentManager.findFragmentById(R.id.flContent);
+                fragment.setPreferite(item.isChecked());
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         return super.onOptionsItemSelected(item);
