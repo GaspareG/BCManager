@@ -2,9 +2,6 @@ package re.gaspa.bcmanager.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -16,18 +13,12 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
-
-/**
- * Created by gaspare on 04/09/17.
- */
 
 public class Utils {
 
@@ -77,12 +68,10 @@ public class Utils {
     public static String encodeTobase64(Bitmap image) {
         if (image == null) return "";
 
-        Bitmap immagex = image;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        immagex.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        image.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] b = baos.toByteArray();
-        String imageEncoded = Base64.encodeToString(b, Base64.NO_WRAP);
-        return imageEncoded;
+        return Base64.encodeToString(b, Base64.NO_WRAP);
     }
 
     public static Bitmap decodeBase64(String input) {
@@ -90,15 +79,7 @@ public class Utils {
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 
-    public static Bitmap loadBitmapFromView(View v) {
-        Bitmap b = Bitmap.createBitmap(v.getLayoutParams().width, v.getLayoutParams().height, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(b);
-        v.layout(0, 0, v.getLayoutParams().width, v.getLayoutParams().height);
-        v.draw(c);
-        return b;
-    }
-
-    public static BusinessCard[] getFakeBusinessCard(Context ctx) {
+    static BusinessCard[] getFakeBusinessCard(Context ctx) {
         BusinessCard ret[] = new BusinessCard[3];
 
         ret[0] = new BusinessCard();
@@ -111,9 +92,7 @@ public class Utils {
         ret[0].setColore("#009688");
 
         ret[0].setProfilo(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_profile1));
-        Log.d("DATABASE", "SET PROFILO " + Utils.encodeTobase64(ret[0].getProfilo()).length() + " bytes");
         ret[0].setSfondo(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.default_background1));
-        Log.d("DATABASE", "SET SFONDO " + Utils.encodeTobase64(ret[0].getSfondo()).length() + " bytes");
 
         ret[0].setCasaCitta("Genova");
         ret[0].setCasaStrada("Passo ca' dei rissi 7");
@@ -225,7 +204,7 @@ public class Utils {
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
 
-        float r = 0;
+        float r;
 
         if (bitmap.getWidth() > bitmap.getHeight()) {
             r = bitmap.getHeight() / 2;
@@ -241,7 +220,6 @@ public class Utils {
         canvas.drawBitmap(bitmap, rect, rect, paint);
         return output;
     }
-
 
     public static double truncate(double number, int precision) {
         double prec = Math.pow(10, precision);

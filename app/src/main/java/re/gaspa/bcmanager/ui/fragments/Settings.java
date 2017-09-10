@@ -39,22 +39,22 @@ public class Settings extends Fragment implements View.OnClickListener {
         final int id = view.getId();
 
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
-        builder.setTitle("Sei sicuro?");
+        builder.setTitle(R.string.sure);
         builder.setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (id == R.id.layout_delete_all) {
                     Utils.deleteAll();
-                    Toast.makeText(mBinding.getRoot().getContext(), "Cancellati tutti i dati!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mBinding.getRoot().getContext(), R.string.cancel_all, Toast.LENGTH_LONG).show();
                 } else if (id == R.id.layout_delete_favourite) {
                     Utils.deletePreferite();
-                    Toast.makeText(mBinding.getRoot().getContext(), "Cancellati tutti i preferiti!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mBinding.getRoot().getContext(), R.string.cancel_preferite, Toast.LENGTH_LONG).show();
                 } else if (id == R.id.layout_delete_profile) {
                     Utils.deleteProfile();
-                    Toast.makeText(mBinding.getRoot().getContext(), "Cancellato il tuo profilo!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mBinding.getRoot().getContext(), R.string.cancel_profile, Toast.LENGTH_LONG).show();
                 } else if (id == R.id.layout_delete_contacts) {
                     Utils.deleteContacts();
-                    Toast.makeText(mBinding.getRoot().getContext(), "Cancellati tutti i contatti!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mBinding.getRoot().getContext(), R.string.cancel_contacts, Toast.LENGTH_LONG).show();
                 }
                 dialogInterface.dismiss();
             }

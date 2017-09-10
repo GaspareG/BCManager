@@ -5,19 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
-import android.provider.ContactsContract;
-import android.util.Log;
 
 import java.io.File;
-import java.io.InterruptedIOException;
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.Objects;
 
 import re.gaspa.bcmanager.ui.models.BusinessCard;
-
-/**
- * Created by gaspare on 05/09/17.
- */
 
 public class Database {
 
@@ -72,19 +65,17 @@ public class Database {
         query.append("SFONDO BLOB ");
 
         query.append(");");
-        Log.d("DATABASE", query.toString());
+
         db.execSQL(query.toString());
-        Log.d("DATABASE", "OK");
 
         BusinessCard fake[] = Utils.getFakeBusinessCard(context);
 
-        for (int i = 0; i < fake.length; i++)
-            Database.addBusinessCard(fake[i]);
+        for (BusinessCard aFake : fake) Database.addBusinessCard(aFake);
     }
 
     public static ArrayList<BusinessCard> getBusinessCards() {
         SQLiteDatabase db = Database.getDatabase();
-        if (bclist == null) {
+      //  if (bclist == null) {
             bclist = new ArrayList<>();
             Cursor dbCursor = db.query(tableName, null, null, null, null, null, null);
             if (dbCursor != null) {
@@ -92,25 +83,20 @@ public class Database {
                     do {
                         BusinessCard businessCard = BusinessCard.loadFromCursor(dbCursor);
                         bclist.add(businessCard);
-                        Log.d("DATABASE", "CARICATO [" + businessCard.getNome() + "] ID[" + businessCard.getId() + "]");
-                        Log.d("DATABASE", "PROFILO LENGTH [" + Utils.encodeTobase64(businessCard.getProfilo()).length() + "] ID[" + businessCard.getId() + "]");
                     }
                     while (dbCursor.moveToNext());
                 }
                 dbCursor.close();
             }
-        }
+       // }
         return bclist;
     }
 
     public static void addBusinessCard(BusinessCard businessCard) {
         SQLiteDatabase db = Database.getDatabase();
         businessCard.setId(Database.getNextId());
-        Long rowId = db.insert(tableName, null, businessCard.getContentValues());
+        db.insert(tableName, null, businessCard.getContentValues());
         getBusinessCards().add(businessCard);
-        Log.d("DATABASE", "INSERITO [" + businessCard.getNome() + "] ID[" + rowId + "]");
-        Log.d("DATABASE", "DATI: " + businessCard.toString() );
-
     }
 
     private static Integer getNextId() {
@@ -129,7 +115,7 @@ public class Database {
         SQLiteDatabase db = Database.getDatabase();
         ArrayList<BusinessCard> list = getBusinessCards();
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId() == id)
+            if (Objects.equals(list.get(i).getId(), id))
                 list.remove(i);
         }
         db.delete(tableName, "ID = ?", new String[]{String.valueOf(id)});
@@ -152,13 +138,13 @@ public class Database {
         db.update(tableName, businessCard.getContentValues(), "ID = ?", new String[]{businessCard.getId().toString()});
     }
 
-    public static void clearTable() {
+    static void clearTable() {
         SQLiteDatabase db = Database.getDatabase();
         db.delete(tableName, null, null);
         bclist = new ArrayList<>();
     }
 
-    public static void resetPreferite() {
+    static void resetPreferite() {
         SQLiteDatabase db = Database.getDatabase();
         ContentValues cv = new ContentValues();
         cv.put("PREF", 0);

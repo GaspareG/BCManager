@@ -8,20 +8,16 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.SearchView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -78,14 +74,9 @@ public class Main extends AppCompatActivity
 
         PackageManager pm = this.getPackageManager();
 
-        if (!pm.hasSystemFeature(PackageManager.FEATURE_NFC)) {
-            Log.d("NFC", "NFC Feature non disponibile");
-        }
-        else {
+        if (pm.hasSystemFeature(PackageManager.FEATURE_NFC)) {
             NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-            Log.d("NFC", "NFC Feature disponibile");
             if (mNfcAdapter != null) {
-                Log.d("NFC", "NFC Adapter trovato, registro callback");
                 mNfcAdapter.setNdefPushMessageCallback(this, this);
                 mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
             }
@@ -102,7 +93,7 @@ public class Main extends AppCompatActivity
             try {
                 Home fragment = (Home) fragmentManager.findFragmentById(R.id.flContent);
                 fragment.setPreferite(item.isChecked());
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
         }
@@ -115,14 +106,13 @@ public class Main extends AppCompatActivity
 
         int id = item.getItemId();
 
-
         if (id == R.id.nav_share) {
             item.setChecked(false);
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "Utilizza pure te BCManager! http://gaspa.re/bcmanager.apk");
+            sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.condividi_messaggio));
             sendIntent.setType("text/plain");
-            startActivity(Intent.createChooser(sendIntent, "Condividi!"));
+            startActivity(Intent.createChooser(sendIntent, getString(R.string.condividi)));
         } else if (id == R.id.nav_help) {
             item.setChecked(false);
             Intent intent = new Intent(this.getApplicationContext(), Help.class);
@@ -160,8 +150,7 @@ public class Main extends AppCompatActivity
         try {
             fragment = (Fragment) fragmentClass.newInstance();
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
 
     }
@@ -182,11 +171,9 @@ public class Main extends AppCompatActivity
 
     @Override
     public void onClick(View view) {
-        int id = view.getId();
         Intent intent = new Intent(view.getContext(), BusinessCardActivity.class);
         intent.putExtra("businesscard", Preferences.getPersonalBusinessCard(null));
         view.getContext().startActivity(intent);
-
     }
 
     public void updateProfile() {
@@ -218,55 +205,43 @@ public class Main extends AppCompatActivity
 
     @Override
     public NdefMessage createNdefMessage(NfcEvent event) {
-        Log.d("NFC", "CREATE NDEF MESSAGE");
         BusinessCard personal = Preferences.getPersonalBusinessCard(null);
-        Log.d("NFC", "CREATE NDEF PERSONAL " + personal.getNome() );
         String text = personal.toVCard();
-        Log.d("NFC", "CREATE NDEF MESSAGE LENGTH " + text.length());
-        NdefMessage ret = new NdefMessage(new NdefRecord[]{createMimeRecord("application/re.gaspa.bcmanager", text.getBytes())});;
-        Log.d("NFC", "CREATED NDEF MESSAGE");
+        NdefMessage ret = new NdefMessage(new NdefRecord[]{createMimeRecord("application/re.gaspa.bcmanager", text.getBytes())});
         return ret;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("NFC", "NDEF DISCOVERED ?");
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
-            Log.d("NFC", "NDEF DISCOVERED");
             processIntent(getIntent());
         }
     }
 
     @Override
     public void onNewIntent(Intent intent) {
-
-        Log.d("NFC", "NEW NTENT");
         setIntent(intent);
     }
 
     void processIntent(Intent intent) {
-        Log.d("NFC", "PROCESS INTENT");
         Parcelable[] rawMsgs = intent.getParcelableArrayExtra(
                 NfcAdapter.EXTRA_NDEF_MESSAGES);
         NdefMessage msg = (NdefMessage) rawMsgs[0];
         String vcard = new String(msg.getRecords()[0].getPayload());
         BusinessCard toAdd = BusinessCard.loadFromBuffer(vcard.split("\n"));
         Database.addBusinessCard(toAdd);
-        Toast.makeText(this, "Aggiunto nuovo contatto", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.nuovo_contatto, Toast.LENGTH_LONG).show();
     }
 
     public NdefRecord createMimeRecord(String mimeType, byte[] payload) {
-        Log.d("NFC", "CREATE MIME RECORD");
         byte[] mimeBytes = mimeType.getBytes(Charset.forName("US-ASCII"));
-        Log.d("NFC", "CREATED MIME RECORD " + mimeBytes.length );
         return new NdefRecord(
                 NdefRecord.TNF_MIME_MEDIA, mimeBytes, new byte[0], payload);
     }
 
     @Override
     public void onNdefPushComplete(NfcEvent nfcEvent) {
-        Log.d("NFC", "NFC onNdefPushComplete");
-        // TODO
+        Toast.makeText(this.getApplicationContext(), R.string.send_complete, Toast.LENGTH_LONG).show();
     }
 }

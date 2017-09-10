@@ -22,7 +22,7 @@ import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.asynctask.AsyncLoadDatabase;
 import re.gaspa.bcmanager.databinding.FragmentMapBinding;
 import re.gaspa.bcmanager.ui.activities.BusinessCardActivity;
-import re.gaspa.bcmanager.ui.listeners.OnDatabaseLoadListener;
+import re.gaspa.bcmanager.listeners.OnDatabaseLoadListener;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 
 public class Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, OnDatabaseLoadListener {

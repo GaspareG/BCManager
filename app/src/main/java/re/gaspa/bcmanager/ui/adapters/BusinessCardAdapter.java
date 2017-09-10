@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.databinding.CardviewBcBinding;
 import re.gaspa.bcmanager.ui.activities.BusinessCardActivity;
-import re.gaspa.bcmanager.ui.listeners.OnCardMenuClickListener;
+import re.gaspa.bcmanager.listeners.OnCardMenuClickListener;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.ui.viewholders.BusinessCardVH;
 import re.gaspa.bcmanager.utils.Utils;

@@ -16,6 +16,7 @@ import android.view.View;
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.databinding.ActivityBusinesscardBinding;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
+import re.gaspa.bcmanager.utils.Database;
 import re.gaspa.bcmanager.utils.Utils;
 
 public class BusinessCardActivity extends AppCompatActivity implements View.OnClickListener {
@@ -45,7 +46,7 @@ public class BusinessCardActivity extends AppCompatActivity implements View.OnCl
 
             ActionBar bar = getActionBar();
             bar.setBackgroundDrawable(new ColorDrawable(color));
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
 
@@ -55,17 +56,13 @@ public class BusinessCardActivity extends AppCompatActivity implements View.OnCl
         if (profile_image != null) binding.imageProfile.setImageBitmap(profile_image);
         if (background_image != null) binding.backgroundImage.setImageBitmap(background_image);
 
-        Integer id = businessCard.getId();
-        Boolean preferito = businessCard.getPreferito();
         String nome = businessCard.getNome();
         String telefono = businessCard.getTelefono();
         String email = businessCard.getEmail();
         String ruolo = businessCard.getLavoroRuolo();
         String luogo = businessCard.getLavoroLuogo();
-        Location luogoCoordinate = businessCard.getLavoroCoordinate();
         String citta = businessCard.getCasaCitta();
         String strada = businessCard.getCasaStrada();
-        Location cittaCoordinate = businessCard.getCasaCoordinate();
         String sito = businessCard.getSito();
         String telegram = businessCard.getTelegram();
 
@@ -131,6 +128,8 @@ public class BusinessCardActivity extends AppCompatActivity implements View.OnCl
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_favourite, menu);
 
+        if( menu.size() > 0 )
+            menu.getItem(0).setChecked( businessCard.getPreferito() );
         return true;
     }
 
@@ -191,7 +190,7 @@ public class BusinessCardActivity extends AppCompatActivity implements View.OnCl
 
         if (id == R.id.menu_favourite) {
             item.setChecked(!item.isChecked());
-            // TODO Filter
+            Database.setPreferite(businessCard, item.isChecked());
         }
 
         return super.onOptionsItemSelected(item);

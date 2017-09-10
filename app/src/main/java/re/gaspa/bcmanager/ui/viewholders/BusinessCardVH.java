@@ -1,13 +1,8 @@
 package re.gaspa.bcmanager.ui.viewholders;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import re.gaspa.bcmanager.databinding.CardviewBcBinding;
-
-/**
- * Created by gaspare on 02/09/17.
- */
 
 public class BusinessCardVH extends RecyclerView.ViewHolder {
 

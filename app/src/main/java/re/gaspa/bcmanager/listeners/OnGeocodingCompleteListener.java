@@ -1,15 +1,8 @@
-package re.gaspa.bcmanager.ui.listeners;
+package re.gaspa.bcmanager.listeners;
 
 import android.location.Address;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import re.gaspa.bcmanager.ui.models.BusinessCard;
-
-/**
- * Created by gaspare on 10/09/17.
- */
 
 public interface OnGeocodingCompleteListener {
 

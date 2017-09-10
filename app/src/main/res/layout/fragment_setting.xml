@@ -9,7 +9,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:context="re.gaspa.bcmanager.ui.fragments.Settings">
@@ -23,13 +23,14 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="8dp"
-                android:paddingStart="16dp">
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:gravity="bottom"
-                    android:text="Resetta i preferiti"
+                    android:text="@string/settings_0"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -45,13 +46,14 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="8dp"
-                android:paddingStart="16dp">
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:gravity="bottom"
-                    android:text="Cancella profilo personale"
+                    android:text="@string/settings_1"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -67,13 +69,14 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="8dp"
-                android:paddingStart="16dp">
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:gravity="bottom"
-                    android:text="Cancella contatti salvati"
+                    android:text="@string/settings_2"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -89,13 +92,14 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="8dp"
-                android:paddingStart="16dp">
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:gravity="bottom"
-                    android:text="Cancella tutti i dati"
+                    android:text="@string/settings_3"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="16sp" />
             </LinearLayout>

@@ -45,9 +45,9 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="150dp"
             android:text="@string/default_name"
-            android:textStyle="bold"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/text_role"

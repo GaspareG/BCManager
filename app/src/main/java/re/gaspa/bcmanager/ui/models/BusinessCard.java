@@ -2,7 +2,6 @@ package re.gaspa.bcmanager.ui.models;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,24 +14,16 @@ import android.location.LocationManager;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
-import android.util.StringBuilderPrinter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.utils.Utils;
-
-/**
- * Created by gaspare on 29/08/17.
- */
 
 public class BusinessCard implements Parcelable {
 
@@ -218,7 +209,6 @@ public class BusinessCard implements Parcelable {
         Double lng = this.lavoroCoordinate.getLongitude();
         lat = Utils.truncate(lat, 6);
         lng = Utils.truncate(lng, 6);
-        Log.d("POS", lat + " " + lng);
         this.lavoroCoordinate.setLatitude(lat);
         this.lavoroCoordinate.setLongitude(lng);
     }
@@ -250,7 +240,6 @@ public class BusinessCard implements Parcelable {
         double lng = this.casaCoordinate.getLongitude();
         lat = Utils.truncate(lat, 6);
         lng = Utils.truncate(lng, 6);
-        Log.d("POS", lat + " " + lng);
         this.casaCoordinate.setLatitude(lat);
         this.casaCoordinate.setLongitude(lng);
     }
@@ -335,6 +324,7 @@ public class BusinessCard implements Parcelable {
             return false;
         if (colore != null ? !colore.equals(that.colore) : that.colore != null) return false;
         if (profilo != null ? !profilo.equals(that.profilo) : that.profilo != null) return false;
+
         return sfondo != null ? sfondo.equals(that.sfondo) : that.sfondo == null;
 
     }
@@ -384,7 +374,6 @@ public class BusinessCard implements Parcelable {
 
     public ContentValues getContentValues() {
         ContentValues ret = new ContentValues();
-        // TODO ret.put();
 
         ret.put("ID", this.getId());
         ret.put("PREF", this.getPreferito() ? 1 : 0);
@@ -408,8 +397,7 @@ public class BusinessCard implements Parcelable {
 
         byte profiloB[] = this.getProfilo() == null ? "".getBytes() : Utils.encodeTobase64(this.getProfilo()).getBytes();
         byte sfondoB[] = this.getSfondo() == null ? "".getBytes() : Utils.encodeTobase64(this.getSfondo()).getBytes();
-        Log.d("DATABASE", "PROFILO = " + profiloB.length);
-        Log.d("DATABASE", "SFONDO = " + sfondoB.length);
+
         ret.put("PROFILO", profiloB);
         ret.put("SFONDO", sfondoB);
 
@@ -446,8 +434,8 @@ public class BusinessCard implements Parcelable {
             lavoroCoordinate.setLatitude(cursor.getDouble(cursor.getColumnIndex("LAVOROLAT")));
             lavoroCoordinate.setLongitude(cursor.getDouble(cursor.getColumnIndex("LAVOROLNG")));
             ret.setLavoroCoordinate(lavoroCoordinate);
-        } catch (Exception e) {
-            Log.d("DATABASE", e.toString());
+        } catch (Exception ignored) {
+
         }
 
         return ret;
@@ -456,8 +444,6 @@ public class BusinessCard implements Parcelable {
 
     public String toVCard() {
         StringBuilder builder = new StringBuilder();
-
-        Log.d("NFC", "CREATE NDEF MESSAGE TO VCARD 1");
 
         if (this.getNome() != null && this.getNome().length() > 0)
             builder.append("NAME=").append(this.getNome()).append("\n");
@@ -473,9 +459,6 @@ public class BusinessCard implements Parcelable {
             builder.append("COLOR=").append(this.getColore()).append("\n");
         if (this.getCasaCitta() != null && this.getCasaCitta().length() > 0)
             builder.append("HOMECITY=").append(this.getCasaCitta()).append("\n");
-
-        Log.d("NFC", "CREATE NDEF MESSAGE TO VCARD 2");
-
         if (this.getCasaStrada() != null && this.getCasaStrada().length() > 0)
             builder.append("HOMESTREET=").append(this.getCasaStrada()).append("\n");
         if (this.getCasaCoordinate() != null)
@@ -486,45 +469,10 @@ public class BusinessCard implements Parcelable {
             builder.append("JOBPLACE=").append(this.getLavoroLuogo()).append("\n");
         if (this.getLavoroCoordinate() != null)
             builder.append("JOBCOORD=").append(this.getLavoroCoordinate().getLatitude()).append(", ").append(this.getLavoroCoordinate().getLongitude()).append("\n");
-
-
-        Log.d("NFC", "CREATE NDEF MESSAGE TO VCARD 3");
-
         if (this.getProfilo() != null)
             builder.append("PROFILE=").append(Utils.encodeTobase64(this.getProfilo())).append("\n");
         if (this.getSfondo() != null)
             builder.append("BACKGROUND=").append(Utils.encodeTobase64(this.getSfondo())).append("\n");
-
-        Log.d("NFC", "CREATE NDEF MESSAGE TO VCARD 4");
-
-        return builder.toString();
-    }
-
-    public String toTextMessage() {
-        StringBuilder builder = new StringBuilder();
-
-        if (this.getNome() != null && this.getNome().length() > 0)
-            builder.append("Nome: ").append(this.getNome()).append("\n");
-        if (this.getTelefono() != null && this.getTelefono().length() > 0)
-            builder.append("Telefono: ").append(this.getTelefono()).append("\n");
-        if (this.getEmail() != null && this.getEmail().length() > 0)
-            builder.append("Email: ").append(this.getEmail()).append("\n");
-        if (this.getSito() != null && this.getSito().length() > 0)
-            builder.append("Sito: ").append(this.getSito()).append("\n");
-        if (this.getTelegram() != null && this.getTelegram().length() > 0)
-            builder.append("Telegram: ").append(this.getTelegram()).append("\n");
-        if (this.getCasaCitta() != null && this.getCasaCitta().length() > 0)
-            builder.append("Città: ").append(this.getCasaCitta()).append("\n");
-        if (this.getCasaStrada() != null && this.getCasaStrada().length() > 0)
-            builder.append("Indirizzo: ").append(this.getCasaStrada()).append("\n");
-        if (this.getCasaCoordinate() != null)
-            builder.append("Coordinate abitazione: ").append(this.getCasaCoordinate().getLatitude()).append(", ").append(this.getCasaCoordinate().getLongitude()).append("\n");
-        if (this.getLavoroRuolo() != null && this.getLavoroRuolo().length() > 0)
-            builder.append("Professione: ").append(this.getLavoroRuolo()).append("\n");
-        if (this.getLavoroLuogo() != null && this.getLavoroLuogo().length() > 0)
-            builder.append("Azienda: ").append(this.getLavoroLuogo()).append("\n");
-        if (this.getLavoroCoordinate() != null)
-            builder.append("Coordinate azienda: ").append(this.getLavoroCoordinate().getLatitude()).append(", ").append(this.getLavoroCoordinate().getLongitude()).append("\n");
 
         return builder.toString();
     }
@@ -671,21 +619,19 @@ public class BusinessCard implements Parcelable {
     }
 
     public Bitmap getImage(Context context) {
-        List<Map.Entry<String, String>> prop = this.getProp();
+        List<Map.Entry<String, String>> prop = this.getProp(context);
 
         Bitmap b = Bitmap.createBitmap(256, 256 + 20 * (1 + prop.size()), Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(b);
         Paint p = new Paint();
         p.setAntiAlias(true);
 
-
         p.setColor(Color.WHITE);
         c.drawRect(0, 0, b.getWidth(), b.getHeight(), p);
 
-
         // Disegna Background
         Bitmap background = this.getSfondo();
-        if( background == null )
+        if (background == null)
             background = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_background);
 
         int height = background.getHeight();
@@ -697,7 +643,7 @@ public class BusinessCard implements Parcelable {
 
         // Disegna Profilo
         Bitmap profilo = this.getProfilo();
-        if( profilo == null )
+        if (profilo == null)
             profilo = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_profile);
 
         Bitmap cProfilo = Utils.getCircularBitmap(profilo);
@@ -710,8 +656,8 @@ public class BusinessCard implements Parcelable {
         p.setColor(Color.BLACK);
         try {
             p.setColor(Color.parseColor(this.getColore()));
-        } catch (Exception e) {
-
+        } catch (Exception ignored) {
+            p.setColor(Color.BLACK);
         }
         p.setTextAlign(Paint.Align.LEFT);
         for (Map.Entry<String, String> entry : prop) {
@@ -723,42 +669,72 @@ public class BusinessCard implements Parcelable {
         return b;
     }
 
-    private List<Map.Entry<String, String>> getProp() {
+    private List<Map.Entry<String, String>> getProp(Context context) {
         List<Map.Entry<String, String>> ret = new ArrayList<>();
 
         if (this.getNome() != null && this.getNome().length() > 0)
-            ret.add(new AbstractMap.SimpleEntry<>("Nome", this.getNome()));
-
+            ret.add(new AbstractMap.SimpleEntry<>(context.getString(R.string.desc_nome), this.getNome()));
         if (this.getTelefono() != null && this.getTelefono().length() > 0)
-            ret.add(new AbstractMap.SimpleEntry<>("Telefono", this.getTelefono()));
-
+            ret.add(new AbstractMap.SimpleEntry<>(context.getString(R.string.numero_telefono), this.getTelefono()));
         if (this.getEmail() != null && this.getEmail().length() > 0)
-            ret.add(new AbstractMap.SimpleEntry<>("E-Mail", this.getEmail()));
-
+            ret.add(new AbstractMap.SimpleEntry<>(context.getString(R.string.e_mail), this.getEmail()));
         if (this.getSito() != null && this.getSito().length() > 0)
-            ret.add(new AbstractMap.SimpleEntry<>("Sito", this.getSito()));
-
+            ret.add(new AbstractMap.SimpleEntry<>(context.getString(R.string.sito_web), this.getSito()));
         if (this.getTelegram() != null && this.getTelegram().length() > 0)
-            ret.add(new AbstractMap.SimpleEntry<>("Telegram", this.getTelegram()));
-
+            ret.add(new AbstractMap.SimpleEntry<>(context.getString(R.string.telegram), this.getTelegram()));
         if (this.getCasaCitta() != null && this.getCasaCitta().length() > 0)
-            ret.add(new AbstractMap.SimpleEntry<>("Città", this.getCasaCitta()));
-
+            ret.add(new AbstractMap.SimpleEntry<>(context.getString(R.string.city), this.getCasaCitta()));
         if (this.getCasaStrada() != null && this.getCasaStrada().length() > 0)
-            ret.add(new AbstractMap.SimpleEntry<>("Indirizzo", this.getCasaStrada()));
-
+            ret.add(new AbstractMap.SimpleEntry<>(context.getString(R.string.address), this.getCasaStrada()));
         if (this.getCasaCoordinate() != null)
-            ret.add(new AbstractMap.SimpleEntry<>("Coordinate casa", this.getCasaCoordinate().getLatitude() + ", " + this.getCasaCoordinate().getLongitude()));
-
+            ret.add(new AbstractMap.SimpleEntry<>(context.getString(R.string.home_coord), this.getCasaCoordinate().getLatitude() + ", " + this.getCasaCoordinate().getLongitude()));
         if (this.getLavoroRuolo() != null && this.getLavoroRuolo().length() > 0)
-            ret.add(new AbstractMap.SimpleEntry<>("Occupazione", this.getLavoroRuolo()));
-
+            ret.add(new AbstractMap.SimpleEntry<>(context.getString(R.string.job_role), this.getLavoroRuolo()));
         if (this.getLavoroLuogo() != null && this.getLavoroLuogo().length() > 0)
-            ret.add(new AbstractMap.SimpleEntry<>("Luogo di lavoro", this.getLavoroLuogo()));
-
+            ret.add(new AbstractMap.SimpleEntry<>(context.getString(R.string.job_place), this.getLavoroLuogo()));
         if (this.getLavoroCoordinate() != null)
-            ret.add(new AbstractMap.SimpleEntry<>("Coordinate lavoro", this.getLavoroCoordinate().getLatitude() + ", " + this.getLavoroCoordinate().getLongitude()));
+            ret.add(new AbstractMap.SimpleEntry<>(context.getString(R.string.job_coord), this.getLavoroCoordinate().getLatitude() + ", " + this.getLavoroCoordinate().getLongitude()));
 
         return ret;
     }
+
+    public String toTextMessage(Context context) {
+        StringBuilder builder = new StringBuilder();
+
+        if (this.getNome() != null && this.getNome().length() > 0)
+            builder.append(context.getString(R.string.desc_nome)).append(": ").append(this.getNome()).append("\n");
+
+        if (this.getTelefono() != null && this.getTelefono().length() > 0)
+            builder.append(context.getString(R.string.numero_telefono)).append(": ").append(this.getTelefono()).append("\n");
+
+        if (this.getEmail() != null && this.getEmail().length() > 0)
+            builder.append(context.getString(R.string.e_mail)).append(": ").append(this.getEmail()).append("\n");
+
+        if (this.getSito() != null && this.getSito().length() > 0)
+            builder.append(context.getString(R.string.sito_web)).append(": ").append(this.getSito()).append("\n");
+
+        if (this.getTelegram() != null && this.getTelegram().length() > 0)
+            builder.append(context.getString(R.string.telegram)).append(": ").append(this.getTelegram()).append("\n");
+
+        if (this.getCasaCitta() != null && this.getCasaCitta().length() > 0)
+            builder.append(context.getString(R.string.city)).append(": ").append(this.getCasaCitta()).append("\n");
+
+        if (this.getCasaStrada() != null && this.getCasaStrada().length() > 0)
+            builder.append(context.getString(R.string.address)).append(": ").append(this.getCasaStrada()).append("\n");
+
+        if (this.getCasaCoordinate() != null)
+            builder.append(context.getString(R.string.home_coord)).append(": ").append(this.getCasaCoordinate().getLatitude()).append(", ").append(this.getCasaCoordinate().getLongitude()).append("\n");
+
+        if (this.getLavoroRuolo() != null && this.getLavoroRuolo().length() > 0)
+            builder.append(context.getString(R.string.job_role)).append(": ").append(this.getLavoroRuolo()).append("\n");
+
+        if (this.getLavoroLuogo() != null && this.getLavoroLuogo().length() > 0)
+            builder.append(context.getString(R.string.job_place)).append(": ").append(this.getLavoroLuogo()).append("\n");
+
+        if (this.getLavoroCoordinate() != null)
+            builder.append(context.getString(R.string.job_coord)).append(": ").append(this.getLavoroCoordinate().getLatitude()).append(", ").append(this.getLavoroCoordinate().getLongitude()).append("\n");
+
+        return builder.toString();
+    }
+
 }

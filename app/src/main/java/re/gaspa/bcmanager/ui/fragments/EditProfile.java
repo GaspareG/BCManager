@@ -10,16 +10,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,25 +28,19 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.asynctask.AsyncGeocoding;
 import re.gaspa.bcmanager.databinding.DialogColorBinding;
 import re.gaspa.bcmanager.databinding.FragmentEditProfileBinding;
 import re.gaspa.bcmanager.ui.activities.Main;
-import re.gaspa.bcmanager.ui.listeners.OnGeocodingCompleteListener;
+import re.gaspa.bcmanager.listeners.OnGeocodingCompleteListener;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.utils.Preferences;
 import re.gaspa.bcmanager.utils.Utils;
 
-/**
- * Created by gaspare on 28/08/17.
- */
 
 public class EditProfile extends Fragment implements View.OnClickListener, OnGeocodingCompleteListener {
 
@@ -70,10 +61,8 @@ public class EditProfile extends Fragment implements View.OnClickListener, OnGeo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
                 R.layout.fragment_edit_profile, container, false);
-
 
         mBinding.buttonHomePosition.setOnClickListener(this);
         mBinding.buttonWorkPosition.setOnClickListener(this);
@@ -323,11 +312,11 @@ public class EditProfile extends Fragment implements View.OnClickListener, OnGeo
             personal.setLavoroCoordinate(lavoroCoordinate);
 
             Preferences.setPersonalBusinessCard(null, personal);
-            Toast.makeText(getContext(), "Profilo salvato!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.profilo_salvato, Toast.LENGTH_LONG).show();
 
             try {
                 ((Main) getActivity()).updateProfile();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
         }
@@ -452,8 +441,7 @@ public class EditProfile extends Fragment implements View.OnClickListener, OnGeo
                     InputStream imageStream = getActivity().getContentResolver().openInputStream(selectedImage);
                     backgroundBitmap = BitmapFactory.decodeStream(imageStream);
                     mBinding.imageBackground.setImageBitmap(backgroundBitmap);
-                } catch (FileNotFoundException e) {
-                    Log.d("EXCEPTION", e.toString());
+                } catch (FileNotFoundException ignored) {
                 }
             }
         }
@@ -488,8 +476,8 @@ public class EditProfile extends Fragment implements View.OnClickListener, OnGeo
                 mBinding.textCity.setText(addresses.get(0).getLocality());
                 mBinding.textStreet.setText(addresses.get(0).getAddressLine(0));
             }
-        } catch (Exception e) {
-            Log.d("EXCEPTION", e.toString());
+        } catch (Exception ignored) {
+
         }
 
     }

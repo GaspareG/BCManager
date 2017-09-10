@@ -10,10 +10,6 @@ import android.util.Log;
 
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 
-/**
- * Created by gaspare on 05/09/17.
- */
-
 public class Preferences {
 
     private static BusinessCard personal = null;
@@ -30,7 +26,6 @@ public class Preferences {
         editor.putString("website", personal.getSito());
         editor.putString("telegram", personal.getTelegram());
         editor.putString("color", personal.getColore());
-
 
         editor.putString("jobRole", personal.getLavoroRuolo());
         editor.putString("jobName", personal.getLavoroLuogo());
@@ -52,12 +47,10 @@ public class Preferences {
         Bitmap sfondo = personal.getSfondo();
         if (profilo != null) {
             String profiloString = Utils.encodeTobase64(profilo);
-            Log.d("SHARED", "PROFILO " + profiloString.length());
             editor.putString("profilo", profiloString);
         }
         if (sfondo != null) {
             String sfondoString = Utils.encodeTobase64(sfondo);
-            Log.d("SHARED", "SFONDO " + sfondoString.length());
             editor.putString("sfondo", sfondoString);
         }
 
@@ -111,11 +104,6 @@ public class Preferences {
             Preferences.personal.setCasaCitta(casaCitta);
             Preferences.personal.setCasaStrada(casaStrada);
             Preferences.personal.setCasaCoordinate(casaCoordinate);
-
-            if (profilo != null)
-                Log.d("SHARED", "PROFILO " + profilo.length());
-            if (sfondo != null)
-                Log.d("SHARED", "SFONDO " + sfondo.length());
 
             if (profilo != null)
                 Preferences.personal.setProfilo(Utils.decodeBase64(profilo));

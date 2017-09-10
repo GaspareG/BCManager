@@ -47,7 +47,7 @@ public class Help extends AppCompatActivity implements View.OnClickListener {
         } else if (page == 2) {
             page = 1;
             loadFragment(HelpPage1.class);
-            binding.buttonForward.setText("Avanti");
+            binding.buttonForward.setText(R.string.avanti);
         }
     }
 
@@ -57,14 +57,14 @@ public class Help extends AppCompatActivity implements View.OnClickListener {
             binding.buttonBack.setVisibility(View.VISIBLE);
             page = 1;
         } else if (page == 1) {
-            binding.buttonForward.setText("Fine");
+            binding.buttonForward.setText(R.string.fine);
             loadFragment(EditProfile.class);
             page = 2;
         } else if (page == 2) {
             AlertDialog.Builder alert = new AlertDialog.Builder(Help.this);
-            alert.setTitle("Sei sicuro?")
-                    .setMessage("Prima di proseguire ricorda di salvare il tuo profilo!")
-                    .setPositiveButton("Continua", new DialogInterface.OnClickListener() {
+            alert.setTitle(R.string.sure)
+                    .setMessage(R.string.salva_profilo)
+                    .setPositiveButton(R.string.continua, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -72,7 +72,7 @@ public class Help extends AppCompatActivity implements View.OnClickListener {
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             getApplicationContext().startActivity(intent);
                         }
-                    }).setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
+                    }).setNegativeButton(R.string.annulla, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

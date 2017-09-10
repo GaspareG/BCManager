@@ -1,20 +1,14 @@
 package re.gaspa.bcmanager.ui.fragments;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -33,16 +27,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.asynctask.AsyncLoadDatabase;
 import re.gaspa.bcmanager.databinding.FragmentHomeBinding;
 import re.gaspa.bcmanager.ui.adapters.BusinessCardAdapter;
-import re.gaspa.bcmanager.ui.listeners.OnDatabaseLoadListener;
+import re.gaspa.bcmanager.listeners.OnDatabaseLoadListener;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
-import re.gaspa.bcmanager.utils.Database;
 import re.gaspa.bcmanager.utils.Preferences;
 
 public class Home extends Fragment implements OnDatabaseLoadListener, View.OnClickListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
@@ -82,6 +74,7 @@ public class Home extends Fragment implements OnDatabaseLoadListener, View.OnCli
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("RESUME", "HOME RESUME");
         new AsyncLoadDatabase(null, this, false, search, preferite).execute();
     }
 
@@ -91,11 +84,11 @@ public class Home extends Fragment implements OnDatabaseLoadListener, View.OnCli
         if (view.getId() != R.id.fab) return;
 
         final CharSequence[] items = {
-                "Esporta VCard", "Esporta Testo", "Esporta Immagine", "Condividi via NFC"
+                getString(R.string.export_vcard), getString(R.string.export_text), getString(R.string.export_image), getString(R.string.share_nfc)
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
-        builder.setTitle("Condividi il tuo profilo");
+        builder.setTitle(R.string.share_profile);
         final Context context = this.getContext();
         final Activity activity = this.getActivity();
         final Home home = this;
@@ -113,36 +106,31 @@ public class Home extends Fragment implements OnDatabaseLoadListener, View.OnCli
                             outputVCard.setReadable(true, false);
                             outputVCard.setWritable(true);
 
-                            Uri contentUri = FileProvider.getUriForFile(context, "re.gaspa.bcmanager.fileprovider", outputVCard);
-
-                            Log.d("SHARE", "PATH " + outputVCard.getAbsolutePath());
-                            Log.d("SHARE", "URI " + contentUri);
-
+                            Uri contentUri = FileProvider.getUriForFile(context, getString(R.string.fileprovider), outputVCard);
+;
                             String toWrite = Preferences.getPersonalBusinessCard(null).toVCard();
 
                             FileWriter fw = new FileWriter(outputVCard);
                             BufferedWriter bw = new BufferedWriter(fw);
                             bw.write(toWrite);
                             bw.close();
-                            Log.e("SHARE", "File scritto");
 
                             Intent shareIntent = new Intent();
                             shareIntent.setAction(Intent.ACTION_SEND);
                             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
                             shareIntent.setDataAndType(contentUri, context.getContentResolver().getType(contentUri));
                             shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-                            context.startActivity(Intent.createChooser(shareIntent, "Scegli un'applicazione"));
-                        } catch (IOException e) {
-                            Log.e("SHARE", "File write failed: " + e.toString());
+                            context.startActivity(Intent.createChooser(shareIntent, getString(R.string.choose_app)));
+                        } catch (IOException ignored) {
                         }
                         break;
 
                     case 1: // Testo
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, Preferences.getPersonalBusinessCard(null).toTextMessage());
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, Preferences.getPersonalBusinessCard(null).toTextMessage(context));
                         sendIntent.setType("text/plain");
-                        startActivity(Intent.createChooser(sendIntent, "Condividi profilo testuale"));
+                        startActivity(Intent.createChooser(sendIntent, getString(R.string.share_profile_text)));
                         break;
                     case 2: // Immagine
                         try {
@@ -154,10 +142,7 @@ public class Home extends Fragment implements OnDatabaseLoadListener, View.OnCli
                             outputVCard.setReadable(true, false);
                             outputVCard.setWritable(true);
 
-                            Uri contentUri = FileProvider.getUriForFile(context, "re.gaspa.bcmanager.fileprovider", outputVCard);
-
-                            Log.d("SHARE", "PATH " + outputVCard.getAbsolutePath());
-                            Log.d("SHARE", "URI " + contentUri);
+                            Uri contentUri = FileProvider.getUriForFile(context, getString(R.string.fileprovider), outputVCard);
 
                             FileOutputStream out = new FileOutputStream(outputVCard);
                             Bitmap image = Preferences.getPersonalBusinessCard(null).getImage(context);
@@ -165,24 +150,21 @@ public class Home extends Fragment implements OnDatabaseLoadListener, View.OnCli
                             out.flush();
                             out.close();
 
-                            Log.e("SHARE", "File scritto");
-
                             Intent shareIntent = new Intent();
                             shareIntent.setAction(Intent.ACTION_SEND);
                             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
                             shareIntent.setDataAndType(contentUri, context.getContentResolver().getType(contentUri));
                             shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-                            context.startActivity(Intent.createChooser(shareIntent, "Scegli un'applicazione"));
-                        } catch (IOException e) {
-                            Log.e("SHARE", "File write failed: " + e.toString());
+                            context.startActivity(Intent.createChooser(shareIntent, getString(R.string.choose_app)));
+                        } catch (IOException ignored) {
                         }
                         break;
 
                     case 3: // NFC
                         if (mAndroidBeamAvailable) {
-                            Toast.makeText(context, "Avvicina Telefono", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, R.string.near_phone, Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(context, "NFC Non disponibile", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, R.string.no_nfc, Toast.LENGTH_LONG).show();
                         }
                         break;
                 }
@@ -239,5 +221,6 @@ public class Home extends Fragment implements OnDatabaseLoadListener, View.OnCli
     @Override
     public void OnDatabaseLoad(ArrayList<BusinessCard> businessCards) {
         mBcAdapter.setBusinessCardItems(businessCards);
+        mBcAdapter.notifyDataSetChanged();
     }
 }
