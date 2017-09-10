@@ -153,7 +153,7 @@ public class Utils {
 
         ret[2] = new BusinessCard();
         ret[2].setPreferito(true);
-        ret[2].setNome("DonalD Trump");
+        ret[2].setNome("Donald Trump");
         ret[2].setTelefono("+01001001001");
         ret[2].setEmail("info@donaldjtrump.com");
         ret[2].setSito("donaldjtrump.com");

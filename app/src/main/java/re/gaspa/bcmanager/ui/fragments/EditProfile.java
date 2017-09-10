@@ -45,6 +45,7 @@ import re.gaspa.bcmanager.ui.activities.Main;
 import re.gaspa.bcmanager.ui.listeners.OnGeocodingCompleteListener;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.utils.Preferences;
+import re.gaspa.bcmanager.utils.Utils;
 
 /**
  * Created by gaspare on 28/08/17.
@@ -426,7 +427,7 @@ public class EditProfile extends Fragment implements View.OnClickListener, OnGeo
 
                 mBinding.textCity.setText(place.getAddress());
                 mBinding.textStreet.setText(place.getAddress());
-                mBinding.textHomeCoord.setText(place.getLatLng().latitude + " " + place.getLatLng().longitude);
+                mBinding.textHomeCoord.setText(Utils.truncate(place.getLatLng().latitude, 6) + " " + Utils.truncate(place.getLatLng().longitude, 6) );
 
                 new AsyncGeocoding(this.getContext(), place.getLatLng(), this).execute();
 
@@ -436,7 +437,7 @@ public class EditProfile extends Fragment implements View.OnClickListener, OnGeo
                 Place place = PlacePicker.getPlace(data, getActivity());
 
                 mBinding.textJobplace.setText(place.getAddress());
-                mBinding.textJobCoord.setText(place.getLatLng().latitude + " " + place.getLatLng().longitude);
+                mBinding.textJobCoord.setText(Utils.truncate(place.getLatLng().latitude, 6) + " " + Utils.truncate(place.getLatLng().longitude, 6) );
             }
         } else if (requestCode == CHOOSE_PROFILE) {
             if (resultCode == Activity.RESULT_OK) {

@@ -4,7 +4,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPicker16"
+        android:background="@color/colorPrimary"
         android:orientation="vertical">
 
         <LinearLayout
@@ -17,7 +17,7 @@
                 android:id="@+id/button_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="16dp"
                 android:background="@color/colorPicker15"
                 android:text="@string/indietro" />
 
@@ -25,7 +25,7 @@
                 android:id="@+id/button_forward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="16dp"
                 android:background="@color/colorPicker15"
                 android:text="@string/avanti" />
 
@@ -35,7 +35,7 @@
             android:id="@+id/fragment_help"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_margin="8dp"
+            android:layout_margin="16dp"
             android:background="@android:color/white">
 
         </FrameLayout>

@@ -1,6 +1,7 @@
 package re.gaspa.bcmanager.ui.models;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -70,7 +71,7 @@ public class BusinessCard implements Parcelable {
         this.casaCoordinate = null;
         this.sito = "";
         this.telegram = "";
-        this.colore = "";
+        this.colore = "#4CAF50";
         this.profilo = null;
         this.sfondo = null;
     }
@@ -275,7 +276,14 @@ public class BusinessCard implements Parcelable {
     }
 
     public void setColore(String colore) {
-        this.colore = colore;
+
+        try {
+            int colorCode = Color.parseColor(colore);
+            if (colorCode != -1)
+                this.colore = colore;
+        } catch (Exception e) {
+            this.colore = "#4CAF50";
+        }
     }
 
     public Bitmap getProfilo() {
@@ -449,6 +457,8 @@ public class BusinessCard implements Parcelable {
     public String toVCard() {
         StringBuilder builder = new StringBuilder();
 
+        Log.d("NFC", "CREATE NDEF MESSAGE TO VCARD 1");
+
         if (this.getNome() != null && this.getNome().length() > 0)
             builder.append("NAME=").append(this.getNome()).append("\n");
         if (this.getTelefono() != null && this.getTelefono().length() > 0)
@@ -463,6 +473,9 @@ public class BusinessCard implements Parcelable {
             builder.append("COLOR=").append(this.getColore()).append("\n");
         if (this.getCasaCitta() != null && this.getCasaCitta().length() > 0)
             builder.append("HOMECITY=").append(this.getCasaCitta()).append("\n");
+
+        Log.d("NFC", "CREATE NDEF MESSAGE TO VCARD 2");
+
         if (this.getCasaStrada() != null && this.getCasaStrada().length() > 0)
             builder.append("HOMESTREET=").append(this.getCasaStrada()).append("\n");
         if (this.getCasaCoordinate() != null)
@@ -473,10 +486,16 @@ public class BusinessCard implements Parcelable {
             builder.append("JOBPLACE=").append(this.getLavoroLuogo()).append("\n");
         if (this.getLavoroCoordinate() != null)
             builder.append("JOBCOORD=").append(this.getLavoroCoordinate().getLatitude()).append(", ").append(this.getLavoroCoordinate().getLongitude()).append("\n");
+
+
+        Log.d("NFC", "CREATE NDEF MESSAGE TO VCARD 3");
+
         if (this.getProfilo() != null)
             builder.append("PROFILE=").append(Utils.encodeTobase64(this.getProfilo())).append("\n");
         if (this.getSfondo() != null)
             builder.append("BACKGROUND=").append(Utils.encodeTobase64(this.getSfondo())).append("\n");
+
+        Log.d("NFC", "CREATE NDEF MESSAGE TO VCARD 4");
 
         return builder.toString();
     }
@@ -651,7 +670,7 @@ public class BusinessCard implements Parcelable {
         return toAdd;
     }
 
-    public Bitmap getImage() {
+    public Bitmap getImage(Context context) {
         List<Map.Entry<String, String>> prop = this.getProp();
 
         Bitmap b = Bitmap.createBitmap(256, 256 + 20 * (1 + prop.size()), Bitmap.Config.ARGB_8888);
@@ -666,6 +685,9 @@ public class BusinessCard implements Parcelable {
 
         // Disegna Background
         Bitmap background = this.getSfondo();
+        if( background == null )
+            background = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_background);
+
         int height = background.getHeight();
         int width = background.getWidth();
         c.drawCircle(50, 50, 25, p);
@@ -675,6 +697,9 @@ public class BusinessCard implements Parcelable {
 
         // Disegna Profilo
         Bitmap profilo = this.getProfilo();
+        if( profilo == null )
+            profilo = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_profile);
+
         Bitmap cProfilo = Utils.getCircularBitmap(profilo);
         src = new Rect(0, 0, cProfilo.getWidth(), cProfilo.getWidth());
         dest = new Rect(64, 64, 192, 192);
@@ -723,7 +748,7 @@ public class BusinessCard implements Parcelable {
             ret.add(new AbstractMap.SimpleEntry<>("Indirizzo", this.getCasaStrada()));
 
         if (this.getCasaCoordinate() != null)
-            ret.add(new AbstractMap.SimpleEntry<>("Coordinate abitazione", this.getCasaCoordinate().getLatitude() + ", " + this.getCasaCoordinate().getLongitude()));
+            ret.add(new AbstractMap.SimpleEntry<>("Coordinate casa", this.getCasaCoordinate().getLatitude() + ", " + this.getCasaCoordinate().getLongitude()));
 
         if (this.getLavoroRuolo() != null && this.getLavoroRuolo().length() > 0)
             ret.add(new AbstractMap.SimpleEntry<>("Occupazione", this.getLavoroRuolo()));

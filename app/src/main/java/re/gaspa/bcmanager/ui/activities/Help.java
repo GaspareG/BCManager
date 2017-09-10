@@ -69,6 +69,7 @@ public class Help extends AppCompatActivity implements View.OnClickListener {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             Intent intent = new Intent(getApplicationContext(), Main.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             getApplicationContext().startActivity(intent);
                         }
                     }).setNegativeButton("Annulla", new DialogInterface.OnClickListener() {

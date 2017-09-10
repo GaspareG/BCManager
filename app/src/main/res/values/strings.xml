@@ -46,6 +46,7 @@
     <string name="e_mail">E-Mail</string>
     <string name="telegram">Telegram</string>
     <string name="sito_web">Sito web</string>
-    <string name="hello_help_0">Benvenuto in BCManager!\n\nPrima di iniziare l\'esperienza\n una breve spiegazione dell\'uso…</string>
+    <string name="hello_help_00">Benvenuto in BCManager!</string>
+    <string name="hello_help_01">Prima di iniziare l\'esperienza\n una breve spiegazione dell\'uso…</string>
 
 </resources>

@@ -1,12 +1,14 @@
 package re.gaspa.bcmanager.ui.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -41,7 +43,7 @@ import re.gaspa.bcmanager.utils.Database;
 import re.gaspa.bcmanager.utils.Preferences;
 
 public class Main extends AppCompatActivity
-        implements NfcAdapter.CreateNdefMessageCallback, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements NfcAdapter.CreateNdefMessageCallback, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, NfcAdapter.OnNdefPushCompleteCallback {
 
     private FragmentManager fragmentManager;
     private ActivityMainBinding binding;
@@ -74,14 +76,20 @@ public class Main extends AppCompatActivity
 
         binding.navView.getHeaderView(0).setOnClickListener(this);
 
-        // Check for available NFC Adapter
-        NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (mNfcAdapter != null) {
-            Log.d("NFC", "ADAPTER FOUND");
-            mNfcAdapter.setNdefPushMessageCallback(this, this);
-        } else
-            Log.d("NFC", "NO ADAPTER");
+        PackageManager pm = this.getPackageManager();
 
+        if (!pm.hasSystemFeature(PackageManager.FEATURE_NFC)) {
+            Log.d("NFC", "NFC Feature non disponibile");
+        }
+        else {
+            NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+            Log.d("NFC", "NFC Feature disponibile");
+            if (mNfcAdapter != null) {
+                Log.d("NFC", "NFC Adapter trovato, registro callback");
+                mNfcAdapter.setNdefPushMessageCallback(this, this);
+                mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
+            }
+        }
     }
 
 
@@ -118,6 +126,7 @@ public class Main extends AppCompatActivity
         } else if (id == R.id.nav_help) {
             item.setChecked(false);
             Intent intent = new Intent(this.getApplicationContext(), Help.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             this.getApplicationContext().startActivity(intent);
         } else {
             Class fragmentClass = Home.class;
@@ -180,16 +189,49 @@ public class Main extends AppCompatActivity
 
     }
 
+    public void updateProfile() {
+        BusinessCard personal = Preferences.getPersonalBusinessCard(null);
+        if (personal != null) {
+            Bitmap profile = personal.getProfilo();
+            Bitmap sfondo = personal.getSfondo();
+            String nome = personal.getNome();
+            String role = personal.getLavoroRuolo();
+
+            if (profile != null) {
+                CircleImageView profileImage = binding.navView.getHeaderView(0).findViewById(R.id.profile_image);
+                profileImage.setImageBitmap(profile);
+            }
+            if (sfondo != null) {
+                ImageView backgroundImage = binding.navView.getHeaderView(0).findViewById(R.id.default_background);
+                backgroundImage.setImageBitmap(sfondo);
+            }
+            if (nome != null) {
+                TextView nameText = binding.navView.getHeaderView(0).findViewById(R.id.text_name);
+                nameText.setText(nome);
+            }
+            if (role != null) {
+                TextView roleText = binding.navView.getHeaderView(0).findViewById(R.id.text_role);
+                roleText.setText(role);
+            }
+        }
+    }
+
     @Override
     public NdefMessage createNdefMessage(NfcEvent event) {
         Log.d("NFC", "CREATE NDEF MESSAGE");
-        String text = Preferences.getPersonalBusinessCard(null).toVCard();
-        return new NdefMessage(new NdefRecord[]{createMimeRecord("application/re.gaspa.bcmanager", text.getBytes())});
+        BusinessCard personal = Preferences.getPersonalBusinessCard(null);
+        Log.d("NFC", "CREATE NDEF PERSONAL " + personal.getNome() );
+        String text = personal.toVCard();
+        Log.d("NFC", "CREATE NDEF MESSAGE LENGTH " + text.length());
+        NdefMessage ret = new NdefMessage(new NdefRecord[]{createMimeRecord("application/re.gaspa.bcmanager", text.getBytes())});;
+        Log.d("NFC", "CREATED NDEF MESSAGE");
+        return ret;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("NFC", "NDEF DISCOVERED ?");
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
             Log.d("NFC", "NDEF DISCOVERED");
             processIntent(getIntent());
@@ -217,34 +259,14 @@ public class Main extends AppCompatActivity
     public NdefRecord createMimeRecord(String mimeType, byte[] payload) {
         Log.d("NFC", "CREATE MIME RECORD");
         byte[] mimeBytes = mimeType.getBytes(Charset.forName("US-ASCII"));
+        Log.d("NFC", "CREATED MIME RECORD " + mimeBytes.length );
         return new NdefRecord(
                 NdefRecord.TNF_MIME_MEDIA, mimeBytes, new byte[0], payload);
     }
 
-    public void updateProfile() {
-        BusinessCard personal = Preferences.getPersonalBusinessCard(null);
-        if (personal != null) {
-            Bitmap profile = personal.getProfilo();
-            Bitmap sfondo = personal.getSfondo();
-            String nome = personal.getNome();
-            String role = personal.getLavoroRuolo();
-
-            if (profile != null) {
-                CircleImageView profileImage = binding.navView.getHeaderView(0).findViewById(R.id.profile_image);
-                profileImage.setImageBitmap(profile);
-            }
-            if (sfondo != null) {
-                ImageView backgroundImage = binding.navView.getHeaderView(0).findViewById(R.id.default_background);
-                backgroundImage.setImageBitmap(sfondo);
-            }
-            if (nome != null) {
-                TextView nameText = binding.navView.getHeaderView(0).findViewById(R.id.text_name);
-                nameText.setText(nome);
-            }
-            if (role != null) {
-                TextView roleText = binding.navView.getHeaderView(0).findViewById(R.id.text_role);
-                roleText.setText(role);
-            }
-        }
+    @Override
+    public void onNdefPushComplete(NfcEvent nfcEvent) {
+        Log.d("NFC", "NFC onNdefPushComplete");
+        // TODO
     }
 }

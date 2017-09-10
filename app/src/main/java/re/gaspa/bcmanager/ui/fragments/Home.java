@@ -160,7 +160,7 @@ public class Home extends Fragment implements OnDatabaseLoadListener, View.OnCli
                             Log.d("SHARE", "URI " + contentUri);
 
                             FileOutputStream out = new FileOutputStream(outputVCard);
-                            Bitmap image = Preferences.getPersonalBusinessCard(null).getImage();
+                            Bitmap image = Preferences.getPersonalBusinessCard(null).getImage(context);
                             image.compress(Bitmap.CompressFormat.PNG, 100, out);
                             out.flush();
                             out.close();

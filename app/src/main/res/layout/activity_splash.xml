@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF9900"
+    android:background="@color/colorPrimary"
     android:gravity="center"
     android:orientation="vertical"
     tools:context="re.gaspa.bcmanager.ui.activities.Splash">
@@ -27,7 +27,8 @@
             android:layout_weight="16"
             android:gravity="center_horizontal|center"
             android:text="@string/bcmanager"
-            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="24sp" />
 
     </LinearLayout>
