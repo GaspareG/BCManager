@@ -34,18 +34,23 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 import re.gaspa.bcmanager.R;
+import re.gaspa.bcmanager.asynctask.AsyncLoadDatabase;
 import re.gaspa.bcmanager.databinding.FragmentHomeBinding;
 import re.gaspa.bcmanager.ui.adapters.BusinessCardAdapter;
+import re.gaspa.bcmanager.ui.listeners.OnDatabaseLoadListener;
+import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.utils.Database;
 import re.gaspa.bcmanager.utils.Preferences;
 
-public class Home extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+public class Home extends Fragment implements OnDatabaseLoadListener, View.OnClickListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private FragmentHomeBinding mBinding;
     private BusinessCardAdapter mBcAdapter;
     private boolean preferite = false;
+    private String search = "";
     private boolean mAndroidBeamAvailable = false;
 
     public Home() {
@@ -61,22 +66,10 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
 
         setHasOptionsMenu(true);
 
-        if (!getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC)) {
-            mAndroidBeamAvailable = false;
-        } else {
-            mAndroidBeamAvailable = true;
-        }
-
-        mBinding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        mAndroidBeamAvailable = getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC);
 
         mBcAdapter = new BusinessCardAdapter(getContext());
-        mBcAdapter.setBusinessCardItems(Database.getBusinessCards());
+        new AsyncLoadDatabase(null, this, false, search, preferite).execute();
 
         mBinding.bcList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mBinding.bcList.setAdapter(mBcAdapter);
@@ -89,7 +82,7 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
     @Override
     public void onResume() {
         super.onResume();
-        mBcAdapter.setBusinessCardItems(Database.getBusinessCards());
+        new AsyncLoadDatabase(null, this, false, search, preferite).execute();
     }
 
     @Override
@@ -213,19 +206,22 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        mBcAdapter.setBusinessCardItems(Database.getBusinessCards(preferite, query));
+        search = query;
+        new AsyncLoadDatabase(null, this, false, search, preferite).execute();
         return true;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        mBcAdapter.setBusinessCardItems(Database.getBusinessCards(preferite, newText));
+        search = newText;
+        new AsyncLoadDatabase(null, this, false, search, preferite).execute();
         return true;
     }
 
     @Override
     public boolean onClose() {
-        mBcAdapter.setBusinessCardItems(Database.getBusinessCards());
+        search = "";
+        new AsyncLoadDatabase(null, this, false, search, preferite).execute();
         return true;
     }
 
@@ -236,6 +232,12 @@ public class Home extends Fragment implements View.OnClickListener, SearchView.O
 
     public void setPreferite(boolean preferite) {
         this.preferite = preferite;
-        mBcAdapter.setBusinessCardItems(Database.getBusinessCards(preferite, ""));
+        new AsyncLoadDatabase(null, this, false, search, preferite).execute();
+    }
+
+
+    @Override
+    public void OnDatabaseLoad(ArrayList<BusinessCard> businessCards) {
+        mBcAdapter.setBusinessCardItems(businessCards);
     }
 }

@@ -16,17 +16,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 import re.gaspa.bcmanager.R;
+import re.gaspa.bcmanager.asynctask.AsyncLoadDatabase;
 import re.gaspa.bcmanager.databinding.FragmentMapBinding;
 import re.gaspa.bcmanager.ui.activities.BusinessCardActivity;
+import re.gaspa.bcmanager.ui.listeners.OnDatabaseLoadListener;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
-import re.gaspa.bcmanager.utils.Database;
 
-public class Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, OnDatabaseLoadListener {
 
     private GoogleMap map;
 
     private MapView mapView;
+    private ArrayList<Marker> markers;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,6 +38,8 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMar
 
         FragmentMapBinding mBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
                 R.layout.fragment_map, container, false);
+
+        markers = new ArrayList<>();
 
         mapView = mBinding.mapView;
         mapView.onCreate(savedInstanceState);
@@ -71,7 +77,9 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMar
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setOnMarkerClickListener(this);
-        for (BusinessCard bc : Database.getBusinessCards()) addMarker(bc);
+
+        new AsyncLoadDatabase(null, this, false, "", false).execute();
+
     }
 
     public void addMarker(BusinessCard businessCard) {
@@ -82,6 +90,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMar
         markerOptions.position(latLng).title(businessCard.getNome());
         Marker marker = map.addMarker(markerOptions);
         marker.setTag(businessCard);
+        markers.add(marker);
 
     }
 
@@ -92,5 +101,13 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMar
         intent.putExtra("businesscard", obj);
         this.getContext().startActivity(intent);
         return true;
+    }
+
+    @Override
+    public void OnDatabaseLoad(ArrayList<BusinessCard> businessCards) {
+        for (Marker m : markers) m.remove();
+        map.clear();
+        markers.clear();
+        for (BusinessCard bc : businessCards) addMarker(bc);
     }
 }

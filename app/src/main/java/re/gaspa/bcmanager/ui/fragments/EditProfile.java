@@ -33,13 +33,16 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import re.gaspa.bcmanager.R;
+import re.gaspa.bcmanager.asynctask.AsyncGeocoding;
 import re.gaspa.bcmanager.databinding.DialogColorBinding;
 import re.gaspa.bcmanager.databinding.FragmentEditProfileBinding;
 import re.gaspa.bcmanager.ui.activities.Main;
+import re.gaspa.bcmanager.ui.listeners.OnGeocodingCompleteListener;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.utils.Preferences;
 
@@ -47,7 +50,7 @@ import re.gaspa.bcmanager.utils.Preferences;
  * Created by gaspare on 28/08/17.
  */
 
-public class EditProfile extends Fragment implements View.OnClickListener {
+public class EditProfile extends Fragment implements View.OnClickListener, OnGeocodingCompleteListener {
 
     private FragmentEditProfileBinding mBinding;
     private DialogColorBinding mBindingColor;
@@ -239,10 +242,6 @@ public class EditProfile extends Fragment implements View.OnClickListener {
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
             photoPickerIntent.setType("image/*");
             startActivityForResult(photoPickerIntent, CHOOSE_BACKGROUND);
-           /* Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                startActivityForResult(takePictureIntent, CHOOSE_BACKGROUND);
-            }*/
         } else if (id == R.id.fab_color) {
             mBindingColor = DataBindingUtil.inflate(getActivity().getLayoutInflater(),
                     R.layout.dialog_color, (ViewGroup) this.getView().getParent(), false);
@@ -429,22 +428,8 @@ public class EditProfile extends Fragment implements View.OnClickListener {
                 mBinding.textStreet.setText(place.getAddress());
                 mBinding.textHomeCoord.setText(place.getLatLng().latitude + " " + place.getLatLng().longitude);
 
-                Geocoder gc = new Geocoder(this.getContext(), Locale.getDefault());
+                new AsyncGeocoding(this.getContext(), place.getLatLng(), this).execute();
 
-                // TODO May in async task?
-                if (gc.isPresent()) {
-                    List<Address> addresses = null;
-                    try {
-                        addresses = gc.getFromLocation(place.getLatLng().latitude, place.getLatLng().longitude, 1);
-
-                        if (addresses.size() > 0) {
-                            mBinding.textCity.setText(addresses.get(0).getLocality());
-                            mBinding.textStreet.setText(addresses.get(0).getAddressLine(0));
-                        }
-                    } catch (IOException e) {
-
-                    }
-                }
             }
         } else if (requestCode == PLACE_WORK_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
@@ -489,6 +474,22 @@ public class EditProfile extends Fragment implements View.OnClickListener {
         mBinding.fabColor.setBackgroundTintList(ColorStateList.valueOf(color));
         mBinding.fabBackground.setBackgroundTintList(ColorStateList.valueOf(color));
         mBinding.fabProfile.setBackgroundTintList(ColorStateList.valueOf(color));
+
+    }
+
+    @Override
+    public void OnGeocodingComplete(List<Address> addresses) {
+
+        if (addresses == null || addresses.size() == 0) return;
+
+        try {
+            if (addresses.size() > 0) {
+                mBinding.textCity.setText(addresses.get(0).getLocality());
+                mBinding.textStreet.setText(addresses.get(0).getAddressLine(0));
+            }
+        } catch (Exception e) {
+            Log.d("EXCEPTION", e.toString());
+        }
 
     }
 }

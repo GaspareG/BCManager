@@ -21,11 +21,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import re.gaspa.bcmanager.R;
+import re.gaspa.bcmanager.asynctask.AsyncLoadDatabase;
+import re.gaspa.bcmanager.ui.fragments.Home;
+import re.gaspa.bcmanager.ui.listeners.OnDatabaseLoadListener;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.utils.Database;
 import re.gaspa.bcmanager.utils.Preferences;
 
-public class Splash extends AppCompatActivity {
+public class Splash extends AppCompatActivity implements OnDatabaseLoadListener {
 
     private final int STORAGE_PERMISSION = 1;
 
@@ -62,24 +65,29 @@ public class Splash extends AppCompatActivity {
 
     public void continueSplash() {
         final Context context = this.getApplicationContext();
+        final Splash th = this;
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                if (Preferences.getFirstOpen(null)) {
-                    Preferences.setFirstOpen(null, false);
-                    Database.getDatabase(true);
-                    Database.createTable(context);
-                    ArrayList<BusinessCard> bc = Database.getBusinessCards();
-                    Intent intent = new Intent(getApplicationContext(), Help.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getApplicationContext().startActivity(intent);
-                } else {
-                    ArrayList<BusinessCard> bc = Database.getBusinessCards();
-                    Intent intent = new Intent(getApplicationContext(), Main.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getApplicationContext().startActivity(intent);
-                }
+                new AsyncLoadDatabase(context, th, Preferences.getFirstOpen(null), "", false).execute();
             }
         }, 500);
+    }
+
+    @Override
+    public void OnDatabaseLoad(ArrayList<BusinessCard> businessCards) {
+        if( Preferences.getFirstOpen(null) )
+        {
+            Preferences.setFirstOpen(null, false);
+            Intent intent = new Intent(getApplicationContext(), Help.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(intent);
+        }
+        else
+        {
+            Intent intent = new Intent(getApplicationContext(), Main.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(intent);
+        }
     }
 }

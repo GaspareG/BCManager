@@ -6,6 +6,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import re.gaspa.bcmanager.R;
+import re.gaspa.bcmanager.asynctask.AsyncLoadDatabase;
 import re.gaspa.bcmanager.ui.adapters.BusinessCardAdapter;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.utils.Database;
@@ -14,13 +15,13 @@ import re.gaspa.bcmanager.utils.Database;
  * Created by gaspare on 08/09/17.
  */
 
-public class CardMenuClickListener implements Toolbar.OnMenuItemClickListener
+public class OnCardMenuClickListener implements Toolbar.OnMenuItemClickListener
 {
     private Context context;
     private BusinessCard businessCard;
     private BusinessCardAdapter businessCardAdapter;
 
-    public CardMenuClickListener(BusinessCardAdapter businessCardAdapter, Context ctx, BusinessCard item) {
+    public OnCardMenuClickListener(BusinessCardAdapter businessCardAdapter, Context ctx, BusinessCard item) {
         this.businessCardAdapter = businessCardAdapter;
         this.businessCard = item;
         this.context = ctx;
@@ -37,6 +38,7 @@ public class CardMenuClickListener implements Toolbar.OnMenuItemClickListener
             Database.deleteBusinessCard(businessCard);
             Toast.makeText(context, "Cancello " + businessCard.getNome(), Toast.LENGTH_LONG).show();
             this.businessCardAdapter.setBusinessCardItems(Database.getBusinessCards());
+         //   new AsyncLoadDatabase(null, this, false, search, preferite);
         }
         else if( id == R.id.preferite )
         {

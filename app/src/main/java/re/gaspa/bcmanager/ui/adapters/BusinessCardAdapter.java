@@ -7,20 +7,17 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import java.util.ArrayList;
 
 import re.gaspa.bcmanager.R;
 import re.gaspa.bcmanager.databinding.CardviewBcBinding;
 import re.gaspa.bcmanager.ui.activities.BusinessCardActivity;
-import re.gaspa.bcmanager.ui.listeners.CardMenuClickListener;
+import re.gaspa.bcmanager.ui.listeners.OnCardMenuClickListener;
 import re.gaspa.bcmanager.ui.models.BusinessCard;
 import re.gaspa.bcmanager.ui.viewholders.BusinessCardVH;
 import re.gaspa.bcmanager.utils.Utils;
@@ -62,7 +59,7 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardVH> im
         MenuItem preferiteItem = binding.cardToolbar.getMenu().getItem(1);
         preferiteItem.setChecked(item.getPreferito());
 
-        binding.cardToolbar.setOnMenuItemClickListener(new CardMenuClickListener(this, binding.getRoot().getContext(), item));
+        binding.cardToolbar.setOnMenuItemClickListener(new OnCardMenuClickListener(this, binding.getRoot().getContext(), item));
 
         final String nome = item.getNome();
         final String colore = item.getColore();
